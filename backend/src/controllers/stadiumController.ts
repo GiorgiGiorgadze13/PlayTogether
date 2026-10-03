@@ -7,7 +7,7 @@ export const getAllStadiums = async (req: Request, res: Response, next: NextFunc
     const { sport } = req.query;
 
     const whereCondition = sport
-      ? { sport: { equals: String(sport), mode: 'insensitive' as const } }
+      ? { sport: { equals: String(sport) } }
       : {};
 
     const stadiums = await prisma.stadium.findMany({

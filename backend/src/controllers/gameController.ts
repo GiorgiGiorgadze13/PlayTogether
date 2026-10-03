@@ -122,7 +122,7 @@ export const getAllGames = async (req: Request, res: Response, next: NextFunctio
 
     if (sport) {
       where.stadium = {
-        sport: { equals: String(sport), mode: 'insensitive' },
+        sport: { equals: String(sport) },
       };
     }
 
