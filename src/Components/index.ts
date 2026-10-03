@@ -6,3 +6,5 @@ export { GamesSection } from './GamesSection';
 export { TournamentsSection } from './TournamentsSection';
 export { HowItWorksSection } from './HowItWorksSection';
 export { Footer } from './Footer';
+export { AuthModal } from './AuthModal';
+export { StadiumBookingModal } from './StadiumBookingModal';

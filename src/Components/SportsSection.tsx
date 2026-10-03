@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { TranslationContent } from '../types/translations';
+import type { Stadium } from '../types/api';
+import { api } from '../services/api';
+import { StadiumBookingModal } from './StadiumBookingModal';
 
 interface SportsSectionProps {
   c: TranslationContent;
 }
 
 export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
+  const [stadiums, setStadiums] = useState<Stadium[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedStadium, setSelectedStadium] = useState<Stadium | null>(null);
+
+  useEffect(() => {
+    const fetchStadiums = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const res = await api.getStadiums();
+        setStadiums(res.stadiums);
+      } catch {
+        setError('Failed to load stadiums from server.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStadiums();
+  }, []);
+
   return (
     <section className="content-section" id="sports">
       <div className="section-heading">
@@ -17,61 +42,63 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
         <Link to="/sports">{c.viewAllSports} <span>→</span></Link>
       </div>
 
-      <div className="sports-grid">
-        {/* 01. Football */}
-        <article className="sport-card sport-card-large">
-          <div className="sport-card-top"><span className="sport-number">01</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual football-visual">
-            <img src="/ფეხბურთი.png" alt="Football" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Football</h3><p>24 games available</p></div>
-        </article>
+      {isLoading && (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: 'rgba(255,255,255,0.6)' }}>
+          <p>Loading available stadiums...</p>
+        </div>
+      )}
 
-        {/* 02. Basketball */}
-        <article className="sport-card">
-          <div className="sport-card-top"><span className="sport-number">02</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual basketball-visual">
-            <img src="/კალათბურთი.png" alt="Basketball" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Basketball</h3><p>18 games available</p></div>
-        </article>
+      {error && (
+        <div style={{ textAlign: 'center', padding: '40px 0', color: '#ff6b6b' }}>
+          <p>⚠️ {error}</p>
+        </div>
+      )}
 
-        {/* 03. Volleyball */}
-        <article className="sport-card">
-          <div className="sport-card-top"><span className="sport-number">03</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual volleyball-visual">
-            <img src="/ფრენბურთი.png" alt="Volleyball" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Volleyball</h3><p>12 games available</p></div>
-        </article>
+      {!isLoading && !error && stadiums.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: 'rgba(255,255,255,0.6)' }}>
+          <p>No stadiums available at the moment.</p>
+        </div>
+      )}
 
-        {/* 04. Rugby */}
-        <article className="sport-card">
-          <div className="sport-card-top"><span className="sport-number">04</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual rugby-visual">
-            <img src="/რაგბი.png" alt="Rugby" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Rugby</h3><p>14 games available</p></div>
-        </article>
+      {!isLoading && !error && stadiums.length > 0 && (
+        <div className="sports-grid">
+          {stadiums.map((stadium, index) => {
+            const isLarge = index === 0;
+            return (
+              <article
+                key={stadium.id}
+                className={`sport-card ${isLarge ? 'sport-card-large' : ''}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => setSelectedStadium(stadium)}
+              >
+                <div className="sport-card-top">
+                  <span className="sport-number">0{index + 1}</span>
+                  <span className="sport-arrow">↗</span>
+                </div>
+                <div className="sport-visual">
+                  <img
+                    src={stadium.imageUrl}
+                    alt={stadium.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
+                </div>
+                <div className="sport-card-info">
+                  <h3>{stadium.name}</h3>
+                  <p>📍 {stadium.location} · ₾{stadium.price}/player</p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
 
-        {/* 05. Tennis */}
-        <article className="sport-card">
-          <div className="sport-card-top"><span className="sport-number">05</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual tennis-visual">
-            <img src="/ტენისი.png" alt="Tennis" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Tennis</h3><p>9 games available</p></div>
-        </article>
-
-        {/* 06. Badminton */}
-        <article className="sport-card">
-          <div className="sport-card-top"><span className="sport-number">06</span><span className="sport-arrow">↗</span></div>
-          <div className="sport-visual badminton-visual">
-            <img src="/ბანბიგტონი.png" alt="Badminton" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-          </div>
-          <div className="sport-card-info"><h3>Badminton</h3><p>7 games available</p></div>
-        </article>
-      </div>
+      {selectedStadium && (
+        <StadiumBookingModal
+          stadium={selectedStadium}
+          onClose={() => setSelectedStadium(null)}
+          c={c}
+        />
+      )}
     </section>
   );
 };

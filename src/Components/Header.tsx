@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import type { Language, TranslationContent } from '../types/translations';
+import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
   lang: Language;
@@ -9,6 +10,8 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => {
+  const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+
   return (
     <header className="navbar">
       <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
@@ -32,8 +35,25 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
       </nav>
 
       <div className="nav-actions">
-        <button className="login-button">{c.login}</button>
-        <button className="signup-button">{c.signup}</button>
+        {isAuthenticated && user ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, color: '#c9ff35' }}>
+              👤 {user.name}
+            </span>
+            <button
+              onClick={logout}
+              className="login-button"
+              style={{ padding: '0 12px', height: '36px', fontSize: '12px' }}
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <>
+            <button className="login-button" onClick={() => openAuthModal('login')}>{c.login}</button>
+            <button className="signup-button" onClick={() => openAuthModal('register')}>{c.signup}</button>
+          </>
+        )}
 
         <button 
           className="lang-switcher" 

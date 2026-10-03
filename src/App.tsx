@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './index.css'
 import type { Language } from './types/translations'
 import { t } from './constants/translations'
+import { AuthProvider } from './context/AuthContext'
+import { AuthModal } from './Components/AuthModal'
 import { Header } from './Components/Header'
 import { Footer } from './Components/Footer'
 import { ScrollToTop } from './Components/ScrollToTop'
@@ -30,23 +32,26 @@ function App() {
   const c = t[lang]
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="app">
-        <Header lang={lang} onToggleLanguage={toggleLanguage} c={c} />
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage c={c} />} />
-            <Route path="/sports" element={<SportsPage c={c} />} />
-            <Route path="/games" element={<GamesPage c={c} />} />
-            <Route path="/tournaments" element={<TournamentsPage c={c} />} />
-            <Route path="/about" element={<AboutPage c={c} />} />
-            <Route path="/search" element={<GamesPage c={c} />} />
-          </Routes>
-        </main>
-        <Footer c={c} />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <ScrollToTop />
+        <div className="app">
+          <Header lang={lang} onToggleLanguage={toggleLanguage} c={c} />
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage c={c} />} />
+              <Route path="/sports" element={<SportsPage c={c} />} />
+              <Route path="/games" element={<GamesPage c={c} />} />
+              <Route path="/tournaments" element={<TournamentsPage c={c} />} />
+              <Route path="/about" element={<AboutPage c={c} />} />
+              <Route path="/search" element={<GamesPage c={c} />} />
+            </Routes>
+          </main>
+          <Footer c={c} />
+          <AuthModal c={c} />
+        </div>
+      </Router>
+    </AuthProvider>
   )
 }
 
