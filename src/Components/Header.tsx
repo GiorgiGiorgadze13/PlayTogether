@@ -1,0 +1,59 @@
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import type { Language, TranslationContent } from '../types/translations';
+
+interface HeaderProps {
+  lang: Language;
+  onToggleLanguage: () => void;
+  c: TranslationContent;
+}
+
+export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => {
+  return (
+    <header className="navbar">
+      <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        <img 
+          src="/ლოგო.png" 
+          alt="PlayTogether Logo" 
+          style={{ width: '64px', height: '64px', objectFit: 'contain', marginLeft: '-16px' }} 
+        />
+        <span className="logo-text" style={{ fontSize: '1.5rem', fontWeight: 'bold', marginLeft: '-6px' }}>
+          <span style={{ color: '#ffffff' }}>Play</span>
+          <span style={{ color: '#888888' }}>Together</span>
+        </span>
+      </Link>
+
+      <nav className="nav-links">
+        <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.home}</NavLink>
+        <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.sports}</NavLink>
+        <NavLink to="/games" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.games}</NavLink>
+        <NavLink to="/tournaments" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.tournaments}</NavLink>
+        <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.about}</NavLink>
+      </nav>
+
+      <div className="nav-actions">
+        <button className="login-button">{c.login}</button>
+        <button className="signup-button">{c.signup}</button>
+
+        <button 
+          className="lang-switcher" 
+          onClick={onToggleLanguage} 
+          style={{ 
+            background: 'none', 
+            border: '1px solid rgba(255,255,255,0.2)', 
+            padding: '6px 12px', 
+            borderRadius: '8px', 
+            color: '#fff', 
+            cursor: 'pointer', 
+            marginLeft: '10px',
+            fontWeight: 500
+          }}
+        >
+          {lang === 'en' ? 'GEO' : 'ENG'}
+        </button>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
