@@ -4,11 +4,18 @@ import prisma from '../lib/prisma.js';
 import { AppError } from '../middleware/errorHandler.js';
 
 const createGameSchema = z.object({
-  stadiumId: z.string().uuid('Invalid stadium ID'),
+  stadiumId: z.string(),
   date: z.string().refine((val) => !isNaN(Date.parse(val)), 'Invalid date format'),
   startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'startTime must be HH:mm format (e.g. 20:00)'),
   endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'endTime must be HH:mm format (e.g. 22:00)'),
   title: z.string().min(3, 'Title must be at least 3 characters long').optional(),
+  maxPlayers: z.number().int().min(1).max(100).optional(),
+  selectedPhotoUrl: z.string().optional(),
+  selectedPhotoAttribution: z.string().optional(),
+  venueName: z.string().optional(),
+  venueLocation: z.string().optional(),
+  venueAddress: z.string().optional(),
+  sport: z.string().optional(),
 });
 
 export const createGame = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -17,19 +24,45 @@ export const createGame = async (req: Request, res: Response, next: NextFunction
       throw new AppError('Authentication required', 401);
     }
 
-    const { stadiumId, date, startTime, endTime, title } = createGameSchema.parse(req.body);
+    const {
+      stadiumId,
+      date,
+      startTime,
+      endTime,
+      title,
+      maxPlayers,
+      selectedPhotoUrl,
+      selectedPhotoAttribution,
+      venueName,
+      venueLocation,
+      venueAddress,
+      sport,
+    } = createGameSchema.parse(req.body);
 
     if (startTime >= endTime) {
       throw new AppError('startTime must be earlier than endTime', 400);
     }
 
-    // Verify stadium exists
-    const stadium = await prisma.stadium.findUnique({
+    // Verify or auto-create stadium if external Google Place
+    let stadium = await prisma.stadium.findUnique({
       where: { id: stadiumId },
     });
 
     if (!stadium) {
-      throw new AppError('Stadium not found', 404);
+      stadium = await (prisma.stadium.create as any)({
+        data: {
+          id: stadiumId,
+          name: venueName || 'Sports Stadium',
+          description: 'Booked via PlayTogether',
+          location: venueLocation || 'Tbilisi',
+          address: venueAddress || venueLocation || 'Tbilisi',
+          sport: sport || 'Football',
+          imageUrl: selectedPhotoUrl || 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',
+          selectedPhotoUrl: selectedPhotoUrl || null,
+          selectedPhotoAttribution: selectedPhotoAttribution || null,
+          price: 15.0,
+        },
+      });
     }
 
     const bookingDate = new Date(date);
@@ -68,7 +101,10 @@ export const createGame = async (req: Request, res: Response, next: NextFunction
           date: startOfDay,
           startTime,
           endTime,
-          title: title || `${stadium.sport} Match at ${stadium.name}`,
+          title: title || `${stadium?.sport || sport || 'Sports'} Match at ${stadium?.name || venueName || 'Stadium'}`,
+          maxPlayers: (maxPlayers || 10) as any,
+          selectedPhotoUrl: selectedPhotoUrl || null,
+          selectedPhotoAttribution: selectedPhotoAttribution || null,
         },
       });
 
@@ -200,49 +236,57 @@ export const joinGame = async (req: Request, res: Response, next: NextFunction):
     const id = req.params.id as string;
     const userId = req.user.userId;
 
-    const game = await prisma.game.findUnique({
-      where: { id },
-    });
+    const updatedGame = await prisma.$transaction(async (tx) => {
+      const game = await tx.game.findUnique({
+        where: { id },
+        include: { players: true },
+      });
 
-    if (!game) {
-      throw new AppError('Game not found', 404);
-    }
+      if (!game) {
+        throw new AppError('Game not found', 404);
+      }
 
-    if (game.status !== 'UPCOMING') {
-      throw new AppError('Cannot join a game that is not upcoming', 400);
-    }
+      if (game.status !== 'UPCOMING') {
+        throw new AppError('Cannot join a game that is not upcoming', 400);
+      }
 
-    const existingPlayer = await prisma.gamePlayer.findUnique({
-      where: {
-        gameId_userId: {
+      const maxLimit = (game as any).maxPlayers || 10;
+      if (game.players.length >= maxLimit) {
+        throw new AppError('Game is full. Cannot join this match.', 400);
+      }
+
+      const existingPlayer = await tx.gamePlayer.findUnique({
+        where: {
+          gameId_userId: {
+            gameId: id,
+            userId,
+          },
+        },
+      });
+
+      if (existingPlayer) {
+        throw new AppError('You have already joined this game', 409);
+      }
+
+      await tx.gamePlayer.create({
+        data: {
           gameId: id,
           userId,
         },
-      },
-    });
+      });
 
-    if (existingPlayer) {
-      throw new AppError('You have already joined this game', 409);
-    }
-
-    await prisma.gamePlayer.create({
-      data: {
-        gameId: id,
-        userId,
-      },
-    });
-
-    const updatedGame = await prisma.game.findUnique({
-      where: { id },
-      include: {
-        stadium: true,
-        creator: { select: { id: true, name: true, email: true } },
-        players: {
-          include: {
-            user: { select: { id: true, name: true, email: true } },
+      return tx.game.findUnique({
+        where: { id },
+        include: {
+          stadium: true,
+          creator: { select: { id: true, name: true, email: true } },
+          players: {
+            include: {
+              user: { select: { id: true, name: true, email: true } },
+            },
           },
         },
-      },
+      });
     });
 
     res.status(200).json({

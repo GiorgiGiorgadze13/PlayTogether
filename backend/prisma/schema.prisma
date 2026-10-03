@@ -28,32 +28,42 @@ model User {
 }
 
 model Stadium {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  location    String
-  sport       String
-  imageUrl    String
-  price       Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                      String   @id @default(uuid())
+  name                    String
+  description             String
+  location                String
+  address                 String?
+  latitude                Float?
+  longitude               Float?
+  sport                   String
+  imageUrl                String
+  selectedPhotoUrl        String?
+  selectedPhotoAttribution String?
+  rating                  Float?
+  placeId                 String?
+  price                   Float
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
-  games       Game[]
+  games                   Game[]
 
   @@map("stadiums")
 }
 
 model Game {
-  id        String     @id @default(uuid())
-  stadiumId String
-  creatorId String
-  title     String     @default("Sports Match")
-  date      DateTime
-  startTime String     // Format: "HH:mm" (e.g. "20:00")
-  endTime   String     // Format: "HH:mm" (e.g. "22:00")
-  status    GameStatus @default(UPCOMING)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id                      String     @id @default(uuid())
+  stadiumId               String
+  creatorId               String
+  title                   String     @default("Sports Match")
+  date                    DateTime
+  startTime               String     // Format: "HH:mm" (e.g. "20:00")
+  endTime                 String     // Format: "HH:mm" (e.g. "22:00")
+  maxPlayers              Int        @default(10)
+  selectedPhotoUrl        String?
+  selectedPhotoAttribution String?
+  status                  GameStatus @default(UPCOMING)
+  createdAt               DateTime   @default(now())
+  updatedAt               DateTime   @updatedAt
 
   stadium   Stadium    @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
   creator   User       @relation("GameCreator", fields: [creatorId], references: [id], onDelete: Cascade)

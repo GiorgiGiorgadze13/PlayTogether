@@ -2,6 +2,7 @@ import type {
   AuthResponse,
   User,
   Stadium,
+  VenuePlace,
   Game,
   AvailabilityResponse,
   CreateGameData,
@@ -81,6 +82,14 @@ export const api = {
   getStadiums: (sport?: string): Promise<{ stadiums: Stadium[] }> => {
     const query = sport ? `?sport=${encodeURIComponent(sport)}` : '';
     return fetchApi<{ stadiums: Stadium[] }>(`/stadiums${query}`, {
+      method: 'GET',
+    });
+  },
+
+  searchVenues: (sport: string, query?: string): Promise<{ venues: VenuePlace[] }> => {
+    const params = new URLSearchParams({ sport: sport || '' });
+    if (query) params.append('query', query);
+    return fetchApi<{ venues: VenuePlace[] }>(`/stadiums/search?${params.toString()}`, {
       method: 'GET',
     });
   },

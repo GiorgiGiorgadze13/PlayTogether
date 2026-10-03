@@ -5,6 +5,7 @@ import type { TranslationContent } from '../types/translations';
 import type { Game } from '../types/api';
 import { api, ApiError } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { getSportRequirements } from '../constants/sports';
 
 interface GamesSectionProps {
   c: TranslationContent;
@@ -125,27 +126,37 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
             const isUserJoined = user && game.players?.some((p) => p.userId === user.id);
             const playerCount = game.players?.length || 0;
             const stadium = game.stadium;
-            const sportIcon =
-              stadium?.sport === 'Football'
-                ? '⚽'
-                : stadium?.sport === 'Basketball'
-                ? '🏀'
-                : stadium?.sport === 'Volleyball'
-                ? '🏐'
-                : stadium?.sport === 'Rugby'
-                ? '🏉'
-                : stadium?.sport === 'Tennis'
-                ? '🎾'
-                : '🏸';
+            const sportReq = getSportRequirements(stadium?.sport || '');
+            const maxPlayers = game.maxPlayers || sportReq.maxPlayers || 10;
+            const isFull = playerCount >= maxPlayers;
+            const remainingSpots = Math.max(0, maxPlayers - playerCount);
+            const capacityPercent = Math.min(100, Math.round((playerCount / maxPlayers) * 100));
+            const cardPhoto = game.selectedPhotoUrl || stadium?.selectedPhotoUrl || stadium?.imageUrl;
 
             return (
-              <article key={game.id} className="game-card">
+              <article key={game.id} className="game-card" style={{ display: 'flex', flexDirection: 'column' }}>
+                {/* Stadium Photo Banner */}
+                {cardPhoto && (
+                  <div style={{ position: 'relative', width: '100%', height: '140px', borderRadius: '12px', overflow: 'hidden', marginBottom: '14px' }}>
+                    <img
+                      src={cardPhoto}
+                      alt={stadium?.name || game.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.7)', padding: '4px 8px', borderRadius: '6px', fontSize: '11px', color: '#ffb703', fontWeight: 700 }}>
+                      ⭐ {stadium?.rating || 4.7}
+                    </div>
+                  </div>
+                )}
+
                 <div className="game-card-header">
-                  <div className="game-tag">{sportIcon} {stadium?.sport || 'Sport'}</div>
-                  <span className="spots-badge">{playerCount} player{playerCount === 1 ? '' : 's'} joined</span>
+                  <div className="game-tag">{sportReq.icon} {stadium?.sport || 'Sport'}</div>
+                  <span className="spots-badge" style={{ color: isFull ? '#ff6b6b' : '#c9ff35', borderColor: isFull ? 'rgba(255,77,77,0.3)' : 'rgba(201,255,53,0.3)' }}>
+                    {playerCount} / {maxPlayers} players
+                  </span>
                 </div>
 
-                <h3>{game.title}</h3>
+                <h3 style={{ margin: '8px 0 12px' }}>{game.title}</h3>
 
                 <div className="game-info">
                   <div>
@@ -154,7 +165,33 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                   </div>
                   <div>
                     <span>{c.location}</span>
-                    <strong>{stadium?.name || 'Sports Venue'} ({stadium?.location})</strong>
+                    <strong>{stadium?.name || 'Sports Venue'} ({stadium?.address || stadium?.location})</strong>
+                  </div>
+                </div>
+
+                {/* Capacity Progress Bar Component */}
+                <div style={{ marginTop: '14px', background: '#0d0f11', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
+                    <span>{sportReq.name} Registration</span>
+                    <span style={{ color: isFull ? '#ff6b6b' : '#c9ff35' }}>
+                      {playerCount} / {maxPlayers}
+                    </span>
+                  </div>
+
+                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '6px' }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${capacityPercent}%`,
+                        background: isFull ? '#ff6b6b' : '#c9ff35',
+                        borderRadius: '3px',
+                        transition: 'width 0.3s ease',
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ fontSize: '11px', color: isFull ? '#ff6b6b' : 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
+                    {isFull ? '🔴 Game is full' : `🟢 ${remainingSpots} spot${remainingSpots === 1 ? '' : 's'} remaining`}
                   </div>
                 </div>
 
@@ -164,7 +201,7 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                   </div>
                 )}
 
-                <div className="game-card-footer" style={{ marginTop: '16px' }}>
+                <div className="game-card-footer" style={{ marginTop: 'auto', paddingTop: '16px' }}>
                   <div className="game-price">
                     <strong>₾{stadium?.price || 15}</strong>
                     <span>{c.perPlayer}</span>
@@ -185,9 +222,18 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                   ) : (
                     <button
                       onClick={() => handleJoinGame(game.id)}
-                      disabled={processingGameId === game.id}
+                      disabled={processingGameId === game.id || isFull}
+                      style={{
+                        background: isFull ? '#333' : undefined,
+                        color: isFull ? '#888' : undefined,
+                        cursor: isFull ? 'not-allowed' : 'pointer',
+                      }}
                     >
-                      {processingGameId === game.id ? 'Joining...' : `${c.joinGame}`} <span>↗</span>
+                      {processingGameId === game.id
+                        ? 'Joining...'
+                        : isFull
+                        ? 'Game Full'
+                        : `${c.joinGame}`} <span>↗</span>
                     </button>
                   )}
                 </div>

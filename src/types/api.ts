@@ -10,10 +10,33 @@ export interface Stadium {
   name: string;
   description: string;
   location: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
   sport: string;
   imageUrl: string;
+  selectedPhotoUrl?: string;
+  selectedPhotoAttribution?: string;
+  rating?: number;
+  placeId?: string;
   price: number;
   createdAt: string;
+}
+
+export interface VenuePlace {
+  id: string;
+  name: string;
+  address: string;
+  location: string;
+  latitude: number;
+  longitude: number;
+  imageUrl: string;
+  selectedPhotoUrl?: string;
+  selectedPhotoAttribution?: string;
+  rating: number;
+  placeId: string;
+  sport: string;
+  price: number;
 }
 
 export interface GamePlayer {
@@ -32,6 +55,9 @@ export interface Game {
   date: string;
   startTime: string;
   endTime: string;
+  maxPlayers: number;
+  selectedPhotoUrl?: string;
+  selectedPhotoAttribution?: string;
   status: 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
   createdAt: string;
   stadium?: Stadium;
@@ -79,4 +105,11 @@ export interface CreateGameData {
   startTime: string;
   endTime: string;
   title?: string;
+  maxPlayers?: number;
+  selectedPhotoUrl?: string;
+  selectedPhotoAttribution?: string;
+  venueName?: string;
+  venueLocation?: string;
+  venueAddress?: string;
+  sport?: string;
 }
