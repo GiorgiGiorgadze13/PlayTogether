@@ -1,0 +1,1664 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+
+/* =========================================
+   განულება და საბაზისო პარამეტრები (RESET)
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* ზომებში ბორდერების და პედინგების ავტომატური გათვალისწინება */
+}
+
+/* ძირითადი ფერები, ფონტები და ცვლადები მთელი საიტისთვის */
+:root {
+  font-family: 'Manrope', sans-serif;
+  color: #ffffff;
+  background: #070809;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* ფერების პალიტრა */
+  --black: #070809;
+  --black-soft: #0d0f11;
+  --black-card: #111315;
+
+  --white: #ffffff;
+  --white-soft: #f5f5f2;
+  --gray-light: #dedfdb;
+  --gray: #8f9290;
+  --gray-dark: #555957;
+
+  --line: rgba(255, 255, 255, 0.1);
+  --line-dark: rgba(0, 0, 0, 0.1);
+
+  --accent: #c9ff35; /* ძირითადი აქცენტი (ღია მწვანე / ლიმნისფერი) */
+}
+
+html {
+  scroll-behavior: smooth; /* გვერდზე ლინკებით გადასვლისას გლუვი სქროლი */
+}
+
+body {
+  min-width: 320px;
+  background: var(--black);
+}
+
+button,
+a {
+  font: inherit; /* ფონტის მემკვიდრეობით მიღება ღილაკებსა და ლინკებზე */
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* =========================================
+   მთლიანი აპლიკაციის კონტეინერი (APP)
+========================================= */
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--black);
+}
+
+
+/* =========================================
+   ნავიგაცია / მენიუ (NAVBAR)
+========================================= */
+
+.navbar {
+  width: min(1280px, calc(100% - 64px)); /* მაქსიმალური სიგანე გვერდული მინდვრებით */
+  height: 92px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+  z-index: 20;
+}
+
+/* ლოგოს დიზაინი */
+.logo {
+  color: var(--white);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+
+.logo span {
+  color: rgba(255, 255, 255, 0.48);
+}
+
+/* ნავიგაციის ლინკები */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.nav-links a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 12px;
+  font-weight: 600;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+/* ანიმაციური ხაზი ლინკების ქვეშ ჰოვერზე */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: var(--white);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* ავტორიზაციის და რეგისტრაციის ღილაკები მენიუში */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-button,
+.signup-button {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.login-button {
+  color: var(--white);
+  background: transparent;
+}
+
+.login-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.signup-button {
+  color: var(--black);
+  background: var(--white);
+}
+
+.signup-button:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+/* =========================================
+   მთავარი სექცია (HERO SECTION)
+========================================= */
+
+.hero {
+  width: min(1280px, calc(100% - 64px));
+  min-height: 720px;
+
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr; /* მარცხენა ტექსტური და მარჯვენა ვიზუალური ნაწილები */
+
+  align-items: center;
+  gap: 50px;
+
+  position: relative;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  padding: 50px 0 80px;
+}
+
+/* ჰიროს ზედა პატარა წარწერა (Eyebrow) */
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* პატარა მწვანე მანათობელი წერტილი ზედა წარწერასთან */
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 5px rgba(201, 255, 53, 0.08),
+    0 0 18px rgba(201, 255, 53, 0.35);
+}
+
+/* მთავარი დიდი სათაური */
+.hero h1 {
+  max-width: 760px;
+  margin-top: 25px;
+  color: var(--white);
+  font-size: clamp(52px, 6vw, 84px); /* რესპონსივ ზომა ეკრანის მიხედვით */
+  line-height: 0.96;
+  letter-spacing: -5px;
+  font-weight: 700;
+}
+
+.hero h1 span {
+  color: rgba(255, 255, 255, 0.38); /* სათაურის შეფერადებული ნაწილი */
+}
+
+/* ჰიროს აღწერა / ტექსტი */
+.hero-description {
+  max-width: 510px;
+  margin-top: 30px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* მოქმედების ღილაკები ჰიროში */
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.primary-button,
+.secondary-button {
+  height: 52px;
+  padding: 0 21px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border 0.25s ease;
+}
+
+/* მთავარი გამოკვეთილი ღილაკი */
+.primary-button {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  color: var(--black);
+  background: var(--accent);
+}
+
+.primary-button strong {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.primary-button:hover {
+  color: var(--white);
+  background: rgba(201, 255, 53, 0.17);
+  border: 1px solid rgba(201, 255, 53, 0.45);
+  transform: translateY(-3px);
+}
+
+/* მეორეული ღილაკი */
+.secondary-button {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-3px);
+}
+
+
+/* ჰიროს ქვედა სტატისტიკა (META) */
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 55px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.meta-item strong {
+  color: var(--white);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.meta-item span {
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.meta-divider {
+  width: 1px;
+  height: 28px;
+  margin: 0 25px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+
+/* =========================================
+   ჰიროს ვიზუალური ნაწილი / ორბიტები (HERO VISUAL)
+========================================= */
+
+.hero-visual {
+  min-height: 600px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ფონური მბზინავი ეფექტი (Glow) */
+.visual-glow {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(201, 255, 53, 0.08);
+  filter: blur(75px);
+}
+
+/* სტატიკური წრეები ფონში (ოდნავ გამუქებული ხაზით) */
+.visual-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.visual-circle-one {
+  width: 520px;
+  height: 520px;
+}
+
+.visual-circle-two {
+  width: 380px;
+  height: 380px;
+  border-color: rgba(201, 255, 53, 0.28);
+}
+
+/* ცენტრალური წრე (გლობუსი / ცენტრი) */
+.hero-center {
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #eaf0d2,
+      #95978c 58%,
+      hsl(70, 18%, 40%)
+    );
+  color: var(--black);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.65);
+}
+
+.center-small {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.center-title {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.center-line {
+  width: 30px;
+  height: 2px;
+  margin-top: 13px;
+  background: var(--black);
+}
+
+.center-caption {
+  margin-top: 11px;
+  color: #70736f;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* მოძრავი ორბიტები და სპორტული იკონები */
+.sport-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  /* ორბიტების ხაზები (გამუქებულია უკეთესი გამოკვეთისთვის) */
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  transform: translate(-50%, -50%);
+  animation: rotateOrbit linear infinite;
+}
+
+/* თითოეული ორბიტის ზომა და ბრუნვის სიჩქარე */
+.orbit-one {
+  width: 300px;
+  height: 300px;
+  animation-duration: 22s;
+}
+
+.orbit-two {
+  width: 380px;
+  height: 380px;
+  animation-duration: 28s;
+  animation-direction: reverse; /* საპირისპირო მიმართულებით ბრუნვა */
+}
+
+.orbit-three {
+  width: 460px;
+  height: 460px;
+  animation-duration: 35s;
+}
+
+.orbit-four {
+  width: 540px;
+  height: 540px;
+  animation-duration: 42s;
+  animation-direction: reverse;
+}
+
+.orbit-five {
+  width: 620px;
+  height: 620px;
+  animation-duration: 50s;
+}
+
+.orbit-six {
+  width: 700px;
+  height: 700px;
+  animation-duration: 60s;
+  animation-direction: reverse;
+}
+
+/* ორბიტებზე მომოძრავე ობიექტები/იკონები */
+.sport-object {
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #15181a;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 19px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  animation: counterRotate linear infinite; /* რომ იკონები თავის ღერძზე არ ბრუნავდნენ უწესრიგოდ */
+}
+
+.orbit-one .sport-object { animation-duration: 22s; }
+.orbit-two .sport-object { animation-duration: 28s; animation-direction: reverse; }
+.orbit-three .sport-object { animation-duration: 35s; }
+.orbit-four .sport-object { animation-duration: 42s; animation-direction: reverse; }
+.orbit-five .sport-object { animation-duration: 50s; }
+.orbit-six .sport-object { animation-duration: 60s; animation-direction: reverse; }
+
+/* ვიზუალური დეკორატიული წარწერები ფონში */
+.visual-label {
+  position: absolute;
+  color: rgba(170, 250, 31, 0.27);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.label-top { top: 15%; right: 7%; }
+.label-bottom { bottom: 15%; left: 4%; }
+
+/* ორბიტების ბრუნვის ანიმაციები */
+@keyframes rotateOrbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes counterRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+
+/* =========================================
+   ძებნის ბლოკი (SEARCH SECTION) - გამოყოფილი ჩარჩო
+========================================= */
+
+.search-section {
+  width: 100%;
+  padding: 60px max(32px, calc((100% - 1280px) / 2));
+  background: var(--black); /* მთლიანი ფონი შავია */
+}
+
+/* ცალკე გამოტანილი თეთრი ჩარჩო მომრგვალებული კიდეებით */
+.search-container-card {
+  width: 100%;
+  padding: 70px 60px;
+  background: var(--white-soft);
+  border-radius: 24px; /* გვერდების მომრგვალება */
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4); /* ჩრდილი შავ ფონზე გამოსაყოფად */
+}
+
+.search-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.search-intro > div > span {
+  color: #777b77;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.search-intro h2 {
+  margin-top: 8px;
+  color: var(--black);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1.8px;
+}
+
+.search-intro p {
+  max-width: 300px;
+  color: #858883;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* ძებნის მთავარი მართკუთხედი (ფილტრების ბადე) */
+.search-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  padding: 8px;
+  border: 1px solid #dcded9;
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.search-field {
+  min-height: 68px;
+  padding: 13px 18px;
+  border-right: 1px solid #e8e9e6;
+}
+
+.search-field small {
+  display: block;
+  margin-bottom: 8px;
+  color: #999c97;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.field-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #242624;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.field-icon {
+  color: #777b76;
+  font-size: 12px;
+}
+
+/* ძებნის ღილაკი */
+.search-button {
+  min-width: 155px;
+  margin: 0;
+  border-radius: 8px;
+  color: var(--white);
+  background: var(--black);
+  font-size: 11px;
+  font-weight: 800;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.search-button span {
+  margin-left: 15px;
+  font-size: 14px;
+}
+
+.search-button:hover {
+  background: #282a27;
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   საერთო კონტენტისა და სექციების სათაურები
+========================================= */
+
+.content-section,
+.games-section {
+  width: min(1280px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.section-heading > div > span {
+  color: rgba(255, 255, 255, 0.34);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.section-heading h2 {
+  margin-top: 9px;
+  color: var(--white);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+
+.section-heading > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.section-heading > a span {
+  font-size: 15px;
+}
+
+.section-heading > a:hover {
+  color: var(--white);
+}
+
+
+/* =========================================
+   სპორტის სექცია / ბენტო ბადე (SPORTS BENTO GRID)
+========================================= */
+
+.content-section {
+  padding: 112px 0 120px;
+}
+
+.sports-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-auto-rows: 240px;
+  gap: 14px;
+}
+
+/* სპორტის ცალკეული ბარათი */
+.sport-card {
+  min-width: 0;
+  position: relative;
+  padding: 24px;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #151719;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: transform 0.3s ease, border 0.3s ease, background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sport-card:hover {
+  transform: translateY(-6px);
+  background: #1b1e20;
+  border-color: rgba(201, 255, 53, 0.25);
+}
+
+/* დიდი ბარათი (რომელიც ორ რიგზე იჭიმება) */
+.sport-card-large {
+  grid-row: span 2;
+  background:
+    radial-gradient(
+      circle at 70% 35%,
+      rgba(201, 255, 53, 0.12),
+      transparent 40%
+    ),
+    #151719;
+}
+
+.sport-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 4;
+}
+
+.sport-number {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.sport-arrow {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s ease;
+}
+
+.sport-card:hover .sport-arrow {
+  color: var(--black);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.sport-visual {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  filter: grayscale(0.1);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.sport-card:hover .sport-visual {
+  opacity: 1;
+  transform: scale(1.08) rotate(-5deg);
+}
+
+/* სურათების ზომის და ცენტრის ზუსტი რეგულირება (ფეხბურთი ყველაზე დიდი, სხვები გაზრდილი და სიმეტრიული) */
+.football-visual {
+  right: 12%;
+  bottom: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.football-visual img {
+  width: 195px !important;
+  height: 195px !important;
+  object-fit: contain !important;
+}
+
+.basketball-visual,
+.volleyball-visual,
+.tennis-visual,
+.badminton-visual,
+.rugby-visual {
+  right: 8%;
+  bottom: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sport-card:not(.sport-card-large) .sport-visual img {
+  width: 140px !important;
+  height: 140px !important;
+  object-fit: contain !important;
+}
+
+.sport-card-info {
+  position: absolute;
+  left: 24px;
+  bottom: 23px;
+  z-index: 3;
+}
+
+.sport-card-info h3 {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.sport-card-info p {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 9px;
+}
+
+
+/* =========================================
+   თამაშები / მატჩები (GAMES SECTION)
+========================================= */
+
+.games-section {
+  padding-bottom: 120px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.game-card {
+  min-height: 300px;
+  padding: 25px;
+  border-radius: 14px;
+  color: var(--black);
+  background: var(--white);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.25);
+}
+
+.game-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.game-tag {
+  color: #4d514e;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.spots-badge {
+  padding: 6px 9px;
+  border-radius: 50px;
+  color: #394300;
+  background: #efffc5;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.game-card h3 {
+  max-width: 270px;
+  margin-top: 28px;
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+}
+
+.game-info {
+  display: grid;
+  gap: 17px;
+  margin-top: 30px;
+}
+
+.game-info div {
+  display: grid;
+  gap: 5px;
+}
+
+.game-info span {
+  color: #a0a29f;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.game-info strong {
+  color: #353735;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.game-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 27px;
+  padding-top: 17px;
+  border-top: 1px solid #e9eae7;
+}
+
+.game-price {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.game-price strong {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.game-price span {
+  color: #999c98;
+  font-size: 9px;
+}
+
+.game-card-footer button {
+  height: 35px;
+  padding: 0 13px;
+  border-radius: 7px;
+  color: var(--white);
+  background: var(--black);
+  font-size: 9px;
+  font-weight: 800;
+  transition: all 0.25s ease;
+}
+
+.game-card-footer button span {
+  margin-left: 8px;
+}
+
+.game-card-footer button:hover {
+  color: var(--black);
+  background: var(--accent);
+}
+
+
+/* =========================================
+   ტურნირები (TOURNAMENTS SECTION)
+========================================= */
+
+.tournaments-section {
+  width: 100%;
+  padding: 105px max(32px, calc((100% - 1280px) / 2));
+  background:
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(201, 255, 53, 0.08),
+      transparent 28%
+    ),
+    #101214;
+}
+
+.tournament-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 34px;
+}
+
+.tournament-heading > div > span {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.tournament-heading h2 {
+  max-width: 620px;
+  margin-top: 9px;
+  color: var(--white);
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -2.3px;
+}
+
+.tournament-heading p {
+  max-width: 490px;
+  margin-top: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.outline-button {
+  height: 45px;
+  padding: 0 17px;
+  border-radius: 7px;
+  color: var(--white);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 10px;
+  font-weight: 800;
+  transition: all 0.25s ease;
+}
+
+.outline-button span {
+  margin-left: 12px;
+  font-size: 14px;
+}
+
+.outline-button:hover {
+  color: var(--black);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tournament-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.tournament-card {
+  min-height: 365px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #181b1d;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: transform 0.3s ease, border 0.3s ease;
+}
+
+.tournament-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201, 255, 53, 0.28);
+}
+
+.tournament-featured {
+  background:
+    radial-gradient(
+      circle at 80% 35%,
+      rgba(201, 255, 53, 0.13),
+      transparent 40%
+    ),
+    #181b1d;
+}
+
+.tournament-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tournament-card-top span {
+  color: rgba(255, 255, 255, 0.43);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.tournament-card-top strong {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 10px;
+}
+
+.tournament-icon {
+  margin-top: 25px;
+  font-size: 74px;
+  line-height: 1;
+  filter: grayscale(0.15);
+  transition: transform 0.4s ease;
+}
+
+.tournament-card:hover .tournament-icon {
+  transform: scale(1.08) rotate(-5deg);
+}
+
+.tournament-content {
+  margin-top: auto;
+}
+
+.tournament-content h3 {
+  color: var(--white);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.tournament-content p {
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9px;
+}
+
+.tournament-meta {
+  display: flex;
+  gap: 9px;
+  margin-top: 17px;
+}
+
+.tournament-meta span {
+  padding: 6px 9px;
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 8px;
+}
+
+.tournament-card > button {
+  align-self: flex-start;
+  margin-top: 20px;
+  color: var(--white);
+  background: transparent;
+  font-size: 9px;
+  font-weight: 800;
+  transition: color 0.2s ease;
+}
+
+.tournament-card > button:hover {
+  color: var(--accent);
+}
+
+
+/* =========================================
+   როგორ მუშაობს (HOW IT WORKS SECTION)
+========================================= */
+
+.how-section {
+  width: min(1280px, calc(100% - 64px));
+  margin: 110px auto;
+  padding: 78px 70px;
+  border-radius: 18px;
+  background: var(--white-soft);
+  color: var(--black);
+}
+
+.how-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.how-header > div > span {
+  color: #888c87;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.how-header h2 {
+  margin-top: 10px;
+  color: var(--black);
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -2.3px;
+}
+
+.how-header p {
+  max-width: 280px;
+  color: #858983;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 65px;
+}
+
+.step {
+  min-height: 245px;
+  padding: 22px;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid #e2e4df;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+
+.step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step-top span {
+  color: #999c97;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.step-top div {
+  width: 27px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #777a76;
+  background: #f0f1ee;
+  font-size: 12px;
+}
+
+.step-icon {
+  width: 48px;
+  height: 48px;
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--black);
+  background: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.step h3 {
+  margin-top: 20px;
+  color: var(--black);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.step p {
+  max-width: 260px;
+  margin-top: 9px;
+  color: #858883;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   ფუტერი / ბოლო ნაწილი (FOOTER)
+========================================= */
+
+.footer {
+  width: min(1280px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 55px 0 35px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 50px;
+}
+
+.footer-logo {
+  color: var(--white);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.footer-logo span {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer-brand p {
+  max-width: 250px;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-column span {
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.footer-column a {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 10px;
+  transition: color 0.2s ease;
+}
+
+.footer-column a:hover {
+  color: var(--white);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 55px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.24);
+  font-size: 8px;
+}
+
+
+/* =========================================
+   რესპონსივი — ტაბლეტებისთვის (MAX 1050px)
+========================================= */
+
+@media (max-width: 1050px) {
+
+  .navbar,
+  .hero,
+  .content-section,
+  .games-section,
+  .how-section,
+  .footer {
+    width: calc(100% - 40px);
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 55px 0 80px;
+  }
+
+  .hero-content {
+    padding-bottom: 0;
+  }
+
+  .hero-visual {
+    min-height: 570px;
+  }
+
+  .sports-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 220px;
+  }
+
+  .sport-card-large {
+    grid-row: span 2;
+  }
+
+  .games-grid,
+  .tournament-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-box {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-field:nth-child(2) {
+    border-right: none;
+  }
+
+  .search-field {
+    border-bottom: 1px solid #e8e9e6;
+  }
+
+  .search-button {
+    min-height: 55px;
+    margin: 6px;
+    grid-column: span 2;
+  }
+}
+
+
+/* =========================================
+   რესპონსივი — მობილურებისთვის (MAX 700px)
+========================================= */
+
+@media (max-width: 700px) {
+
+  .navbar,
+  .hero,
+  .content-section,
+  .games-section,
+  .how-section,
+  .footer {
+    width: calc(100% - 30px);
+  }
+
+  .navbar {
+    height: 75px;
+  }
+
+  .nav-links {
+    display: none; /* მობილურში მთავარი მენიუს დამალვა */
+  }
+
+  .nav-actions {
+    gap: 4px;
+  }
+
+  .login-button,
+  .signup-button {
+    height: 38px;
+    padding: 0 12px;
+    font-size: 10px;
+  }
+
+  .logo {
+    font-size: 19px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 65px 0 40px;
+  }
+
+  .hero h1 {
+    font-size: 49px;
+    letter-spacing: -3px;
+  }
+
+  .hero-description {
+    font-size: 13px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primary-button,
+  .secondary-button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .hero-meta {
+    justify-content: space-between;
+    margin-top: 42px;
+  }
+
+  .meta-divider {
+    margin: 0 10px;
+  }
+
+  .meta-item strong {
+    font-size: 14px;
+  }
+
+  .meta-item span {
+    font-size: 7px;
+  }
+
+  .hero-visual {
+    min-height: 430px;
+  }
+
+  .visual-circle-one {
+    width: 330px;
+    height: 330px;
+  }
+
+  .visual-circle-two {
+    width: 255px;
+    height: 255px;
+  }
+
+  .hero-center {
+    width: 145px;
+    height: 145px;
+  }
+
+  .center-title {
+    font-size: 15px;
+  }
+
+  /* მობილურისთვის ორბიტების ზომების დაპატარავება */
+  .sport-orbit {
+    width: 250px;
+    height: 250px;
+  }
+
+  .orbit-two { width: 310px; height: 310px; }
+  .orbit-three { width: 370px; height: 370px; }
+  .orbit-four { width: 430px; height: 430px; }
+  .orbit-five { width: 490px; height: 490px; }
+  .orbit-six { width: 550px; height: 550px; }
+
+  .sport-object {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+  }
+
+  .label-top,
+  .label-bottom {
+    display: none; /* დეკორატიული წარწერების დამალვა მობილურში */
+  }
+
+  .search-section {
+    padding: 40px 15px;
+  }
+
+  .search-container-card {
+    padding: 35px 20px;
+    border-radius: 16px;
+  }
+
+  .search-intro {
+    display: block;
+  }
+
+  .search-intro p {
+    margin-top: 12px;
+  }
+
+  .search-intro h2 {
+    font-size: 27px;
+  }
+
+  .search-box {
+    grid-template-columns: 1fr;
+    margin-top: 25px;
+  }
+
+  .search-field {
+    border-right: none;
+  }
+
+  .search-button {
+    grid-column: auto;
+    min-height: 50px;
+    margin: 5px;
+  }
+
+  .content-section {
+    padding: 75px 0;
+  }
+
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section-heading h2 {
+    font-size: 31px;
+  }
+
+  .sports-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .sport-card,
+  .sport-card-large {
+    min-height: 220px;
+    grid-row: auto;
+  }
+
+  .football-visual {
+    font-size: 110px;
+  }
+
+  .games-grid,
+  .tournament-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .games-section {
+    padding-bottom: 75px;
+  }
+
+  .tournaments-section {
+    padding: 75px 15px;
+  }
+
+  .tournament-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .tournament-heading h2 {
+    font-size: 34px;
+  }
+
+  .tournament-card {
+    min-height: 330px;
+  }
+
+  .how-section {
+    margin: 70px auto;
+    padding: 50px 25px;
+  }
+
+  .how-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .how-header h2 {
+    font-size: 34px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    margin-top: 40px;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+  }
+
+  .footer-brand {
+    grid-column: span 2;
+  }
+
+  .footer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
