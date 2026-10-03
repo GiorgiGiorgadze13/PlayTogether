@@ -32,14 +32,31 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
         <NavLink to="/games" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.games}</NavLink>
         <NavLink to="/tournaments" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.tournaments}</NavLink>
         <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.about}</NavLink>
+        {isAuthenticated && (
+          <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            My Profile
+          </NavLink>
+        )}
       </nav>
 
       <div className="nav-actions">
         {isAuthenticated && user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: '#c9ff35' }}>
+            <Link
+              to="/profile"
+              style={{
+                fontSize: '13px',
+                fontWeight: 700,
+                color: '#c9ff35',
+                textDecoration: 'none',
+                background: 'rgba(201, 255, 53, 0.15)',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                border: '1px solid rgba(201, 255, 53, 0.3)',
+              }}
+            >
               👤 {user.name}
-            </span>
+            </Link>
             <button
               onClick={logout}
               className="login-button"
