@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameStatus {
+  UPCOMING
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  createdGames Game[]       @relation("GameCreator")
+  gameMemberships GamePlayer[]
+
+  @@map("users")
+}
+
+model Stadium {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  location    String
+  sport       String
+  imageUrl    String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  games       Game[]
+
+  @@map("stadiums")
+}
+
+model Game {
+  id        String     @id @default(uuid())
+  stadiumId String
+  creatorId String
+  title     String     @default("Sports Match")
+  date      DateTime
+  startTime String     // Format: "HH:mm" (e.g. "20:00")
+  endTime   String     // Format: "HH:mm" (e.g. "22:00")
+  status    GameStatus @default(UPCOMING)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  stadium   Stadium    @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+  creator   User       @relation("GameCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  players   GamePlayer[]
+
+  // Prevent duplicate bookings at identical start times for the same stadium and date
+  @@unique([stadiumId, date, startTime])
+  @@map("games")
+}
+
+model GamePlayer {
+  id       String   @id @default(uuid())
+  gameId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([gameId, userId])
+  @@map("game_players")
+}
