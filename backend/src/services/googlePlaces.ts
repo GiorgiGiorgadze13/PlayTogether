@@ -17,9 +17,9 @@ export interface VenuePlace {
 const REAL_FALLBACK_VENUES: VenuePlace[] = [
   {
     id: 'stadium-football-1',
-    name: 'Boris Paichadze Dinamo Arena',
-    address: '2 Akaki Tsereteli Ave, Tbilisi, Georgia',
-    location: 'Tbilisi, Chugureti',
+    name: 'Mikheil Meskhi Stadium',
+    address: '74 Chavchavadze Ave, Tbilisi, Georgia',
+    location: 'Tbilisi, Vake',
     latitude: 41.7231,
     longitude: 44.7897,
     imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',

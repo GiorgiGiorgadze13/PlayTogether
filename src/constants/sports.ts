@@ -237,9 +237,9 @@ export function getFallbackVenuesForSport(sportName: string, query: string = '')
       },
       {
         id: 'stadium-181',
-        name: 'Dinamo Arena Auxiliary Field',
-        address: '2 Akaki Tsereteli Ave, Tbilisi',
-        location: 'Tbilisi, Chugureti',
+        name: 'მესხის სახელობის სტადიონის დამხმარე მოედანი',
+        address: '74 Chavchavadze Ave, Tbilisi',
+        location: 'Tbilisi, Vake',
         latitude: 41.7231,
         longitude: 44.7897,
         imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1000&q=80',
