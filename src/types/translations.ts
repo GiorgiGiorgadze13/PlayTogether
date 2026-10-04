@@ -3,6 +3,7 @@ export type Language = 'en' | 'ka';
 export interface TranslationContent {
   home: string;
   sports: string;
+  stadiums: string;
   games: string;
   tournaments: string;
   about: string;

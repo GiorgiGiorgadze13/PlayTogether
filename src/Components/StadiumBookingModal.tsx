@@ -7,7 +7,8 @@ import type { TranslationContent } from '../types/translations';
 import { getSportRequirements, SPORT_REQUIREMENTS } from '../constants/sports';
 
 interface StadiumBookingModalProps {
-  stadium: Stadium | null;
+  stadium?: Stadium | VenuePlace | null;
+  initialSport?: string | null;
   onClose: () => void;
   c: TranslationContent;
   onBookingSuccess?: () => void;
@@ -32,6 +33,7 @@ const PRESET_SLOTS: TimeSlotPreset[] = [
 
 export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   stadium,
+  initialSport,
   onClose,
   onBookingSuccess,
 }) => {
@@ -57,11 +59,11 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   const upcomingDays = getUpcomingDays();
 
   // Flow Step: 1 = Sport, 2 = Venue, 3 = Date & Time, 4 = Capacity & Confirmation
-  const [step, setStep] = useState<number>(stadium ? 2 : 1);
+  const [step, setStep] = useState<number>(stadium ? 3 : initialSport ? 2 : 1);
 
   // Form State
-  const initialSport = stadium?.sport || 'Football';
-  const [selectedSport, setSelectedSport] = useState<string>(initialSport);
+  const activeSport = stadium?.sport || initialSport || 'Football';
+  const [selectedSport, setSelectedSport] = useState<string>(activeSport);
   const [selectedVenue, setSelectedVenue] = useState<VenuePlace | Stadium | null>(
     stadium
       ? {
@@ -427,17 +429,13 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                         alignItems: 'center',
                       }}
                     >
-                      <img
-                        src={photoSrc}
-                        alt={v.name}
-                        style={{
-                          width: '80px',
-                          height: '70px',
-                          borderRadius: '10px',
-                          objectFit: 'cover',
-                          background: '#000',
-                        }}
-                      />
+                      <div style={{ width: '80px', height: '70px', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
+                        <img
+                          src={photoSrc}
+                          alt={v.name}
+                          className="clean-stadium-img"
+                        />
+                      </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <h4 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 2px' }}>{v.name}</h4>
@@ -769,11 +767,13 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               }}
             >
               <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '14px' }}>
-                <img
-                  src={selectedVenue.selectedPhotoUrl || selectedVenue.imageUrl}
-                  alt={selectedVenue.name}
-                  style={{ width: '80px', height: '80px', borderRadius: '12px', objectFit: 'cover' }}
-                />
+                <div style={{ width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden', flexShrink: 0 }}>
+                  <img
+                    src={selectedVenue.selectedPhotoUrl || selectedVenue.imageUrl}
+                    alt={selectedVenue.name}
+                    className="clean-stadium-img"
+                  />
+                </div>
                 <div>
                   <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', textTransform: 'uppercase' }}>
                     {sportReq.icon} {sportReq.name}

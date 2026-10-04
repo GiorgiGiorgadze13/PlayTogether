@@ -257,7 +257,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 <img
                   src={t.stadiumPhoto}
                   alt={t.stadiumName}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', color: 'transparent', fontSize: 0 }}
+                  className="clean-stadium-img"
                 />
                 <div
                   style={{

@@ -11,6 +11,7 @@ import { ScrollToTop } from './Components/ScrollToTop'
 
 import { HomePage } from './pages/HomePage'
 import { SportsPage } from './pages/SportsPage'
+import { StadiumsPage } from './pages/StadiumsPage'
 import { GamesPage } from './pages/GamesPage'
 import { TournamentsPage } from './pages/TournamentsPage'
 import { AboutPage } from './pages/AboutPage'
@@ -42,6 +43,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage c={c} />} />
               <Route path="/sports" element={<SportsPage c={c} />} />
+              <Route path="/stadiums" element={<StadiumsPage c={c} />} />
               <Route path="/games" element={<GamesPage c={c} />} />
               <Route path="/tournaments" element={<TournamentsPage c={c} />} />
               <Route path="/about" element={<AboutPage c={c} />} />

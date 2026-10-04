@@ -412,7 +412,7 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                     <img
                       src={cardPhoto}
                       alt={stadium?.name || game.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      className="clean-stadium-img"
                     />
                     <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)', padding: '4px 8px', borderRadius: '6px', fontSize: '11px', color: '#ffb703', fontWeight: 800 }}>
                       ⭐ {stadium?.rating || 4.7}

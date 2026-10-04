@@ -29,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
       <nav className="nav-links">
         <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.home}</NavLink>
         <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.sports}</NavLink>
+        <NavLink to="/stadiums" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.stadiums}</NavLink>
         <NavLink to="/games" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.games}</NavLink>
         <NavLink to="/tournaments" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.tournaments}</NavLink>
         <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.about}</NavLink>

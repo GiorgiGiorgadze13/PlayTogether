@@ -801,9 +801,22 @@ a {
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
+/* Clean stadium picture utility - removes bottom-left watermarks & logos */
+.clean-stadium-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transform: scale(1.25);
+  transform-origin: 90% 10%;
+  transition: transform 0.35s ease;
+}
+
+.sport-card:hover .clean-stadium-img {
+  transform: scale(1.32);
+}
+
 .sport-card:hover .sport-visual {
   opacity: 1;
-  transform: scale(1.08) rotate(-5deg);
 }
 
 /* სურათების ზომის და ცენტრის ზუსტი რეგულირება (ფეხბურთი ყველაზე დიდი, სხვები გაზრდილი და სიმეტრიული) */

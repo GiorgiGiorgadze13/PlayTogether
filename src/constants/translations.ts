@@ -4,6 +4,7 @@ export const t: Record<Language, TranslationContent> = {
   en: {
     home: 'Home',
     sports: 'Sports',
+    stadiums: 'Stadiums',
     games: 'Games',
     tournaments: 'Tournaments',
     about: 'About',
@@ -58,6 +59,7 @@ export const t: Record<Language, TranslationContent> = {
   ka: {
     home: 'მთავარი',
     sports: 'სპორტი',
+    stadiums: 'სტადიონები',
     games: 'თამაშები',
     tournaments: 'ტურნირები',
     about: 'ჩვენ შესახებ',

@@ -374,7 +374,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                   <img
                     src={stadiumPhoto}
                     alt={stadiumName}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    className="clean-stadium-img"
                   />
                   <div
                     style={{
