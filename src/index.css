@@ -659,9 +659,14 @@ a {
 ========================================= */
 
 .content-section,
-.games-section {
-  width: min(1280px, calc(100% - 64px));
+.games-section,
+.tournaments-section {
+  width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
 }
 
 .section-heading {
@@ -990,14 +995,10 @@ a {
 
 .tournaments-section {
   width: 100%;
-  padding: 105px max(32px, calc((100% - 1280px) / 2));
-  background:
-    radial-gradient(
-      circle at 85% 30%,
-      rgba(201, 255, 53, 0.08),
-      transparent 28%
-    ),
-    #101214;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+  box-sizing: border-box;
 }
 
 .tournament-heading {

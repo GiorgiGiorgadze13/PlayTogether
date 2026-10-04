@@ -138,17 +138,42 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
   });
 
   return (
-    <section className="tournaments-section" id="tournaments" style={{ padding: '40px 0' }}>
-      <div className="tournament-heading" style={{ marginBottom: '24px' }}>
+    <section
+      className="tournaments-section"
+      id="tournaments"
+      style={{
+        maxWidth: '1280px',
+        width: '100%',
+        margin: '0 auto',
+        padding: '40px 24px 100px 24px',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div className="tournament-heading" style={{ marginBottom: '32px' }}>
         <div>
-          <span>{c.comingTogether}</span>
-          <h2>{c.playTournament}</h2>
-          <p>{c.tournamentDesc}</p>
+          <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '2px', color: '#c9ff35', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
+            {c.comingTogether}
+          </span>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 800, lineHeight: 1.15, margin: '0 0 12px', color: '#ffffff' }}>
+            {c.playTournament}
+          </h2>
+          <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'rgba(255,255,255,0.65)', maxWidth: '620px', margin: 0 }}>
+            {c.tournamentDesc}
+          </p>
         </div>
       </div>
 
       {/* Sport Category Filter Tabs */}
-      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '14px', marginBottom: '28px' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '10px',
+          overflowX: 'auto',
+          paddingBottom: '12px',
+          marginBottom: '32px',
+          scrollbarWidth: 'none',
+        }}
+      >
         {['All', 'Football', 'Tennis', 'Basketball', 'Volleyball', 'Rugby', 'Badminton'].map((sport) => {
           const isSelected = selectedSportFilter.toLowerCase() === sport.toLowerCase();
           return (
@@ -156,8 +181,8 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
               key={sport}
               onClick={() => setSelectedSportFilter(sport)}
               style={{
-                padding: '8px 16px',
-                borderRadius: '20px',
+                padding: '10px 20px',
+                borderRadius: '24px',
                 background: isSelected ? '#c9ff35' : '#151719',
                 color: isSelected ? '#070809' : '#ffffff',
                 border: isSelected ? '2px solid #c9ff35' : '1px solid rgba(255,255,255,0.15)',
@@ -165,6 +190,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 fontSize: '13px',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
+                transition: 'all 0.2s ease',
               }}
             >
               {sport === 'All' ? '🏆 All Sports' : sport}
@@ -176,14 +202,14 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
       {successModal && (
         <div
           style={{
-            padding: '14px 20px',
+            padding: '16px 24px',
             background: 'rgba(201, 255, 53, 0.15)',
             border: '1px solid rgba(201, 255, 53, 0.4)',
-            borderRadius: '12px',
+            borderRadius: '14px',
             color: '#c9ff35',
             fontSize: '14px',
             fontWeight: 800,
-            marginBottom: '24px',
+            marginBottom: '32px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -192,7 +218,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
           <span>✓ {successModal}</span>
           <button
             onClick={() => setSuccessModal(null)}
-            style={{ background: 'none', border: 'none', color: '#c9ff35', cursor: 'pointer', fontWeight: 800 }}
+            style={{ background: 'none', border: 'none', color: '#c9ff35', cursor: 'pointer', fontWeight: 800, fontSize: '16px' }}
           >
             ✕
           </button>
@@ -204,7 +230,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: '24px',
+          gap: '28px',
         }}
       >
         {filteredTournaments.map((t) => {
@@ -218,32 +244,34 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
               style={{
                 background: '#151719',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '20px',
+                borderRadius: '24px',
                 overflow: 'hidden',
-                boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
+                boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
                 display: 'flex',
                 flexDirection: 'column',
+                transition: 'transform 0.3s ease, border-color 0.3s ease',
               }}
             >
               {/* Stadium Photo Banner */}
-              <div style={{ position: 'relative', height: '170px', width: '100%', overflow: 'hidden' }}>
+              <div style={{ position: 'relative', height: '190px', width: '100%', overflow: 'hidden', background: '#1c1f22' }}>
                 <img
                   src={t.stadiumPhoto}
                   alt={t.stadiumName}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', color: 'transparent', fontSize: 0 }}
                 />
                 <div
                   style={{
                     position: 'absolute',
-                    top: '12px',
-                    left: '12px',
+                    top: '14px',
+                    left: '14px',
                     background: '#c9ff35',
                     color: '#070809',
-                    padding: '4px 10px',
+                    padding: '6px 12px',
                     borderRadius: '8px',
                     fontSize: '11px',
                     fontWeight: 900,
                     textTransform: 'uppercase',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                   }}
                 >
                   {t.icon} {t.sport} TOURNAMENT
@@ -252,15 +280,16 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 <div
                   style={{
                     position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    background: 'rgba(0,0,0,0.75)',
-                    backdropFilter: 'blur(4px)',
+                    top: '14px',
+                    right: '14px',
+                    background: 'rgba(0,0,0,0.85)',
+                    backdropFilter: 'blur(6px)',
                     color: '#ffb703',
-                    padding: '4px 10px',
+                    padding: '6px 12px',
                     borderRadius: '8px',
                     fontSize: '11px',
                     fontWeight: 800,
+                    border: '1px solid rgba(255,183,3,0.3)',
                   }}
                 >
                   🏆 {t.prizePool}
@@ -268,11 +297,11 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
               </div>
 
               {/* Tournament Details */}
-              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px', color: '#fff' }}>
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 8px', color: '#ffffff', lineHeight: 1.25 }}>
                   {t.title}
                 </h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', margin: '0 0 16px' }}>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', margin: '0 0 20px', lineHeight: 1.4 }}>
                   📍 <strong>{t.stadiumName}</strong> · {t.stadiumLocation}
                 </p>
 
@@ -280,51 +309,51 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 <div
                   style={{
                     background: '#0d0f11',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    marginBottom: '16px',
+                    padding: '14px 16px',
+                    borderRadius: '14px',
+                    marginBottom: '20px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>DATES</div>
-                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff', marginTop: '2px' }}>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>DATES</div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff', marginTop: '3px' }}>
                       📅 {t.dateStr}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>ENTRY FEE</div>
-                    <div style={{ fontSize: '13px', fontWeight: 800, color: '#c9ff35', marginTop: '2px' }}>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>ENTRY FEE</div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#c9ff35', marginTop: '3px' }}>
                       ₾{t.entryFee} / player
                     </div>
                   </div>
                 </div>
 
                 {/* Registered Teams Progress Bar */}
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
+                <div style={{ marginBottom: '24px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '8px' }}>
                     <span>Registered Teams / Players</span>
                     <span style={{ color: isFull ? '#ff6b6b' : '#c9ff35' }}>
                       {t.teamsRegistered} / {t.maxTeams} Teams
                     </span>
                   </div>
 
-                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden', marginBottom: '6px' }}>
+                  <div style={{ height: '7px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden', marginBottom: '8px' }}>
                     <div
                       style={{
                         height: '100%',
                         width: `${fillPercent}%`,
                         background: isFull ? '#ff6b6b' : '#c9ff35',
-                        borderRadius: '3px',
+                        borderRadius: '4px',
                         transition: 'width 0.3s ease',
                       }}
                     />
                   </div>
 
-                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>
                     {isFull ? '🔴 Registration Closed' : `🟢 ${t.maxTeams - t.teamsRegistered} team spots remaining`}
                   </div>
                 </div>
@@ -336,8 +365,8 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   style={{
                     marginTop: 'auto',
                     width: '100%',
-                    height: '44px',
-                    borderRadius: '10px',
+                    height: '48px',
+                    borderRadius: '12px',
                     border: 'none',
                     background: isRegistered ? 'rgba(201,255,53,0.2)' : isFull ? '#333' : '#c9ff35',
                     color: isRegistered ? '#c9ff35' : isFull ? '#888' : '#070809',
