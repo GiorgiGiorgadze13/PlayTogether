@@ -33,7 +33,6 @@ const PRESET_SLOTS: TimeSlotPreset[] = [
 export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   stadium,
   onClose,
-  c,
   onBookingSuccess,
 }) => {
   const { isAuthenticated, openAuthModal } = useAuth();

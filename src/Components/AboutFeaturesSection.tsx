@@ -81,7 +81,7 @@ const FAQ_ITEMS = [
   },
 ];
 
-export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = ({ c }) => {
+export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   return (
