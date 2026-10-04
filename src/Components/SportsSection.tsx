@@ -75,19 +75,25 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                 position: 'relative',
               }}
             >
-              {/* Sport AI-Style Image Header */}
-              <div style={{ position: 'relative', height: '180px', width: '100%', overflow: 'hidden' }}>
+              {/* Sport Image Header */}
+              <div style={{ position: 'relative', height: '190px', width: '100%', overflow: 'hidden', background: '#1c1f22' }}>
                 <img
                   src={sportItem.imageUrl}
                   alt={sportItem.name}
-                  className="clean-stadium-img"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.4s ease',
+                  }}
                 />
                 <div
                   style={{
                     position: 'absolute',
                     top: '12px',
                     left: '12px',
-                    background: 'rgba(0, 0, 0, 0.8)',
+                    background: 'rgba(7, 8, 9, 0.85)',
                     backdropFilter: 'blur(8px)',
                     color: '#c9ff35',
                     padding: '6px 12px',
@@ -97,7 +103,8 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    border: '1px solid rgba(201, 255, 53, 0.3)',
+                    border: '1px solid rgba(201, 255, 53, 0.35)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                   }}
                 >
                   <span style={{ fontSize: '16px' }}>{sportItem.icon}</span>
@@ -111,10 +118,11 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                     right: '12px',
                     background: '#c9ff35',
                     color: '#070809',
-                    padding: '4px 10px',
+                    padding: '5px 12px',
                     borderRadius: '8px',
                     fontSize: '11px',
                     fontWeight: 900,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                   }}
                 >
                   👥 {sportItem.maxPlayers} MAX PLAYERS
@@ -130,39 +138,60 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                   <span style={{ fontSize: '18px', color: '#c9ff35', fontWeight: 900 }}>↗</span>
                 </div>
 
-                <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', margin: '0 0 16px', lineHeight: 1.45, flex: 1 }}>
+                <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)', margin: '0 0 16px', lineHeight: 1.45, flex: 1 }}>
                   {sportItem.description}
                 </p>
 
+                {/* Booking Steps Flow Indicator */}
                 <div
                   style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
                     background: '#0d0f11',
-                    padding: '10px 14px',
-                    borderRadius: '10px',
+                    padding: '12px 14px',
+                    borderRadius: '12px',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    color: 'rgba(255,255,255,0.8)',
+                    marginBottom: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
                   }}
                 >
-                  <span>Flow:</span>
-                  <span style={{ color: '#c9ff35' }}>
-                    Choose Venue → Time Slot → Book
-                  </span>
+                  <div style={{ fontSize: '10px', fontWeight: 800, color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    ⚡ BOOKING FLOW
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      color: '#c9ff35',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <span style={{ background: 'rgba(201, 255, 53, 0.14)', padding: '3px 8px', borderRadius: '6px' }}>
+                      1. Venue
+                    </span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>→</span>
+                    <span style={{ background: 'rgba(201, 255, 53, 0.14)', padding: '3px 8px', borderRadius: '6px' }}>
+                      2. Time Slot
+                    </span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.3)' }}>→</span>
+                    <span style={{ background: 'rgba(201, 255, 53, 0.14)', padding: '3px 8px', borderRadius: '6px' }}>
+                      3. Book
+                    </span>
+                  </div>
                 </div>
 
                 <button
                   style={{
-                    marginTop: '16px',
+                    marginTop: 'auto',
                     width: '100%',
-                    height: '44px',
+                    height: '46px',
                     background: '#c9ff35',
                     color: '#070809',
                     border: 'none',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     fontWeight: 800,
                     fontSize: '13px',
                     cursor: 'pointer',
@@ -170,7 +199,7 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '6px',
-                    transition: 'all 0.2s ease',
+                    transition: 'transform 0.2s ease, background 0.2s ease',
                   }}
                 >
                   Book {sportItem.name} Stadium →

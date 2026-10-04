@@ -15,7 +15,7 @@ export const SPORT_REQUIREMENTS: Record<string, SportRequirement> = {
     maxPlayers: 22,
     defaultSearchQuery: 'football stadium field',
     icon: '⚽',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1200&q=80',
     description: '7v7 & 11v11 Full Turf Pitches & Floodlit Arenas',
   },
   tennis: {

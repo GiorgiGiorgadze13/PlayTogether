@@ -15,7 +15,7 @@
 :root {
   font-family: 'Manrope', sans-serif;
   color: #ffffff;
-  background: #070809;
+  background: #151719;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,7 +24,7 @@
   /* ფერების პალიტრა */
   --black: #070809;
   --black-soft: #0d0f11;
-  --black-card: #111315;
+  --black-card: #151719;
 
   --white: #ffffff;
   --white-soft: #f5f5f2;
@@ -44,7 +44,15 @@ html {
 
 body {
   min-width: 320px;
-  background: var(--black);
+  background-color: #151719;
+  background-image:
+    radial-gradient(circle at 70% 20%, rgba(201, 255, 53, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 20% 55%, rgba(201, 255, 53, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 85%, rgba(201, 255, 53, 0.07) 0%, transparent 48%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: #ffffff;
 }
 
 button,
@@ -70,8 +78,8 @@ a {
 .app {
   width: 100%;
   min-height: 100vh;
-  overflow: hidden;
-  background: var(--black);
+  position: relative;
+  background: transparent;
 }
 
 
@@ -550,7 +558,7 @@ a {
 .search-section {
   width: 100%;
   padding: 60px max(32px, calc((100% - 1280px) / 2));
-  background: var(--black); /* მთლიანი ფონი შავია */
+  background: transparent;
 }
 
 /* ცალკე გამოტანილი თეთრი ჩარჩო მომრგვალებული კიდეებით */
@@ -1371,6 +1379,11 @@ a {
 ========================================= */
 
 @media (max-width: 1050px) {
+  body {
+    background-image:
+      radial-gradient(circle at 70% 20%, rgba(201, 255, 53, 0.075) 0%, transparent 45%),
+      radial-gradient(circle at 20% 60%, rgba(201, 255, 53, 0.045) 0%, transparent 40%);
+  }
 
   .navbar,
   .hero,
@@ -1437,6 +1450,11 @@ a {
 ========================================= */
 
 @media (max-width: 700px) {
+  body {
+    background-image:
+      radial-gradient(circle at 50% 15%, rgba(201, 255, 53, 0.065) 0%, transparent 40%),
+      radial-gradient(circle at 50% 70%, rgba(201, 255, 53, 0.04) 0%, transparent 45%);
+  }
 
   .navbar,
   .hero,
