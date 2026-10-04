@@ -4,7 +4,7 @@ import type { Stadium, AvailabilityResponse, VenuePlace } from '../types/api';
 import { api, ApiError } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import type { TranslationContent } from '../types/translations';
-import { getSportRequirements, SPORT_REQUIREMENTS } from '../constants/sports';
+import { getSportRequirements, SPORT_REQUIREMENTS, getFallbackVenuesForSport } from '../constants/sports';
 
 interface StadiumBookingModalProps {
   stadium?: Stadium | VenuePlace | null;
@@ -85,6 +85,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const [searchQuery, setSearchQuery] = useState('');
   const [venues, setVenues] = useState<VenuePlace[]>([]);
+  const [currentVenueIndex, setCurrentVenueIndex] = useState<number>(0);
   const [isSearchingVenues, setIsSearchingVenues] = useState(false);
 
   const [date, setDate] = useState<string>(upcomingDays[1].isoDate); // Default Tomorrow
@@ -102,21 +103,34 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const sportReq = getSportRequirements(selectedSport);
 
-  // Fetch real Google Places venues for chosen sport
+  // Fetch real Google Places venues for chosen sport with fallbacks
   const fetchVenues = useCallback(async (sportName: string, queryText: string) => {
     try {
       setIsSearchingVenues(true);
       const res = await api.searchVenues(sportName, queryText);
-      setVenues(res.venues);
-      if (!selectedVenue && res.venues.length > 0) {
+      if (res.venues && res.venues.length > 0) {
+        setVenues(res.venues);
         setSelectedVenue(res.venues[0]);
+        setCurrentVenueIndex(0);
+      } else {
+        const fallbacks = getFallbackVenuesForSport(sportName, queryText);
+        setVenues(fallbacks);
+        if (fallbacks.length > 0) {
+          setSelectedVenue(fallbacks[0]);
+          setCurrentVenueIndex(0);
+        }
       }
-    } catch (err) {
-      console.error('Failed to search venues:', err);
+    } catch {
+      const fallbacks = getFallbackVenuesForSport(sportName, queryText);
+      setVenues(fallbacks);
+      if (fallbacks.length > 0) {
+        setSelectedVenue(fallbacks[0]);
+        setCurrentVenueIndex(0);
+      }
     } finally {
       setIsSearchingVenues(false);
     }
-  }, [selectedVenue]);
+  }, []);
 
   useEffect(() => {
     fetchVenues(selectedSport, searchQuery);
@@ -371,12 +385,12 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
         )}
 
-        {/* STEP 2: CHOOSE VENUE (Google Places Search) */}
+        {/* STEP 2: CHOOSE VENUE (Interactive Carousel with Left/Right Navigation) */}
         {step === 2 && (
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>2. Choose Stadium / Venue</h2>
             <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
-              Real venues found for <strong style={{ color: '#c9ff35' }}>{sportReq.name}</strong> ({sportReq.maxPlayers} max players)
+              Select a stadium for <strong style={{ color: '#c9ff35' }}>{sportReq.name}</strong> ({venues.length} venues available)
             </p>
 
             <div style={{ marginBottom: '16px' }}>
@@ -400,79 +414,254 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
             </div>
 
             {isSearchingVenues ? (
-              <div style={{ padding: '30px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+              <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
                 Searching Google Places & real venues...
               </div>
             ) : venues.length === 0 ? (
-              <div style={{ padding: '30px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
-                No venues found. Try another search term.
+              <div style={{ padding: '40px', textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>
+                No venues found for "{searchQuery}".
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '340px', overflowY: 'auto', marginBottom: '20px' }}>
-                {venues.map((v) => {
-                  const isSelected = selectedVenue?.id === v.id;
-                  const photoSrc = v.selectedPhotoUrl || v.imageUrl;
+              <div>
+                {/* Main Active Stadium Carousel Card */}
+                {(() => {
+                  const activeVenue = venues[currentVenueIndex] || venues[0];
+                  const photoSrc = activeVenue.selectedPhotoUrl || activeVenue.imageUrl;
+
+                  const handlePrev = () => {
+                    const prevIdx = (currentVenueIndex - 1 + venues.length) % venues.length;
+                    setCurrentVenueIndex(prevIdx);
+                    setSelectedVenue(venues[prevIdx]);
+                  };
+
+                  const handleNext = () => {
+                    const nextIdx = (currentVenueIndex + 1) % venues.length;
+                    setCurrentVenueIndex(nextIdx);
+                    setSelectedVenue(venues[nextIdx]);
+                  };
+
                   return (
-                    <div
-                      key={v.id}
-                      onClick={() => {
-                        setSelectedVenue(v);
-                      }}
-                      style={{
-                        display: 'flex',
-                        gap: '14px',
-                        padding: '12px',
-                        borderRadius: '14px',
-                        background: isSelected ? 'rgba(201, 255, 53, 0.12)' : '#0d0f11',
-                        border: isSelected ? '2px solid #c9ff35' : '1px solid rgba(255, 255, 255, 0.1)',
-                        cursor: 'pointer',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <div style={{ width: '80px', height: '70px', borderRadius: '10px', overflow: 'hidden', flexShrink: 0 }}>
-                        <img
-                          src={photoSrc}
-                          alt={v.name}
-                          className="clean-stadium-img"
-                        />
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <h4 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 2px' }}>{v.name}</h4>
-                          <span style={{ fontSize: '12px', color: '#ffb703', fontWeight: 700 }}>
-                            ⭐ {v.rating || 4.7}
-                          </span>
+                    <div style={{ marginBottom: '16px' }}>
+                      <div
+                        style={{
+                          position: 'relative',
+                          background: '#151719',
+                          border: '2px solid #c9ff35',
+                          borderRadius: '16px',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
+                        }}
+                      >
+                        {/* Left Arrow Button */}
+                        <button
+                          type="button"
+                          onClick={handlePrev}
+                          title="Previous Stadium"
+                          style={{
+                            position: 'absolute',
+                            left: '12px',
+                            top: '90px',
+                            transform: 'translateY(-50%)',
+                            zIndex: 10,
+                            width: '42px',
+                            height: '42px',
+                            borderRadius: '50%',
+                            background: 'rgba(0, 0, 0, 0.85)',
+                            backdropFilter: 'blur(6px)',
+                            color: '#c9ff35',
+                            border: '1px solid rgba(201, 255, 53, 0.5)',
+                            cursor: 'pointer',
+                            fontSize: '20px',
+                            fontWeight: 900,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+                          }}
+                        >
+                          ←
+                        </button>
+
+                        {/* Right Arrow Button */}
+                        <button
+                          type="button"
+                          onClick={handleNext}
+                          title="Next Stadium"
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            top: '90px',
+                            transform: 'translateY(-50%)',
+                            zIndex: 10,
+                            width: '42px',
+                            height: '42px',
+                            borderRadius: '50%',
+                            background: 'rgba(0, 0, 0, 0.85)',
+                            backdropFilter: 'blur(6px)',
+                            color: '#c9ff35',
+                            border: '1px solid rgba(201, 255, 53, 0.5)',
+                            cursor: 'pointer',
+                            fontSize: '20px',
+                            fontWeight: 900,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+                          }}
+                        >
+                          →
+                        </button>
+
+                        {/* Image Header */}
+                        <div style={{ position: 'relative', height: '185px', width: '100%', overflow: 'hidden' }}>
+                          <img
+                            src={photoSrc}
+                            alt={activeVenue.name}
+                            className="clean-stadium-img"
+                          />
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '12px',
+                              left: '12px',
+                              background: '#c9ff35',
+                              color: '#070809',
+                              padding: '4px 10px',
+                              borderRadius: '8px',
+                              fontSize: '11px',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                            }}
+                          >
+                            <span>{sportReq.icon}</span> OPTION {currentVenueIndex + 1} OF {venues.length}
+                          </div>
+
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '12px',
+                              right: '12px',
+                              background: 'rgba(0,0,0,0.85)',
+                              color: '#ffb703',
+                              padding: '4px 10px',
+                              borderRadius: '8px',
+                              fontSize: '12px',
+                              fontWeight: 800,
+                              border: '1px solid rgba(255,183,3,0.3)',
+                            }}
+                          >
+                            ⭐ {activeVenue.rating || 4.8}
+                          </div>
                         </div>
-                        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', margin: '0 0 4px' }}>
-                          📍 {v.address || v.location}
-                        </p>
-                        <span style={{ fontSize: '11px', color: '#c9ff35', fontWeight: 700 }}>
-                          ₾{v.price}/player
-                        </span>
+
+                        {/* Venue Info Details */}
+                        <div style={{ padding: '16px' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 4px', color: '#fff' }}>
+                            {activeVenue.name}
+                          </h3>
+                          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.65)', margin: '0 0 12px' }}>
+                            📍 {activeVenue.address || activeVenue.location}
+                          </p>
+
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              background: '#0d0f11',
+                              padding: '10px 14px',
+                              borderRadius: '10px',
+                              marginBottom: '14px',
+                              border: '1px solid rgba(255,255,255,0.08)',
+                            }}
+                          >
+                            <div>
+                              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, display: 'block' }}>CAPACITY</span>
+                              <strong style={{ fontSize: '12px', color: '#fff' }}>👥 Max {sportReq.maxPlayers} Players</strong>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, display: 'block' }}>RATE / PLAYER</span>
+                              <strong style={{ fontSize: '14px', color: '#c9ff35' }}>₾{activeVenue.price || 15}</strong>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedVenue(activeVenue);
+                              setStep(3);
+                            }}
+                            style={{
+                              width: '100%',
+                              height: '44px',
+                              background: '#c9ff35',
+                              color: '#070809',
+                              border: 'none',
+                              borderRadius: '10px',
+                              fontWeight: 900,
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px',
+                            }}
+                          >
+                            Select {activeVenue.name} & Continue →
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Bottom Thumbnail Strip */}
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '10px',
+                          overflowX: 'auto',
+                          paddingTop: '10px',
+                          paddingBottom: '4px',
+                          scrollbarWidth: 'none',
+                        }}
+                      >
+                        {venues.map((v, idx) => {
+                          const isSelected = idx === currentVenueIndex;
+                          const thumbPhoto = v.selectedPhotoUrl || v.imageUrl;
+                          return (
+                            <div
+                              key={v.id}
+                              onClick={() => {
+                                setCurrentVenueIndex(idx);
+                                setSelectedVenue(v);
+                              }}
+                              style={{
+                                flexShrink: 0,
+                                width: '120px',
+                                background: isSelected ? 'rgba(201, 255, 53, 0.15)' : '#0d0f11',
+                                border: isSelected ? '2px solid #c9ff35' : '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '10px',
+                                padding: '6px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                              }}
+                            >
+                              <div style={{ height: '54px', borderRadius: '6px', overflow: 'hidden', marginBottom: '4px' }}>
+                                <img src={thumbPhoto} alt={v.name} className="clean-stadium-img" />
+                              </div>
+                              <div style={{ fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isSelected ? '#c9ff35' : '#fff' }}>
+                                {v.name}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   );
-                })}
+                })()}
               </div>
             )}
-
-            <button
-              onClick={() => setStep(3)}
-              disabled={!selectedVenue}
-              style={{
-                width: '100%',
-                height: '46px',
-                background: selectedVenue ? '#c9ff35' : '#333',
-                color: selectedVenue ? '#070809' : '#888',
-                fontWeight: 800,
-                borderRadius: '10px',
-                border: 'none',
-                cursor: selectedVenue ? 'pointer' : 'not-allowed',
-                fontSize: '14px',
-              }}
-            >
-              Continue to Date & Available Slots →
-            </button>
           </div>
         )}
 
