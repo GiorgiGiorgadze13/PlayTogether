@@ -14,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Close mobile drawer on route change
+  // Close mobile drawer automatically on route navigation
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
@@ -24,106 +24,88 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
   };
 
   return (
-    <>
+    <div className="navbar-sticky-wrapper">
       <header className="navbar">
-        {/* Logo */}
-        <Link to="/" className="logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+        {/* Zone 1: Logo */}
+        <Link 
+          to="/" 
+          className="logo" 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '10px', 
+            textDecoration: 'none',
+            minWidth: 'max-content',
+            flexShrink: 0
+          }}
+        >
           <img 
             src="/ლოგო.png" 
             alt="PlayTogether Logo" 
-            style={{ width: '64px', height: '64px', objectFit: 'contain', marginLeft: '-16px' }} 
+            style={{ width: '42px', height: '42px', objectFit: 'contain' }} 
           />
-          <span className="logo-text" style={{ fontSize: '1.5rem', fontWeight: 'bold', marginLeft: '-6px' }}>
+          <span className="logo-text" style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.5px', whiteSpace: 'nowrap' }}>
             <span style={{ color: '#ffffff' }}>Play</span>
-            <span style={{ color: '#888888' }}>Together</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.48)' }}>Together</span>
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
+        {/* Zone 2: Centered Nav Links (Desktop Only) */}
         <nav className="nav-links desktop-only-nav">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.home}</NavLink>
-          <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.sports}</NavLink>
-          <NavLink to="/stadiums" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.stadiums}</NavLink>
-          <NavLink to="/games" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.findGameBtn}</NavLink>
-          <NavLink to="/find-players" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.findPlayers}</NavLink>
-          <NavLink to="/tournaments" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.tournaments}</NavLink>
-          <NavLink to="/learn" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.learn}</NavLink>
-          <NavLink to="/about" className={({ isActive }) => (isActive ? 'active-link' : '')}>{c.about}</NavLink>
-          {isAuthenticated && (
-            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-              My Profile
-            </NavLink>
-          )}
+          <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.home}
+          </NavLink>
+          <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.sports}
+          </NavLink>
+          <NavLink to="/stadiums" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.stadiums}
+          </NavLink>
+          <NavLink to="/games" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.findGameBtn}
+          </NavLink>
+          <NavLink to="/find-players" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.findPlayers}
+          </NavLink>
+          <NavLink to="/tournaments" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.tournaments}
+          </NavLink>
+          <NavLink to="/learn" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+            {c.learn}
+          </NavLink>
         </nav>
 
-        {/* Desktop Right Actions */}
+        {/* Zone 3: Right Actions (Desktop Only) */}
         <div className="nav-actions desktop-only-nav">
           {isAuthenticated && user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Link
-                to="/profile"
-                style={{
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  color: '#c9ff35',
-                  textDecoration: 'none',
-                  background: 'rgba(201, 255, 53, 0.15)',
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(201, 255, 53, 0.3)',
-                }}
-              >
-                👤 {user.name}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Link to="/profile" className="username-pill" title="View Profile">
+                <span style={{ fontSize: '14px' }}>👤</span>
+                <span>{user.name || 'giorgadze1313'}</span>
               </Link>
-              <button
-                onClick={logout}
-                className="login-button"
-                style={{ padding: '0 12px', height: '36px', fontSize: '12px' }}
-              >
+              <button onClick={logout} className="logout-button">
                 Logout
               </button>
             </div>
           ) : (
-            <>
-              <button className="login-button" onClick={() => openAuthModal('login')}>{c.login}</button>
-              <button className="signup-button" onClick={() => openAuthModal('register')}>{c.signup}</button>
-            </>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button className="login-button" onClick={() => openAuthModal('login')}>
+                {c.login}
+              </button>
+              <button className="signup-button" onClick={() => openAuthModal('register')}>
+                {c.signup}
+              </button>
+            </div>
           )}
 
-          <button 
-            className="lang-switcher" 
-            onClick={onToggleLanguage} 
-            style={{ 
-              background: 'none', 
-              border: '1px solid rgba(255,255,255,0.2)', 
-              padding: '6px 12px', 
-              borderRadius: '8px', 
-              color: '#fff', 
-              cursor: 'pointer', 
-              marginLeft: '10px',
-              fontWeight: 500
-            }}
-          >
+          <button className="lang-switcher" onClick={onToggleLanguage}>
             {lang === 'en' ? 'GEO' : 'ENG'}
           </button>
         </div>
 
-        {/* Mobile Header Right Controls (Lang Switcher + Burger Toggle) */}
+        {/* Mobile Right Controls (< 1100px) */}
         <div className="mobile-only-controls" style={{ display: 'none', alignItems: 'center', gap: '10px' }}>
-          <button 
-            className="lang-switcher" 
-            onClick={onToggleLanguage} 
-            style={{ 
-              background: 'none', 
-              border: '1px solid rgba(255,255,255,0.25)', 
-              padding: '6px 12px', 
-              borderRadius: '8px', 
-              color: '#fff', 
-              cursor: 'pointer',
-              fontWeight: 700,
-              fontSize: '12px',
-            }}
-          >
+          <button className="lang-switcher" onClick={onToggleLanguage}>
             {lang === 'en' ? 'GEO' : 'ENG'}
           </button>
 
@@ -162,13 +144,14 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
             bottom: 0,
             background: 'rgba(7, 8, 9, 0.96)',
             backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
             zIndex: 999,
             padding: '24px 20px 40px',
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
             overflowY: 'auto',
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -305,72 +288,44 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
             >
               🥊 {c.learn}
             </NavLink>
-
-            <NavLink
-              to="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              ℹ️ {c.about}
-            </NavLink>
-
-            {isAuthenticated && (
-              <NavLink
-                to="/profile"
-                onClick={() => setIsMobileMenuOpen(false)}
-                style={({ isActive }) => ({
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  background: isActive ? '#c9ff35' : '#151719',
-                  color: isActive ? '#070809' : '#fff',
-                  fontWeight: 800,
-                  fontSize: '15px',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                })}
-              >
-                👤 My Profile
-              </NavLink>
-            )}
           </nav>
 
           <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
 
-          {/* Auth Actions in Drawer */}
+          {/* User / Auth Actions in Mobile Drawer */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {isAuthenticated && user ? (
-              <button
-                onClick={() => {
-                  logout();
-                  setIsMobileMenuOpen(false);
-                }}
-                style={{
-                  width: '100%',
-                  height: '46px',
-                  background: '#ff4d4d',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '12px',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                }}
-              >
-                Logout ({user.name})
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="username-pill"
+                  style={{ justifyContent: 'center', height: '44px', width: '100%' }}
+                >
+                  <span>👤</span>
+                  <span>{user.name || 'giorgadze1313'}</span>
+                </Link>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '44px',
+                    background: 'rgba(255, 77, 77, 0.15)',
+                    color: '#ff4d4d',
+                    border: '1px solid rgba(255, 77, 77, 0.3)',
+                    borderRadius: '12px',
+                    fontWeight: 800,
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <button
@@ -414,7 +369,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
