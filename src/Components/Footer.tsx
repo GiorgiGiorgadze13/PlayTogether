@@ -27,7 +27,9 @@ export const Footer: React.FC<FooterProps> = ({ c }) => {
         <div className="footer-column">
           <span>{c.explore}</span>
           <Link to="/sports">{c.sports}</Link>
-          <Link to="/games">{c.games}</Link>
+          <Link to="/games">{c.findGameBtn}</Link>
+          <Link to="/find-players">{c.findPlayers}</Link>
+          <Link to="/learn">{c.learn}</Link>
           <Link to="/tournaments">{c.tournaments}</Link>
         </div>
         <div className="footer-column">

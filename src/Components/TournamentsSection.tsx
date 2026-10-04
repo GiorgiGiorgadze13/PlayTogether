@@ -32,7 +32,7 @@ const TOURNAMENTS_DATA: Tournament[] = [
     dateStr: 'Oct 18-20, 2026',
     stadiumName: 'Mikheil Meskhi Stadium',
     stadiumLocation: 'Tbilisi, Vake',
-    stadiumPhoto: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',
+    stadiumPhoto: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1000&q=80',
     teamsRegistered: 12,
     maxTeams: 16,
     entryFee: 25,
@@ -258,6 +258,9 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   src={t.stadiumPhoto}
                   alt={t.stadiumName}
                   className="clean-stadium-img"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1000&q=80';
+                  }}
                 />
                 <div
                   style={{

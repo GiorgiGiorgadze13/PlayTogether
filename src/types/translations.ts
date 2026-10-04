@@ -6,6 +6,8 @@ export interface TranslationContent {
   stadiums: string;
   games: string;
   tournaments: string;
+  learn: string;
+  findPlayers: string;
   about: string;
   login: string;
   signup: string;
@@ -54,4 +56,25 @@ export interface TranslationContent {
   account: string;
   contact: string;
   rights: string;
+  // Learn & Instructors translations
+  learnEyebrow: string;
+  learnTitle: string;
+  learnSubtitle: string;
+  findInstructor: string;
+  startLearning: string;
+  certifiedCoaches: string;
+  viewAllCoaches: string;
+  lessonPricing: string;
+  perHour: string;
+  filterAll: string;
+  filterRacket: string;
+  filterTeam: string;
+  filterCombat: string;
+  bookLesson: string;
+  instructorQualifications: string;
+  experience: string;
+  rating: string;
+  individualLesson: string;
+  groupLesson: string;
+  selectSlot: string;
 }

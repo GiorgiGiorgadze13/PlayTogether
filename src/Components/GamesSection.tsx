@@ -22,7 +22,7 @@ const FALLBACK_SPORT_GAMES: Game[] = [
     endTime: '20:00',
     maxPlayers: 14,
     status: 'UPCOMING',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',
+    selectedPhotoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1000&q=80',
     createdAt: new Date().toISOString(),
     stadium: {
       id: 'stadium-football-1',
@@ -31,7 +31,7 @@ const FALLBACK_SPORT_GAMES: Game[] = [
       location: 'Tbilisi, Vake',
       address: '74 Chavchavadze Ave, Tbilisi',
       sport: 'Football',
-      imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',
+      imageUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1000&q=80',
       rating: 4.8,
       price: 15.0,
       createdAt: new Date().toISOString(),

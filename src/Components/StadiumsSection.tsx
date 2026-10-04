@@ -19,8 +19,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.740867,
     longitude: 44.739850,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+    selectedPhotoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
     rating: 4.8,
     price: 110,
     createdAt: new Date().toISOString(),
@@ -139,8 +139,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.721370,
     longitude: 44.720280,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+    selectedPhotoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
     rating: 5.0,
     price: 550,
     createdAt: new Date().toISOString(),
@@ -374,6 +374,9 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c }) => {
                     src={stadium.selectedPhotoUrl || stadium.imageUrl}
                     alt={stadium.name}
                     className="clean-stadium-img"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80';
+                    }}
                   />
                   <div
                     style={{

@@ -339,7 +339,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
               game.selectedPhotoUrl ||
               game.stadium?.selectedPhotoUrl ||
               game.stadium?.imageUrl ||
-              'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80';
+              'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1000&q=80';
 
             const stadiumName = game.stadium?.name || 'Sports Stadium';
             const stadiumAddress = game.stadium?.address || game.stadium?.location || 'Tbilisi, Georgia';

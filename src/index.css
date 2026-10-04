@@ -1704,3 +1704,17 @@ a {
     gap: 8px;
   }
 }
+
+/* Header Responsive Burger Menu Rules */
+@media (max-width: 1080px) {
+  .desktop-only-nav {
+    display: none !important;
+  }
+  .mobile-only-controls {
+    display: flex !important;
+  }
+  .navbar {
+    width: calc(100% - 32px);
+    height: 72px;
+  }
+}

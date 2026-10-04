@@ -14,6 +14,8 @@ import { SportsPage } from './pages/SportsPage'
 import { StadiumsPage } from './pages/StadiumsPage'
 import { GamesPage } from './pages/GamesPage'
 import { TournamentsPage } from './pages/TournamentsPage'
+import { LearnPage } from './pages/LearnPage'
+import { FindPlayersPage } from './pages/FindPlayersPage'
 import { AboutPage } from './pages/AboutPage'
 import { ProfilePage } from './pages/ProfilePage'
 
@@ -46,6 +48,8 @@ function App() {
               <Route path="/stadiums" element={<StadiumsPage c={c} />} />
               <Route path="/games" element={<GamesPage c={c} />} />
               <Route path="/tournaments" element={<TournamentsPage c={c} />} />
+              <Route path="/learn" element={<LearnPage c={c} />} />
+              <Route path="/find-players" element={<FindPlayersPage c={c} />} />
               <Route path="/about" element={<AboutPage c={c} />} />
               <Route path="/profile" element={<ProfilePage c={c} />} />
               <Route path="/search" element={<GamesPage c={c} />} />
