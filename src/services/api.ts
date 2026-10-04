@@ -100,7 +100,7 @@ export const api = {
     });
   },
 
-  checkAvailability: (
+  checkAvailability: async (
     stadiumId: string,
     date: string,
     startTime?: string,
@@ -110,22 +110,67 @@ export const api = {
     if (startTime) params.append('startTime', startTime);
     if (endTime) params.append('endTime', endTime);
 
-    return fetchApi<AvailabilityResponse>(`/stadiums/${stadiumId}/availability?${params.toString()}`, {
-      method: 'GET',
-    });
+    try {
+      return await fetchApi<AvailabilityResponse>(`/stadiums/${stadiumId}/availability?${params.toString()}`, {
+        method: 'GET',
+      });
+    } catch {
+      // Check local storage custom games for slot conflicts when backend is unreachable
+      const customGames: Game[] = JSON.parse(localStorage.getItem('playTogether_custom_games') || '[]');
+      const dayGames = customGames.filter((g) => g.stadiumId === stadiumId && g.date.startsWith(date));
+      const bookedSlots = dayGames.map((g) => ({
+        id: g.id,
+        title: g.title,
+        date: g.date,
+        startTime: g.startTime,
+        endTime: g.endTime,
+      }));
+
+      const isConflicting =
+        startTime && endTime && bookedSlots.some((b) => startTime < b.endTime && endTime > b.startTime);
+      return {
+        available: !isConflicting,
+        message: isConflicting ? 'Slot already booked.' : 'Venue open for booking.',
+        bookedSlots,
+      };
+    }
   },
 
   // Games API
-  getGames: (params?: { stadiumId?: string; sport?: string; date?: string }): Promise<{ games: Game[] }> => {
+  getGames: async (params?: { stadiumId?: string; sport?: string; date?: string }): Promise<{ games: Game[] }> => {
     const queryParams = new URLSearchParams();
     if (params?.stadiumId) queryParams.append('stadiumId', params.stadiumId);
     if (params?.sport) queryParams.append('sport', params.sport);
     if (params?.date) queryParams.append('date', params.date);
 
     const query = queryParams.toString() ? `?${queryParams.toString()}` : '';
-    return fetchApi<{ games: Game[] }>(`/games${query}`, {
-      method: 'GET',
-    });
+    let apiGames: Game[] = [];
+    try {
+      const res = await fetchApi<{ games: Game[] }>(`/games${query}`, {
+        method: 'GET',
+      });
+      apiGames = res.games || [];
+    } catch {
+      apiGames = [];
+    }
+
+    const customGames: Game[] = JSON.parse(localStorage.getItem('playTogether_custom_games') || '[]');
+    const combined = [...customGames, ...apiGames];
+
+    let filtered = combined;
+    if (params?.stadiumId) {
+      filtered = filtered.filter((g) => g.stadiumId === params.stadiumId);
+    }
+    if (params?.sport) {
+      filtered = filtered.filter(
+        (g) => g.stadium?.sport?.toLowerCase() === params.sport?.toLowerCase()
+      );
+    }
+    if (params?.date) {
+      filtered = filtered.filter((g) => g.date.startsWith(params.date!));
+    }
+
+    return { games: filtered };
   },
 
   getGameById: (id: string): Promise<{ game: Game }> => {

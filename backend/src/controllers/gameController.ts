@@ -65,9 +65,20 @@ export const createGame = async (req: Request, res: Response, next: NextFunction
       });
     }
 
-    const bookingDate = new Date(date);
-    const startOfDay = new Date(new Date(bookingDate).setHours(0, 0, 0, 0));
-    const endOfDay = new Date(new Date(bookingDate).setHours(23, 59, 59, 999));
+    const [yearStr, monthStr, dayStr] = date.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+
+    const startOfDay =
+      !isNaN(year) && !isNaN(month) && !isNaN(day)
+        ? new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0))
+        : new Date(new Date(date).setHours(0, 0, 0, 0));
+
+    const endOfDay =
+      !isNaN(year) && !isNaN(month) && !isNaN(day)
+        ? new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999))
+        : new Date(new Date(date).setHours(23, 59, 59, 999));
 
     // Check for overlapping games at the same stadium on the same date
     const existingGames = await prisma.game.findMany({
@@ -163,11 +174,16 @@ export const getAllGames = async (req: Request, res: Response, next: NextFunctio
     }
 
     if (date) {
-      const targetDate = new Date(String(date));
-      if (!isNaN(targetDate.getTime())) {
+      const dateStr = String(date);
+      const [yearStr, monthStr, dayStr] = dateStr.split('-');
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      const day = parseInt(dayStr, 10);
+
+      if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
         where.date = {
-          gte: new Date(new Date(targetDate).setHours(0, 0, 0, 0)),
-          lte: new Date(new Date(targetDate).setHours(23, 59, 59, 999)),
+          gte: new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0)),
+          lte: new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999)),
         };
       }
     }
