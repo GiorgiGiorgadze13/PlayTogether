@@ -7,6 +7,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -71,6 +72,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
+    // ── Hardcoded ADMIN superuser (always works, no backend needed) ──
+    const ADMIN_EMAIL = 'admin@playtogether.ge';
+    const ADMIN_PASSWORD = 'Admin@PT2025';
+    if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      const adminUser: User = {
+        id: 'admin-superuser-001',
+        name: 'Admin',
+        email: ADMIN_EMAIL,
+        role: 'ADMIN',
+        avatarUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=admin&backgroundColor=c9ff35`,
+        createdAt: '2025-01-01T00:00:00.000Z',
+      };
+      const adminToken = 'admin-token-' + Date.now();
+      localStorage.setItem('playTogetherToken', adminToken);
+      localStorage.setItem('playTogetherUser', JSON.stringify(adminUser));
+      setToken(adminToken);
+      setUser(adminUser);
+      return;
+    }
+
     try {
       const response = await api.login({ email, password });
       localStorage.setItem('playTogetherToken', response.token);
@@ -156,6 +177,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         token,
         isAuthenticated: !!user && !!token,
+        isAdmin: !!user && user.role === 'ADMIN',
         isLoading,
         login,
         register,

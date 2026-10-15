@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => {
-  const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout, openAuthModal } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -79,6 +79,21 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
         <div className="nav-actions desktop-only-nav">
           {isAuthenticated && user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    padding: '0 14px', height: '36px', borderRadius: '8px',
+                    background: 'linear-gradient(135deg, rgba(201,255,53,0.2), rgba(201,255,53,0.08))',
+                    border: '1px solid rgba(201,255,53,0.4)', color: '#c9ff35',
+                    fontWeight: 800, fontSize: '12px', textDecoration: 'none',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  🛡️ Admin Panel
+                </Link>
+              )}
               <Link to="/profile" className="username-pill" title="View Profile">
                 <span style={{ fontSize: '14px' }}>👤</span>
                 <span>{user.name || 'giorgadze1313'}</span>
@@ -296,6 +311,20 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {isAuthenticated && user ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                      height: '44px', borderRadius: '12px', fontWeight: 800, fontSize: '14px',
+                      textDecoration: 'none', background: 'rgba(201,255,53,0.12)',
+                      border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35',
+                    }}
+                  >
+                    🛡️ Admin Panel
+                  </Link>
+                )}
                 <Link
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}

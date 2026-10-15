@@ -18,6 +18,7 @@ import { LearnPage } from './pages/LearnPage'
 import { FindPlayersPage } from './pages/FindPlayersPage'
 import { AboutPage } from './pages/AboutPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { AdminPage } from './pages/AdminPage'
 
 function App() {
   const [lang, setLang] = useState<Language>(() => {
@@ -52,6 +53,7 @@ function App() {
               <Route path="/find-players" element={<FindPlayersPage c={c} />} />
               <Route path="/about" element={<AboutPage c={c} />} />
               <Route path="/profile" element={<ProfilePage c={c} />} />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/search" element={<GamesPage c={c} />} />
             </Routes>
           </main>
