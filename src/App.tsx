@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './index.css'
-import type { Language } from './types/translations'
-import { t } from './constants/translations'
 import { AuthProvider } from './context/AuthContext'
+import { LanguageProvider, useLanguage } from './context/LanguageContext'
 import { AuthModal } from './Components/AuthModal'
 import { Header } from './Components/Header'
 import { Footer } from './Components/Footer'
@@ -22,50 +20,45 @@ import { AdminPage } from './pages/AdminPage'
 import { PlayPassPage } from './pages/PlayPassPage'
 import { SubscriptionProvider } from './context/SubscriptionContext'
 
-function App() {
-  const [lang, setLang] = useState<Language>(() => {
-    const savedLang = localStorage.getItem('playTogetherLang')
-    return savedLang === 'en' || savedLang === 'ka' ? savedLang : 'en'
-  })
-
-  useEffect(() => {
-    localStorage.setItem('playTogetherLang', lang)
-  }, [lang])
-
-  const toggleLanguage = () => {
-    setLang((prev) => (prev === 'en' ? 'ka' : 'en'))
-  }
-
-  const c = t[lang]
+function AppInner() {
+  const { lang, c, toggleLanguage } = useLanguage()
 
   return (
+    <Router>
+      <SubscriptionProvider>
+        <ScrollToTop />
+        <div className="app">
+          <Header lang={lang} onToggleLanguage={toggleLanguage} c={c} />
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage c={c} />} />
+              <Route path="/sports" element={<SportsPage c={c} />} />
+              <Route path="/stadiums" element={<StadiumsPage c={c} />} />
+              <Route path="/games" element={<GamesPage c={c} />} />
+              <Route path="/tournaments" element={<TournamentsPage c={c} />} />
+              <Route path="/learn" element={<LearnPage c={c} />} />
+              <Route path="/find-players" element={<FindPlayersPage c={c} />} />
+              <Route path="/about" element={<AboutPage c={c} />} />
+              <Route path="/profile" element={<ProfilePage c={c} />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/search" element={<GamesPage c={c} />} />
+              <Route path="/playpass" element={<PlayPassPage c={c} />} />
+            </Routes>
+          </main>
+          <Footer c={c} />
+          <AuthModal c={c} />
+        </div>
+      </SubscriptionProvider>
+    </Router>
+  )
+}
+
+function App() {
+  return (
     <AuthProvider>
-      <Router>
-        <SubscriptionProvider>
-          <ScrollToTop />
-          <div className="app">
-            <Header lang={lang} onToggleLanguage={toggleLanguage} c={c} />
-            <main>
-              <Routes>
-                <Route path="/" element={<HomePage c={c} />} />
-                <Route path="/sports" element={<SportsPage c={c} />} />
-                <Route path="/stadiums" element={<StadiumsPage c={c} />} />
-                <Route path="/games" element={<GamesPage c={c} />} />
-                <Route path="/tournaments" element={<TournamentsPage c={c} />} />
-                <Route path="/learn" element={<LearnPage c={c} />} />
-                <Route path="/find-players" element={<FindPlayersPage c={c} />} />
-                <Route path="/about" element={<AboutPage c={c} />} />
-                <Route path="/profile" element={<ProfilePage c={c} />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/search" element={<GamesPage c={c} />} />
-                <Route path="/playpass" element={<PlayPassPage c={c} />} />
-              </Routes>
-            </main>
-            <Footer c={c} />
-            <AuthModal c={c} />
-          </div>
-        </SubscriptionProvider>
-      </Router>
+      <LanguageProvider>
+        <AppInner />
+      </LanguageProvider>
     </AuthProvider>
   )
 }

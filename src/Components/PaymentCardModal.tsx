@@ -1,6 +1,7 @@
 /* oxlint-disable */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface PaymentCardModalProps {
   onClose: () => void;
@@ -157,9 +158,11 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
   onClose,
   onSuccess,
   amount,
-  actionLabel = 'Confirm & Pay',
+  actionLabel,
 }) => {
   const { saveCard } = useAuth();
+  const { c } = useLanguage();
+  const resolvedLabel = actionLabel ?? c.confirmPayment;
 
   const [cardData, setCardData] = useState<CardData>({ number: '', name: '', expiry: '', cvv: '' });
   const [isFlipped, setIsFlipped] = useState(false);
@@ -179,15 +182,15 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
   const validate = (): boolean => {
     const e: Partial<CardData> = {};
     const cleanNum = cardData.number.replace(/\s/g, '');
-    if (cleanNum.length < 16) e.number = 'Enter a valid 16-digit card number.';
-    if (!cardData.name.trim() || cardData.name.trim().length < 3) e.name = 'Enter the cardholder name.';
+    if (cleanNum.length < 16) e.number = c.cardNumberError;
+    if (!cardData.name.trim() || cardData.name.trim().length < 3) e.name = c.holderError;
     const [mm, yy] = cardData.expiry.split('/');
     const currentYear = new Date().getFullYear() % 100;
     const currentMonth = new Date().getMonth() + 1;
     if (!mm || !yy || +mm < 1 || +mm > 12 || +yy < currentYear || (+yy === currentYear && +mm < currentMonth)) {
-      e.expiry = 'Enter a valid expiry date.';
+      e.expiry = c.expiryError;
     }
-    if (cardData.cvv.length < 3) e.cvv = 'Enter a valid CVV.';
+    if (cardData.cvv.length < 3) e.cvv = c.cvvError;
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -227,7 +230,7 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
     boxSizing: 'border-box',
   });
 
-  const processingStepLabels = ['Encrypting card data...', 'Verifying with bank...', 'Payment authorized! ✅'];
+  const processingStepLabels = [c.paymentProcessing, 'Verifying with bank...', `${c.paymentSuccess} ✅`];
 
   return (
     <div
@@ -308,8 +311,8 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
             {succeeded ? (
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '56px', marginBottom: '12px' }}>✅</div>
-                <div style={{ fontWeight: 800, fontSize: '18px', color: '#c9ff35' }}>Payment Successful!</div>
-                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginTop: '6px' }}>Redirecting...</div>
+                <div style={{ fontWeight: 800, fontSize: '18px', color: '#c9ff35' }}>{c.paymentSuccess}</div>
+                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginTop: '6px' }}>{c.paymentSuccessDesc}</div>
               </div>
             ) : (
               <>
@@ -347,13 +350,13 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
             {/* Card Number */}
             <div>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
-                Card Number
+                {c.cardNumber}
               </label>
               <input
                 id="payment-card-number"
                 type="text"
                 inputMode="numeric"
-                placeholder="1234 5678 9012 3456"
+                placeholder={c.cardNumberPlaceholder}
                 maxLength={19}
                 value={cardData.number}
                 onChange={e => {
@@ -372,12 +375,12 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
             {/* Cardholder Name */}
             <div>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
-                Cardholder Name
+                {c.cardHolder}
               </label>
               <input
                 id="payment-card-name"
                 type="text"
-                placeholder="e.g. GIORGI GIORGADZE"
+                placeholder={c.cardHolderPlaceholder}
                 value={cardData.name}
                 onChange={e => {
                   setCardData(p => ({ ...p, name: e.target.value.toUpperCase() }));
@@ -395,13 +398,13 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
-                  Expiry
+                  {c.expiryDate}
                 </label>
                 <input
                   id="payment-card-expiry"
                   type="text"
                   inputMode="numeric"
-                  placeholder="MM/YY"
+                  placeholder={c.expiryPlaceholder}
                   maxLength={5}
                   value={cardData.expiry}
                   onChange={e => {
@@ -418,13 +421,13 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
-                  CVV
+                  {c.cvv}
                 </label>
                 <input
                   id="payment-card-cvv"
                   type="text"
                   inputMode="numeric"
-                  placeholder="•••"
+                  placeholder={c.cvvPlaceholder}
                   maxLength={4}
                   value={cardData.cvv}
                   onChange={e => {
@@ -467,7 +470,7 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'none'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 32px rgba(201,255,53,0.3)'; }}
             >
               <span>💳</span>
-              {amount ? `Pay ₾${amount} & ${actionLabel}` : actionLabel}
+              {amount ? `Pay ₾${amount} & ${resolvedLabel}` : resolvedLabel}
             </button>
 
             <button

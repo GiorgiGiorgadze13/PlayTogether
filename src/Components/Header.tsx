@@ -101,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
                     transition: 'all 0.15s ease',
                   }}
                 >
-                  🛡️ Admin Panel
+                  🛡️ {c.adminPanel}
                 </Link>
               )}
               <Link to="/profile" className="username-pill" title="View Profile">
@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
                 <span>{user.name || 'giorgadze1313'}</span>
               </Link>
               <button onClick={logout} className="logout-button">
-                Logout
+                {c.logout}
               </button>
             </div>
           ) : (
@@ -352,7 +352,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
                       border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35',
                     }}
                   >
-                    🛡️ Admin Panel
+                    🛡️ {c.adminPanel}
                   </Link>
                 )}
                 <Link
@@ -382,7 +382,7 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
                     cursor: 'pointer',
                   }}
                 >
-                  Logout
+                  {c.logout}
                 </button>
               </div>
             ) : (

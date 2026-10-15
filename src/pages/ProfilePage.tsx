@@ -95,7 +95,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
   const handleLeaveGame = async (gameId: string) => {
     try {
       await api.leaveGame(gameId);
-      setActionSuccess('Successfully left the match.');
+      setActionSuccess(c.successLeft);
       fetchUserGames();
       setTimeout(() => setActionSuccess(null), 3000);
     } catch (err: any) {
@@ -144,19 +144,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
             <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)', margin: '0 0 8px' }}>
               ✉️ {user.email}
             </p>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: 800,
-                color: '#c9ff35',
-                background: 'rgba(201, 255, 53, 0.15)',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-              }}
-            >
-              ACTIVE ATHLETE
+            <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', background: 'rgba(201, 255, 53, 0.15)', padding: '4px 10px', borderRadius: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              {c.activeAthlete}
             </span>
           </div>
         </div>
@@ -177,7 +166,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
               {allUserGames.length}
             </div>
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 600, marginTop: '2px' }}>
-              Total Matches
+              {c.totalMatches}
             </div>
           </div>
 
@@ -195,7 +184,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
               {myCreatedGames.length}
             </div>
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 600, marginTop: '2px' }}>
-              Booked / Created
+              {c.bookedCreated}
             </div>
           </div>
 
@@ -213,7 +202,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
               {myJoinedGames.length}
             </div>
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 600, marginTop: '2px' }}>
-              Joined Matches
+              {c.joinedMatches}
             </div>
           </div>
         </div>
@@ -252,7 +241,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
             transition: 'all 0.2s ease',
           }}
         >
-          All My Booked Stadiums ({allUserGames.length})
+          {c.allBookings(allUserGames.length)}
         </button>
         <button
           onClick={() => setActiveTab('created')}
@@ -268,7 +257,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
             transition: 'all 0.2s ease',
           }}
         >
-          Created by Me ({myCreatedGames.length})
+          {c.createdByMe(myCreatedGames.length)}
         </button>
         <button
           onClick={() => setActiveTab('joined')}
@@ -284,14 +273,14 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
             transition: 'all 0.2s ease',
           }}
         >
-          Joined Matches ({myJoinedGames.length})
+          {c.joinedMatchesTab(myJoinedGames.length)}
         </button>
       </div>
 
       {/* Booked Games Grid */}
       {isLoading ? (
         <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '16px' }}>
-          Loading your booked stadiums and matches...
+          {c.loadingBookings}
         </div>
       ) : error ? (
         <div style={{ padding: '30px', background: 'rgba(255,77,77,0.1)', border: '1px solid rgba(255,77,77,0.3)', borderRadius: '12px', color: '#ff6b6b' }}>
@@ -308,27 +297,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
           }}
         >
           <div style={{ fontSize: '48px', marginBottom: '12px' }}>🏟️</div>
-          <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '8px' }}>No Bookings Found</h3>
+          <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '8px' }}>{c.noBookingsFound}</h3>
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.5)', marginBottom: '20px' }}>
-            {activeTab === 'created'
-              ? "You haven't booked or created any stadium matches yet."
-              : activeTab === 'joined'
-              ? "You haven't joined any match slots yet."
-              : "You have no active stadium bookings."}
+            {activeTab === 'created' ? c.noBookingsCreated : activeTab === 'joined' ? c.noBookingsJoined : c.noBookingsAll}
           </p>
-          <button
-            onClick={() => navigate('/sports')}
-            style={{
-              padding: '12px 24px',
-              background: '#c9ff35',
-              color: '#070809',
-              border: 'none',
-              borderRadius: '10px',
-              fontWeight: 800,
-              cursor: 'pointer',
-            }}
-          >
-            Browse Stadiums & Book Now →
+          <button onClick={() => navigate('/sports')} style={{ padding: '12px 24px', background: '#c9ff35', color: '#070809', border: 'none', borderRadius: '10px', fontWeight: 800, cursor: 'pointer' }}>
+            {c.browseStadiums}
           </button>
         </div>
       ) : (
@@ -434,13 +408,13 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                     }}
                   >
                     <div>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>MATCH DATE</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>{c.matchDate}</div>
                       <div style={{ fontSize: '13px', fontWeight: 800, color: '#fff', marginTop: '2px' }}>
                         📅 {matchDateStr}
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>TIME SLOT</div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>{c.timeSlot}</div>
                       <div style={{ fontSize: '13px', fontWeight: 800, color: '#c9ff35', marginTop: '2px' }}>
                         ⏰ {game.startTime} - {game.endTime}
                       </div>
@@ -451,10 +425,10 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                   <div style={{ marginBottom: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', fontSize: '12px' }}>
                       <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>
-                        Registered Players
+                        {c.registeredPlayers}
                       </span>
                       <span style={{ fontWeight: 800, color: '#c9ff35' }}>
-                        👥 {currentRegistered} / {maxCapacity} Registered
+                        👥 {currentRegistered} / {maxCapacity} {c.registeredPlayers}
                       </span>
                     </div>
 
@@ -490,13 +464,13 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                                 fontWeight: isSelf ? 700 : 500,
                               }}
                             >
-                              👤 {pName} {isSelf ? '(You)' : ''}
+                              👤 {pName} {isSelf ? `(${c.you})` : ''}
                             </span>
                           );
                         })
                       ) : (
                         <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>
-                          No players registered yet.
+                          {c.noPlayersYet}
                         </span>
                       )}
                     </div>
@@ -519,7 +493,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                           cursor: 'pointer',
                         }}
                       >
-                        Leave Match
+                        {c.leaveMatch}
                       </button>
                     )}
                     <Link
@@ -539,7 +513,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                         textDecoration: 'none',
                       }}
                     >
-                      View All Games →
+                      {c.viewAllGames}
                     </Link>
                   </div>
                 </div>
