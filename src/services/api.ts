@@ -197,4 +197,25 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // ── PlayPass Subscription API ──────────────────────────────────
+  getMySubscription: (): Promise<{ subscription: any; weeklyUsage: any }> => {
+    return fetchApi<{ subscription: any; weeklyUsage: any }>('/subscriptions/my', {
+      method: 'GET',
+    });
+  },
+
+  subscribe: (data: { tier: string; durationMonths: number; pricePaid: number }): Promise<{ message: string; subscription: any }> => {
+    return fetchApi<{ message: string; subscription: any }>('/subscriptions/subscribe', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  cancelSubscription: (): Promise<{ message: string }> => {
+    return fetchApi<{ message: string }>('/subscriptions/cancel', {
+      method: 'DELETE',
+    });
+  },
 };
+

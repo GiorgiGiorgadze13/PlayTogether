@@ -13,6 +13,20 @@ enum GameStatus {
   CANCELLED
 }
 
+// Subscription plan tiers
+// SILVER = 2 credits/week, GOLD = 3 credits/week, UNLIMITED = no limit
+enum SubscriptionTier {
+  SILVER
+  GOLD
+  UNLIMITED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
 model User {
   id           String       @id @default(uuid())
   name         String
@@ -21,11 +35,13 @@ model User {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  createdGames Game[]       @relation("GameCreator")
+  createdGames    Game[]            @relation("GameCreator")
   gameMemberships GamePlayer[]
+  subscriptions   UserSubscription[]
 
   @@map("users")
 }
+
 
 model Stadium {
   id                      String   @id @default(uuid())
@@ -75,14 +91,54 @@ model Game {
 }
 
 model GamePlayer {
-  id       String   @id @default(uuid())
-  gameId   String
-  userId   String
-  joinedAt DateTime @default(now())
+  id               String            @id @default(uuid())
+  gameId           String
+  userId           String
+  joinedAt         DateTime          @default(now())
+  // Link to subscription credit used for this booking (null = paid individually)
+  subscriptionId   String?
 
-  game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game             Game              @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription     UserSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
 
   @@unique([gameId, userId])
   @@map("game_players")
+}
+
+// A user's subscription record
+model UserSubscription {
+  id               String             @id @default(uuid())
+  userId           String
+  tier             SubscriptionTier
+  status           SubscriptionStatus @default(ACTIVE)
+  durationMonths   Int
+  startDate        DateTime           @default(now())
+  endDate          DateTime
+  // Price paid in GEL (stored for record-keeping)
+  pricePaid        Float
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weeklyUsages     WeeklyUsage[]
+  gamePlayers      GamePlayer[]
+
+  @@map("user_subscriptions")
+}
+
+// Tracks how many credits a subscription has used in a given ISO week
+model WeeklyUsage {
+  id               String           @id @default(uuid())
+  subscriptionId   String
+  // ISO week key: "YYYY-WNN" e.g. "2026-W42"
+  weekKey          String
+  creditsUsed      Int              @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  subscription     UserSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@unique([subscriptionId, weekKey])
+  @@map("weekly_usages")
 }

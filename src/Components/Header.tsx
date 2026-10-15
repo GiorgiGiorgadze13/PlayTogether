@@ -73,6 +73,16 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           <NavLink to="/learn" className={({ isActive }) => (isActive ? 'active-link' : '')}>
             {c.learn}
           </NavLink>
+          <NavLink
+            to="/playpass"
+            className={({ isActive }) => (isActive ? 'active-link' : '')}
+            style={({ isActive }) => ({
+              color: isActive ? '#c9ff35' : 'rgba(201,255,53,0.8)',
+              fontWeight: 700,
+            })}
+          >
+            🎫 PlayPass
+          </NavLink>
         </nav>
 
         {/* Zone 3: Right Actions (Desktop Only) */}
@@ -302,6 +312,26 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
               })}
             >
               🥊 {c.learn}
+            </NavLink>
+
+            <NavLink
+              to="/playpass"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={({ isActive }) => ({
+                padding: '12px 16px',
+                borderRadius: '12px',
+                background: isActive ? '#c9ff35' : 'rgba(201,255,53,0.08)',
+                color: isActive ? '#070809' : '#c9ff35',
+                fontWeight: 800,
+                fontSize: '15px',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                border: '1px solid rgba(201,255,53,0.25)',
+              })}
+            >
+              🎫 PlayPass
             </NavLink>
           </nav>
 

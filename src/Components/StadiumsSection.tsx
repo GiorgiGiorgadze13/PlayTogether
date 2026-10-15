@@ -5,6 +5,21 @@ import { api } from '../services/api';
 import { StadiumBookingModal } from './StadiumBookingModal';
 import { getSportRequirements } from '../constants/sports';
 
+// Local stadium images
+import imgLisiAbano from '../assets/stadiums/lisiabano.jpg';
+import imgInterAcademy3 from '../assets/stadiums/interacademy3.webp';
+import imgInterAcademy4 from '../assets/stadiums/interacademy4.webp';
+import imgTiflisi1 from '../assets/stadiums/tiflisin1.webp';
+import imgSchool35 from '../assets/stadiums/35thschool.webp';
+import imgNiuton from '../assets/stadiums/niuton.jpg';
+import imgGldanis from '../assets/stadiums/gldanis.webp';
+import imgBaxwood from '../assets/stadiums/baxwood.webp';
+import imgMaracana from '../assets/stadiums/maracana.webp';
+import imgZazaFachulia from '../assets/stadiums/zazafachulia.webp';
+import imgBroklyn from '../assets/stadiums/broklyn.webp';
+import imgTennisCourts from '../assets/stadiums/tenniscourts nutsubidze.jpg';
+import imgPadeli from '../assets/stadiums/პადელი.jpg';
+
 interface StadiumsSectionProps {
   c: TranslationContent;
 }
@@ -19,8 +34,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.740867,
     longitude: 44.739850,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgLisiAbano,
+    selectedPhotoUrl: imgLisiAbano,
     rating: 4.8,
     price: 110,
     createdAt: new Date().toISOString(),
@@ -34,8 +49,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.781429,
     longitude: 44.775924,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgInterAcademy3,
+    selectedPhotoUrl: imgInterAcademy3,
     rating: 4.9,
     price: 180,
     createdAt: new Date().toISOString(),
@@ -49,8 +64,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.781429,
     longitude: 44.775924,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgInterAcademy4,
+    selectedPhotoUrl: imgInterAcademy4,
     rating: 4.9,
     price: 200,
     createdAt: new Date().toISOString(),
@@ -64,8 +79,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.703151,
     longitude: 44.852343,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1577223625816-7546f13df25d?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgTiflisi1,
+    selectedPhotoUrl: imgTiflisi1,
     rating: 4.7,
     price: 150,
     createdAt: new Date().toISOString(),
@@ -79,8 +94,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.721384,
     longitude: 44.723008,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgSchool35,
+    selectedPhotoUrl: imgSchool35,
     rating: 4.8,
     price: 280,
     createdAt: new Date().toISOString(),
@@ -94,8 +109,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.720029,
     longitude: 44.707622,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgNiuton,
+    selectedPhotoUrl: imgNiuton,
     rating: 4.8,
     price: 200,
     createdAt: new Date().toISOString(),
@@ -109,8 +124,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.792786,
     longitude: 44.811098,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgGldanis,
+    selectedPhotoUrl: imgGldanis,
     rating: 4.7,
     price: 140,
     createdAt: new Date().toISOString(),
@@ -124,8 +139,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.679837,
     longitude: 44.689903,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgBaxwood,
+    selectedPhotoUrl: imgBaxwood,
     rating: 4.9,
     price: 150,
     createdAt: new Date().toISOString(),
@@ -139,8 +154,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.721370,
     longitude: 44.720280,
     sport: 'Football',
-    imageUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgMaracana,
+    selectedPhotoUrl: imgMaracana,
     rating: 5.0,
     price: 550,
     createdAt: new Date().toISOString(),
@@ -154,8 +169,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.742347,
     longitude: 44.780332,
     sport: 'Basketball',
-    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgZazaFachulia,
+    selectedPhotoUrl: imgZazaFachulia,
     rating: 5.0,
     price: 220,
     createdAt: new Date().toISOString(),
@@ -169,8 +184,8 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.7100,
     longitude: 44.7500,
     sport: 'Basketball',
-    imageUrl: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgBroklyn,
+    selectedPhotoUrl: imgBroklyn,
     rating: 4.8,
     price: 125,
     createdAt: new Date().toISOString(),
@@ -184,10 +199,40 @@ export const FALLBACK_STADIUMS: Stadium[] = [
     latitude: 41.729971,
     longitude: 44.731098,
     sport: 'Tennis',
-    imageUrl: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1200&q=80',
-    selectedPhotoUrl: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1200&q=80',
+    imageUrl: imgTennisCourts,
+    selectedPhotoUrl: imgTennisCourts,
     rating: 4.7,
     price: 70,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'stadium-padel-1',
+    name: 'Tbilisi Padel Club - Arena Nord',
+    description: 'საუკეთესო პადელის კორტები თანამედროვე დახურულ დარბაზში.',
+    location: 'თბილისი, დიღომი',
+    address: 'დიღმის ოლიმპიური კომპლექსი, თბილისი',
+    latitude: 41.7654,
+    longitude: 44.7699,
+    sport: 'Padel',
+    imageUrl: imgPadeli,
+    selectedPhotoUrl: imgPadeli,
+    rating: 5.0,
+    price: 90,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'stadium-padel-2',
+    name: 'Premium Padel Courts Vake',
+    description: 'მაღალი კლასის პადელის კორტები სრულყოფილი განათებით.',
+    location: 'თბილისი, ვაკე',
+    address: 'ვაკის პარკის მიმდებარედ, თბილისი',
+    latitude: 41.7092,
+    longitude: 44.7558,
+    sport: 'Padel',
+    imageUrl: imgPadeli,
+    selectedPhotoUrl: imgPadeli,
+    rating: 4.9,
+    price: 80,
     createdAt: new Date().toISOString(),
   },
 ];
@@ -222,6 +267,7 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c }) => {
     'Tennis',
     'Basketball',
     'Volleyball',
+    'Padel',
     'Table Tennis',
     'Rugby',
     'Boxing',
