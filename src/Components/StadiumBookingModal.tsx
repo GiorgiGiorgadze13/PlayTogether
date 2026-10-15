@@ -38,7 +38,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   onClose,
   onBookingSuccess,
 }) => {
-  const { user, isAuthenticated, openAuthModal, savedCard } = useAuth();
+  const { user, isAuthenticated, openAuthModal } = useAuth();
 
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
