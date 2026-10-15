@@ -369,3 +369,212 @@ export const LEARN_SPORTS: LearnSport[] = [
 export function getLearnSportById(id: string): LearnSport | undefined {
   return LEARN_SPORTS.find((sport) => sport.id === id.toLowerCase());
 }
+
+// ── Georgian localizations ──────────────────────────────────────────────────
+// Only the text fields are translated; numeric/image/icon fields stay unchanged.
+export interface SportL10n {
+  name: string;
+  tagline: string;
+  description: string;
+  popularTopics: string[];
+  instructors: {
+    id: string;
+    title: string;
+    qualifications: string[];
+    bio: string;
+    lessonTypes: string[];
+  }[];
+}
+
+export const LEARN_SPORTS_KA: Record<string, SportL10n> = {
+  boxing: {
+    name: 'ბოქსი',
+    tagline: 'ტექნიკა, სპარინგი & დაცვა',
+    description: 'დაეუფლე სპარინგის ფეხკინძის ტექნიკას, თავდაცვითი სლიპებსა და ინტენსიურ კონდიციონირებას პროფი ბოქსიორ-მწვრთნელებთან ერთად.',
+    popularTopics: ['ჩანთაზე სავარჯიშოები', 'სპარინგის ტექნიკა', 'ფეხკინძა & სიჩქარე', 'კონტრ-დარტყმები'],
+    instructors: [
+      {
+        id: 'box-1',
+        title: 'ეროვნული ბოქსის ჩემპიონი & სპარინგ-მწვრთნელი',
+        qualifications: ['AIBA სერტიფიცირებული', 'საქართველოს ეროვნული ჩემპიონი', 'პროფ. სპარინგ ინსტრუქტორი'],
+        bio: 'ყოფილი ეროვნული გუნდის ბოქსიორი, სპეციალობა — ფეხკინძა, დამცავი მოძრაობა და ინდივიდუალური სავარჯიშოები.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'სპარინგ-პარტნიორი'],
+      },
+      {
+        id: 'box-2',
+        title: 'ფუნქციონალური ბოქსი & კონდიციონირების მწვრთნელი',
+        qualifications: ['სპორტის მაგისტრი', 'HIIT ბოქსის სპეციალისტი', 'კარდიო-სპარინგის ლიცენზია'],
+        bio: 'ვნებიანი მწვრთნელი, ორიენტირება — სხეულის გამძლეობა, კომბინაციების სიჩქარე, მიტ-ვორქი და დამწყებებისათვის ხელმისაწვდომი სწავლება.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'ბოლო-ნერვების კლინიკა'],
+      },
+    ],
+  },
+  tennis: {
+    name: 'ჩოგბურთი',
+    tagline: 'ზუსტი დარტყმები, სერვი & მოძრაობა',
+    description: 'გააუმჯობესე ფორჰენდი, ბექჰენდის ტოფსპინი, სამსახური და ტაქტიკური მოედნის სტრატეგია.',
+    popularTopics: ['კიქ & სლაისი', 'ფ-ჰენდ ტოფსპინი', 'საბაზო ხაზიდან ბრძოლა', 'ქსელის ვოლეი'],
+    instructors: [
+      {
+        id: 'ten-1',
+        title: 'ყოფილი ATP მოთამაშე & PTR მასტერ-პროფესიონალი',
+        qualifications: ['PTR მასტერ-პროფ.', 'ყოფ. ATP Top 400', 'ITF Level 3 მთავარი მწვრთნელი'],
+        bio: 'სპეციალიზდება ბიომექანიკაზე, მოედნის გეომეტრიის გაგებაზე და შეჯიბრის ფსიქოლოგიაზე.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'სპარინგ-პარტნიორი'],
+      },
+      {
+        id: 'ten-2',
+        title: 'მაღალი ეფექტიანობის ახალგაზრდა & ზრდასრულ სპოლრტსმენთა მწვრთნელი',
+        qualifications: ['PTR სერტ. პროფ.', 'სპორტ-მეცნ. ბაკ.', 'ეროვნული ახ. გუნდის მწვრთნელი'],
+        bio: 'სპეციალისტი სწრაფ სტრიქ-პროგრესში, ფეხკინძის სავარჯიშოებში და მეგობრულ გაკვეთილებში.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+    ],
+  },
+  padel: {
+    name: 'პადელი',
+    tagline: 'კედლის მაჩვენებლები, ბანდეხა & ტაქტიკა',
+    description: 'დაეუფლე შუშის კედელს, პოზიციის თამაშს, ლობის ტაიმინგს და სწრაფ ვიბორა-ჩარიხებს.',
+    popularTopics: ['ბანდეხა & ჩიქიტა', 'კედლის დაცვა', 'ორეული გადართვა', 'ქსელის კონტროლი'],
+    instructors: [
+      {
+        id: 'pad-1',
+        title: 'FIP სერტ. პადელის მთავარი მწვრთნელი',
+        qualifications: ['FIP საერთ. მწვრთნელი', 'ესპ. პადელ-ფედ. სერტ.', 'თბილ. Open ჩემპიონი'],
+        bio: 'ავტენტური ესპანური პადელ-მეთოდოლოგია. ისწავლე კედლის, როგორც მთავარი იარაღის, გამოყენება.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'სპარინგ-პარტნიორი', 'კლინიკა'],
+      },
+      {
+        id: 'pad-2',
+        title: 'პადელ ტაქტიკა & ჯგუფური ინსტრუქტორი',
+        qualifications: ['სერტ. პადელ-ტრენერი', 'ეროვნული ტური ფინალისტი'],
+        bio: 'ფოკუსი — კომუნიკაცია, კედლის პოზიცია, გადასვლა თავდაცვიდან შეტევაზე და მხიარული ჯგუფური კლინიკები.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+    ],
+  },
+  football: {
+    name: 'ფეხბურთი',
+    tagline: 'ბურთის კონტროლი, გადაცემა & სიმარჯვე',
+    description: 'გაამახვილე ბურთის ტექნიკა, პირველი შეხება, ტაქტიკური მოძრაობა და გრძელი სროლის ძალა.',
+    popularTopics: ['პირველი შეხება', '1v1 ჟონგლირება', 'სროლის ტექნიკა', 'ტაქტიკური პოზიციონირება'],
+    instructors: [
+      {
+        id: 'fut-1',
+        title: 'UEFA A ლიცენზიის ფეხბურთის მწვრთნელი',
+        qualifications: ['UEFA A ლიცენზია', 'ყოფ. დინამო-თბ. აკ. მწვ.', 'სპ. ეფ-ის სპეციალისტი'],
+        bio: 'თანამედროვე ტაქტიკური ცნობიერება, სიჩქარითი გადაწყვეტილება და ტექნ. შესრულება ზეწოლის ქვეშ.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+      {
+        id: 'fut-2',
+        title: 'ახალგაზრდული & სააკადემიო განვითარების მწვრთნელი',
+        qualifications: ['UEFA B ლიცენზია', 'ახ. გ. ট্রেনერი', 'Coerver სერტ.'],
+        bio: 'სპეციალიზდება Coerver ბურთის ოსტ-ბა, სიჩქარის კიბეებზე, სროლის სიზუსტეში და 5v5 პოზიციაში.',
+        lessonTypes: ['1-on-1', 'ჯგუფური'],
+      },
+    ],
+  },
+  rugby: {
+    name: 'რაგბი',
+    tagline: 'ჩარხვის მექ-ა, გადაცემა & სკრამი',
+    description: 'ისწავლე გადაცემა, უსაფრთხო კონტაქტი, სკრამის პოზიციონირება და გამძლეობის კონდ-ება.',
+    popularTopics: ['კონტაქტი & ჩარხვა', 'სპინ & პოპ-გდება', 'სკრამ & რაქი', 'მატჩის გამ-ბ'],
+    instructors: [
+      {
+        id: 'rug-1',
+        title: 'საქ. ეროვ. რაგბი-გუნდის ყოფ. წევრი & მწვრთნელი',
+        qualifications: ['World Rugby Level 2', 'ყოფ. Lelo Saracens მოთ.', 'სიძლიერე & კონდ. სპ.'],
+        bio: 'მსოფლიო კლასის ფუნდამენტები — უსაფრთხო კონტაქტი, ბრეიქდაუნი და სტრატეგიული გუნდური მუშაობა.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+    ],
+  },
+  basketball: {
+    name: 'კალათბურთი',
+    tagline: 'სროლება, ჰენდლინგი & დაცვის ფეხკინძა',
+    description: 'ააგე დაუცველი jump shot, ჭარბი ჯვარ-ოვერი, მოედნის ხედვა, ახლო მოძრაობა & პერიმ. დაცვა.',
+    popularTopics: ['ნახტომ-სროლის მექ-ა', 'ჯვარ-ოვ. & ჰენდ.', 'Pick & Roll IQ', 'ვერტ. მოძრაობა'],
+    instructors: [
+      {
+        id: 'bas-1',
+        title: 'პროფ. კალათ-ური სავ-ო მწვრთ. & სროლ-ის მწვ.',
+        qualifications: ['FIBA სერტ. მწვ.', 'ყოფ. სუპ. ლიგის გა-დი', "I'm Possible სერტ."],
+        bio: 'სროლ-ის მექანიკა და ბ-ის მართვ-ის გლუვ-ბა ვიდ-ო ანალ-ისა და მაღალი გამ-ის სავ-ების გზით.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+    ],
+  },
+  volleyball: {
+    name: 'ვოლეიბოლი',
+    tagline: 'სეტინგი, სმეში & სერვის სიზუსტე',
+    description: 'გაამახვილე საკ-ო ნახტომი, სმ-ის მაჯის მოძრ-ბა, სეტ-ის შეხება და ზ-ბ-ის სიმარჯვე.',
+    popularTopics: ['სმ-ის ტაიმ. & მაჯა', 'სეტ-ის სიზუსტე', 'Jump Float სერვ.', 'ბ-ბ-ი & მოძრ.'],
+    instructors: [
+      {
+        id: 'vol-1',
+        title: 'ეროვ. ვოლ-ბ-ის მასტ-ერ-მწვრ.',
+        qualifications: ['FIVB Level 2', 'ეროვ. სანაპ. ჩ-ემ.', 'ბიომ-ის ინს-ტ.'],
+        bio: 'სმ-ის ნახტომ-ის ფეხ-კ., სუფთა სეტ-ის ტექ-ნ. და მოედ-ის კომ-ია ინდ. & სანაპ. ვოლ-ბ-ისთვის.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'კლინიკა'],
+      },
+    ],
+  },
+  badminton: {
+    name: 'ბადმინტონი',
+    tagline: 'სმეში, Drop Shot & სიჩქარე',
+    description: 'განავითარე სიჩქარე, მაჯის სნეპი, სმ-ის კუთხe და სიმარჯვე ბ-ინ.',
+    popularTopics: ['ნახტომ-სმ.', 'ქსელ-ის ატყ.', 'Split-step', 'ორ-ის ბრ-ება'],
+    instructors: [
+      {
+        id: 'bad-1',
+        title: 'BWF სერტ. ბ-ტ. ინსტრ.',
+        qualifications: ['BWF Level 1', 'ეროვ. ტ-ის გამ-ი'],
+        bio: 'ფოკ-ი — Split-step ტაიმ., ჩ-ოს მაჯ-ის სი-ქ. და გ-ის სავ-ები კ-ს. მოთ-ებ-ის.',
+        lessonTypes: ['1-on-1', 'ჯგუფური'],
+      },
+    ],
+  },
+  tabletennis: {
+    name: 'მაგიდის ჩოგბ.',
+    tagline: 'სპი-ს კ-ი, Loop & რეაქ.',
+    description: 'დაეუფ. ტოფსპ. ლ-ს, ბექ-ის ჩოფ-ს, სპ-ის ვარ-ას და მაღ-ს. ფ-ის განლ-ს.',
+    popularTopics: ['ტოფსპ. Loop', 'ბ-ი ბ-ქ-ი ფ-ი', 'სე-ვ. ვარ-ა', 'რეაქ-ის სი-ქ.'],
+    instructors: [
+      {
+        id: 'tt-1',
+        title: 'ITTF Level 2 მ-ა მ-ი',
+        qualifications: ['ITTF სე-ბ. მ-ი', 'მრ-ელ ეროვ. ო-ს მ-ი'],
+        bio: 'ისწ-ლე რ-ის სპ-ის წ-ა, ფ-ენ-ის ლ-ბ-ი და გ-უ-ელ-ი ს-ვ-ი.',
+        lessonTypes: ['1-on-1', 'ჯგუფური', 'სპარინგ-პარტნიორი'],
+      },
+    ],
+  },
+};
+
+/** Returns a sport card with text localised to `lang`. Falls back to English. */
+export function getLocalizedLearnSports(lang: 'en' | 'ka'): LearnSport[] {
+  if (lang === 'en') return LEARN_SPORTS;
+  return LEARN_SPORTS.map((sport) => {
+    const ka = LEARN_SPORTS_KA[sport.id];
+    if (!ka) return sport;
+    return {
+      ...sport,
+      name: ka.name,
+      tagline: ka.tagline,
+      description: ka.description,
+      popularTopics: ka.popularTopics,
+      instructors: sport.instructors.map((ins) => {
+        const kaIns = ka.instructors.find((k) => k.id === ins.id);
+        if (!kaIns) return ins;
+        return {
+          ...ins,
+          title: kaIns.title,
+          qualifications: kaIns.qualifications,
+          bio: kaIns.bio,
+          lessonTypes: kaIns.lessonTypes as typeof ins.lessonTypes,
+        };
+      }),
+    };
+  });
+}

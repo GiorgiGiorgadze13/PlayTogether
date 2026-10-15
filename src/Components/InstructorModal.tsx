@@ -99,10 +99,10 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           </div>
           <div>
             <div style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-              OFFICIAL INSTRUCTORS & COACHES
+              {c.officialInstructors}
             </div>
             <h2 style={{ fontSize: '26px', fontWeight: 800, margin: '2px 0 0', color: '#fff' }}>
-              {sport.name} Coaching Academy
+              {sport.name} {c.coachingAcademy}
             </h2>
           </div>
         </div>
@@ -127,7 +127,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                 padding: 0,
               }}
             >
-              ← Back to all {sport.name} instructors
+              ← {c.backToInstructors} {sport.name}
             </button>
 
             {bookingConfirmed ? (
@@ -142,10 +142,10 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
               >
                 <div style={{ fontSize: '48px', marginBottom: '12px' }}>🎉</div>
                 <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#c9ff35', marginBottom: '8px' }}>
-                  Lesson Booking Confirmed!
+                  {c.lessonBookingConfirmed}
                 </h3>
                 <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', maxWidth: '480px', margin: '0 auto 24px' }}>
-                  You have successfully booked a <strong>{lessonType}</strong> lesson for <strong>{sport.name}</strong> with <strong>{selectedInstructor.name}</strong>.
+                  {c.lessonBookingConfirmedDesc} <strong>{lessonType}</strong> {c.learnEyebrow.includes('INSTRUCTOR') ? 'lesson for' : 'გაკვეთილი'} <strong>{sport.name}</strong> with <strong>{selectedInstructor.name}</strong>.
                 </p>
 
                 <div
@@ -159,13 +159,13 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     textAlign: 'left',
                   }}
                 >
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>TIME SLOT</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>{c.selectSlot.toUpperCase()}</div>
                   <div style={{ fontSize: '15px', fontWeight: 800, color: '#fff', marginBottom: '12px' }}>📅 {selectedSlot}</div>
 
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>LOCATION</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>{c.location.toUpperCase()}</div>
                   <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginBottom: '12px' }}>📍 {selectedInstructor.location}</div>
 
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>TOTAL PRICE</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>{c.checkoutTotal.toUpperCase()}</div>
                   <div style={{ fontSize: '18px', fontWeight: 900, color: '#c9ff35' }}>
                     ₾{lessonType === '1-on-1' ? selectedInstructor.hourlyRate1on1 : selectedInstructor.hourlyRateGroup}
                   </div>
@@ -184,7 +184,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     cursor: 'pointer',
                   }}
                 >
-                  Done
+                  {c.done}
                 </button>
               </div>
             ) : (
@@ -215,9 +215,9 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                       {selectedInstructor.title}
                     </div>
                     <div style={{ display: 'flex', gap: '12px', fontSize: '12px', color: 'rgba(255,255,255,0.6)' }}>
-                      <span>⭐ <strong>{selectedInstructor.rating}</strong> ({selectedInstructor.reviewCount} reviews)</span>
+                      <span>⭐ <strong>{selectedInstructor.rating}</strong> ({selectedInstructor.reviewCount} {c.reviewsLabel})</span>
                       <span>•</span>
-                      <span>🏅 <strong>{selectedInstructor.experienceYears} Years</strong> {c.experience}</span>
+                      <span>🏅 <strong>{selectedInstructor.experienceYears} {c.yearsExperience}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                 {/* Lesson Format Selector */}
                 <div style={{ marginBottom: '24px' }}>
                   <label style={{ fontSize: '11px', fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
-                    SELECT LESSON TYPE
+                    {c.selectLessonType}
                   </label>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div
@@ -243,7 +243,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         👤 {c.individualLesson}
                       </div>
                       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
-                        Personalized focus & rapid skill progress
+                        {c.personalizedFocus}
                       </div>
                       <div style={{ fontSize: '16px', fontWeight: 900, color: '#c9ff35', marginTop: '8px' }}>
                         ₾{selectedInstructor.hourlyRate1on1} <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>/ hr</span>
@@ -265,7 +265,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         👥 {c.groupLesson}
                       </div>
                       <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>
-                        Train alongside motivated peers
+                        {c.trainAlongside}
                       </div>
                       <div style={{ fontSize: '16px', fontWeight: 900, color: '#c9ff35', marginTop: '8px' }}>
                         ₾{selectedInstructor.hourlyRateGroup} <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>/ hr</span>
@@ -277,7 +277,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                 {/* Slot Selector */}
                 <div style={{ marginBottom: '28px' }}>
                   <label style={{ fontSize: '11px', fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
-                    AVAILABLE TIME SLOTS
+                    {c.availableTimeSlots}
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                     {selectedInstructor.availableSlots.map((slot) => (
@@ -318,7 +318,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     opacity: selectedSlot ? 1 : 0.5,
                   }}
                 >
-                  Confirm Booking with {selectedInstructor.name} →
+                  {c.confirmBookingWith} {selectedInstructor.name} →
                 </button>
               </div>
             )}
@@ -399,7 +399,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     </div>
 
                     <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontWeight: 600 }}>
-                      📍 {instructor.location} • 🏆 {instructor.experienceYears} Years Experience
+                      📍 {instructor.location} • 🏆 {instructor.experienceYears} {c.yearsExperience}
                     </div>
                   </div>
 
@@ -417,14 +417,14 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     }}
                   >
                     <div style={{ fontSize: '10px', fontWeight: 800, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                      1-ON-1 LESSON
+                      {c.oneOnOneLesson}
                     </div>
                     <div style={{ fontSize: '22px', fontWeight: 900, color: '#c9ff35', margin: '2px 0 10px' }}>
                       ₾{instructor.hourlyRate1on1} <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>/ hr</span>
                     </div>
 
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
-                      Group: ₾{instructor.hourlyRateGroup} / hr
+                      {c.groupPriceLabel}: ₾{instructor.hourlyRateGroup} {c.perHourShort}
                     </div>
 
                     <button
@@ -442,7 +442,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         transition: 'transform 0.2s ease',
                       }}
                     >
-                      Book Lesson →
+                      {c.bookLesson} →
                     </button>
                   </div>
                 </div>

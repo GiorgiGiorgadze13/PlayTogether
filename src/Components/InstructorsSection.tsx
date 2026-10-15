@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { LEARN_SPORTS, type LearnSport } from '../constants/instructors';
+import { getLocalizedLearnSports, type LearnSport } from '../constants/instructors';
 import type { TranslationContent } from '../types/translations';
 import { InstructorModal } from './InstructorModal';
+import { useLanguage } from '../context/LanguageContext';
 
 interface InstructorsSectionProps {
   c: TranslationContent;
 }
 
 export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => {
+  const { lang } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<'all' | 'racket' | 'team' | 'combat'>('all');
   const [selectedSport, setSelectedSport] = useState<LearnSport | null>(null);
 
-  const filteredSports = LEARN_SPORTS.filter((sport) => {
+  const localizedSports = getLocalizedLearnSports(lang);
+  const filteredSports = localizedSports.filter((sport) => {
     if (activeCategory === 'all') return true;
     return sport.category === activeCategory;
   });
@@ -188,7 +191,7 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                   boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
                 }}
               >
-                From ₾{sport.minPrice} / hr
+                {c.fromPrice} ₾{sport.minPrice} {c.perHourShort}
               </div>
             </div>
 
@@ -255,11 +258,11 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                     />
                   ))}
                   <span style={{ fontSize: '12px', fontWeight: 800, color: '#fff', marginLeft: '10px' }}>
-                    {sport.availableInstructorsCount}+ Coaches
+                    {sport.availableInstructorsCount}+ {c.coachesLabel}
                   </span>
                 </div>
                 <span style={{ fontSize: '11px', color: '#c9ff35', fontWeight: 800 }}>
-                  1-on-1 & Group
+                  {c.lessonFormatLabel}
                 </span>
               </div>
 

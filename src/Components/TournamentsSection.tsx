@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import type { TranslationContent } from '../types/translations';
+import type { Language, TranslationContent } from '../types/translations';
 import { useAuth } from '../context/AuthContext';
 
 interface TournamentsSectionProps {
   c: TranslationContent;
+  lang: Language;
 }
 
 interface Tournament {
@@ -193,7 +194,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 transition: 'all 0.2s ease',
               }}
             >
-              {sport === 'All' ? '🏆 All Sports' : sport}
+              {sport === 'All' ? c.allSportsFilter : sport}
             </button>
           );
         })}
@@ -322,15 +323,15 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   }}
                 >
                   <div>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>DATES</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>{c.datesLabel}</div>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff', marginTop: '3px' }}>
                       📅 {t.dateStr}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>ENTRY FEE</div>
+                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '0.5px' }}>{c.entryFeeLabel}</div>
                     <div style={{ fontSize: '14px', fontWeight: 800, color: '#c9ff35', marginTop: '3px' }}>
-                      ₾{t.entryFee} / player
+                      ₾{t.entryFee} {c.entryFeePerPlayer}
                     </div>
                   </div>
                 </div>
@@ -338,9 +339,9 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 {/* Registered Teams Progress Bar */}
                 <div style={{ marginBottom: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '8px' }}>
-                    <span>Registered Teams / Players</span>
+                    <span>{c.registeredTeamsLabel}</span>
                     <span style={{ color: isFull ? '#ff6b6b' : '#c9ff35' }}>
-                      {t.teamsRegistered} / {t.maxTeams} Teams
+                      {t.teamsRegistered} / {t.maxTeams} {c.teamsLabel}
                     </span>
                   </div>
 
@@ -357,7 +358,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   </div>
 
                   <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>
-                    {isFull ? '🔴 Registration Closed' : `🟢 ${t.maxTeams - t.teamsRegistered} team spots remaining`}
+                    {isFull ? c.registrationClosed : c.teamSpotsRemaining(t.maxTeams - t.teamsRegistered)}
                   </div>
                 </div>
 
@@ -379,7 +380,7 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                     transition: 'all 0.2s ease',
                   }}
                 >
-                  {isRegistered ? '✓ Team Registered' : isFull ? 'Registration Full' : 'Register Team for Tournament →'}
+                  {isRegistered ? c.teamRegistered : isFull ? c.registrationFull : c.registerTeam}
                 </button>
               </div>
             </article>

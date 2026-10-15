@@ -61,6 +61,18 @@ export interface TranslationContent {
   tournamentDesc: string;
   exploreTournaments: string;
   viewTournament: string;
+  // Tournament card UI
+  datesLabel: string;
+  entryFeeLabel: string;
+  entryFeePerPlayer: string;
+  registeredTeamsLabel: string;
+  teamsLabel: string;
+  teamSpotsRemaining: (n: number) => string;
+  registrationClosed: string;
+  registerTeam: string;
+  teamRegistered: string;
+  registrationFull: string;
+  allSportsFilter: string;
 
   // ── How It Works ──
   howItWorks: string;
@@ -103,6 +115,25 @@ export interface TranslationContent {
   individualLesson: string;
   groupLesson: string;
   selectSlot: string;
+  // Card inline strings
+  fromPrice: string;
+  perHourShort: string;
+  coachesLabel: string;
+  lessonFormatLabel: string;
+  officialInstructors: string;
+  coachingAcademy: string;
+  backToInstructors: string;
+  lessonBookingConfirmed: string;
+  lessonBookingConfirmedDesc: string;
+  selectLessonType: string;
+  personalizedFocus: string;
+  trainAlongside: string;
+  availableTimeSlots: string;
+  confirmBookingWith: string;
+  oneOnOneLesson: string;
+  groupPriceLabel: string;
+  yearsExperience: string;
+  reviewsLabel: string;
 
   // ── Auth Modal ──
   loginSubtitle: string;
@@ -256,6 +287,12 @@ export interface TranslationContent {
   pricePerHour: string;
   loadingStadiums: string;
   noStadiumsFound: string;
+  // Stadiums section UI
+  allStadiumsFilter: string;
+  capacityLabel2: string;
+  ratePerPlayerLabel: string;
+  showAllStadiums2: string;
+  noStadiumsForFilter: (sport: string) => string;
 
   // ── Booking Modal ──
   chooseSport: string;

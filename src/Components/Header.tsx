@@ -52,12 +52,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
 
         {/* Zone 2: Centered Nav Links (Desktop Only) */}
         <nav className="nav-links desktop-only-nav">
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'active-link' : '')}>
-            {c.home}
-          </NavLink>
-          <NavLink to="/sports" className={({ isActive }) => (isActive ? 'active-link' : '')}>
-            {c.sports}
-          </NavLink>
           <NavLink to="/stadiums" className={({ isActive }) => (isActive ? 'active-link' : '')}>
             {c.stadiums}
           </NavLink>
@@ -180,45 +174,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           }}
         >
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <NavLink
-              to="/"
-              end
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              🏠 {c.home}
-            </NavLink>
-
-            <NavLink
-              to="/sports"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              ⚽ {c.sports}
-            </NavLink>
-
             <NavLink
               to="/stadiums"
               onClick={() => setIsMobileMenuOpen(false)}
