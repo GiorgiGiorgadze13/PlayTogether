@@ -8,7 +8,7 @@ interface FindPlayersPageProps {
 
 export const FindPlayersPage: React.FC<FindPlayersPageProps> = ({ c }) => {
   return (
-    <div style={{ paddingTop: '20px', minHeight: '80vh' }}>
+    <div style={{ minHeight: '80vh' }}>
       <FindPlayersSection c={c} />
     </div>
   );
