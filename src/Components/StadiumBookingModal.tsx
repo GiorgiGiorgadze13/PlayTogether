@@ -5,6 +5,7 @@ import { api, ApiError } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import type { TranslationContent } from '../types/translations';
 import { getSportRequirements, SPORT_REQUIREMENTS, getFallbackVenuesForSport } from '../constants/sports';
+import { PaymentCardModal } from './PaymentCardModal';
 
 interface StadiumBookingModalProps {
   stadium?: Stadium | VenuePlace | null;
@@ -37,7 +38,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   onClose,
   onBookingSuccess,
 }) => {
-  const { user, isAuthenticated, openAuthModal } = useAuth();
+  const { user, isAuthenticated, openAuthModal, savedCard } = useAuth();
 
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
@@ -58,8 +59,9 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const upcomingDays = getUpcomingDays();
 
-  // Flow Step: 1 = Sport, 2 = Venue, 3 = Date & Time, 4 = Capacity & Confirmation
+  // Flow Step: 1 = Sport, 2 = Venue, 3 = Date & Time, 4 = Review, 5 = Payment
   const [step, setStep] = useState<number>(stadium ? 3 : initialSport ? 2 : 1);
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | null>(null);
 
   // Form State
   const activeSport = stadium?.sport || initialSport || 'Football';
@@ -100,6 +102,8 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [pendingBooking, setPendingBooking] = useState(false);
 
   const sportReq = getSportRequirements(selectedSport);
 
@@ -190,6 +194,26 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
       openAuthModal('login');
       return;
     }
+
+    // Go to payment step
+    setStep(5);
+  };
+
+  const handlePaymentChoice = async (method: 'cash' | 'card') => {
+    setPaymentMethod(method);
+    if (method === 'cash') {
+      await executeBooking();
+    } else {
+      // Card requires details — open PaymentCardModal
+      setPendingBooking(true);
+      setShowPaymentModal(true);
+    }
+  };
+
+  const executeBooking = async () => {
+    setPendingBooking(false);
+    setBookingError(null);
+    setBookingSuccess(null);
 
     if (!selectedVenue) {
       setBookingError('Please select a stadium venue.');
@@ -313,6 +337,21 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
     }
   };
 
+  // Render payment modal if triggered
+  if (showPaymentModal) {
+    return (
+      <PaymentCardModal
+        amount={selectedVenue ? (selectedVenue.price || 15) : undefined}
+        actionLabel="Confirm Booking"
+        onClose={() => { setShowPaymentModal(false); setPendingBooking(false); }}
+        onSuccess={() => {
+          setShowPaymentModal(false);
+          if (pendingBooking) executeBooking();
+        }}
+      />
+    );
+  }
+
   const isSelectedSlotAvailable = !isSlotBooked(startTime, endTime) && (availability?.available !== false);
   const initialRegistered = 1; // Creator auto-joins
   const remainingSpots = Math.max(0, sportReq.maxPlayers - initialRegistered);
@@ -377,16 +416,16 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
         {/* Step Indicator Header */}
         <div style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
               <div
                 key={s}
-                onClick={() => setStep(s)}
+                onClick={() => s < step && setStep(s)}
                 style={{
                   flex: 1,
                   height: '4px',
                   borderRadius: '2px',
                   background: step >= s ? '#c9ff35' : 'rgba(255,255,255,0.15)',
-                  cursor: 'pointer',
+                  cursor: s < step ? 'pointer' : 'default',
                   transition: 'background 0.3s ease',
                 }}
               />
@@ -394,7 +433,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Step {step} of 4 · {step === 1 ? 'Choose Sport' : step === 2 ? 'Choose Venue' : step === 3 ? 'Date & Time Slots' : 'Review & Confirm'}
+              Step {step} of 5 · {step === 1 ? 'Choose Sport' : step === 2 ? 'Choose Venue' : step === 3 ? 'Date & Time Slots' : step === 4 ? 'Review & Confirm' : 'Payment Method'}
             </span>
             {step > 1 && (
               <button
@@ -1078,6 +1117,170 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               </div>
             </div>
 
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: '100%',
+                height: '48px',
+                background: '#c9ff35',
+                color: '#070809',
+                fontWeight: 800,
+                fontSize: '15px',
+                borderRadius: '10px',
+                border: 'none',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {!isAuthenticated
+                ? `Login to Create ${sportReq.name} Match`
+                : `Continue to Payment →`}
+            </button>
+          </form>
+        )}
+
+        {/* STEP 5: PAYMENT METHOD */}
+        {step === 5 && selectedVenue && (
+          <div>
+            <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>5. Choose Payment Method</h2>
+            <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '24px' }}>
+              How would you like to pay for your booking?
+            </p>
+
+            {/* Booking Summary */}
+            <div
+              style={{
+                background: '#0d0f11',
+                borderRadius: '14px',
+                padding: '14px 16px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                marginBottom: '24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Booking Summary</div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff' }}>{selectedVenue.name}</div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', marginTop: '2px' }}>{date} · {startTime} – {endTime}</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Total</div>
+                <div style={{ fontSize: '22px', fontWeight: 900, color: '#c9ff35' }}>₾{selectedVenue.price || 15}</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>per player</div>
+              </div>
+            </div>
+
+            {/* Payment Method Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
+              {/* CASH */}
+              <button
+                type="button"
+                onClick={() => handlePaymentChoice('cash')}
+                disabled={isSubmitting}
+                style={{
+                  padding: '24px 16px',
+                  borderRadius: '18px',
+                  background: paymentMethod === 'cash' ? 'rgba(201,255,53,0.15)' : '#0d0f11',
+                  border: paymentMethod === 'cash' ? '2px solid #c9ff35' : '1px solid rgba(255,255,255,0.12)',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '10px',
+                  transition: 'all 0.25s ease',
+                  color: '#fff',
+                }}
+              >
+                <div
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    background: 'rgba(201,255,53,0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '28px',
+                  }}
+                >
+                  💵
+                </div>
+                <div style={{ fontWeight: 900, fontSize: '16px' }}>Cash</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.4 }}>
+                  Pay at the venue. Booking confirmed immediately.
+                </div>
+                <div
+                  style={{
+                    background: '#c9ff35',
+                    color: '#070809',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  Instant Confirm
+                </div>
+              </button>
+
+              {/* CARD */}
+              <button
+                type="button"
+                onClick={() => handlePaymentChoice('card')}
+                disabled={isSubmitting}
+                style={{
+                  padding: '24px 16px',
+                  borderRadius: '18px',
+                  background: paymentMethod === 'card' ? 'rgba(100,160,255,0.12)' : '#0d0f11',
+                  border: paymentMethod === 'card' ? '2px solid #64a0ff' : '1px solid rgba(255,255,255,0.12)',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '10px',
+                  transition: 'all 0.25s ease',
+                  color: '#fff',
+                }}
+              >
+                <div
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    background: 'rgba(100,160,255,0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '28px',
+                  }}
+                >
+                  💳
+                </div>
+                <div style={{ fontWeight: 900, fontSize: '16px' }}>Card</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.4 }}>
+                  Enter your card details to pay online securely.
+                </div>
+                <div
+                  style={{
+                    background: '#64a0ff',
+                    color: '#000',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  Enter Details
+                </div>
+              </button>
+            </div>
+
             {bookingSuccess && (
               <div
                 style={{
@@ -1087,7 +1290,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   borderRadius: '8px',
                   color: '#c9ff35',
                   fontSize: '13px',
-                  marginBottom: '20px',
+                  marginBottom: '16px',
                   fontWeight: 600,
                 }}
               >
@@ -1104,35 +1307,19 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   borderRadius: '8px',
                   color: '#ff6b6b',
                   fontSize: '13px',
-                  marginBottom: '20px',
+                  marginBottom: '16px',
                 }}
               >
                 ⚠️ {bookingError}
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: '100%',
-                height: '48px',
-                background: '#c9ff35',
-                color: '#070809',
-                fontWeight: 800,
-                fontSize: '15px',
-                borderRadius: '10px',
-                border: 'none',
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {isSubmitting
-                ? 'Publishing Match...'
-                : !isAuthenticated
-                ? `Login to Create ${sportReq.name} Match`
-                : `Create & Join ${sportReq.name} Match`}
-            </button>
-          </form>
+            {isSubmitting && (
+              <div style={{ textAlign: 'center', color: 'rgba(255,255,255,0.6)', fontSize: '13px', padding: '8px' }}>
+                ⏳ Confirming your booking...
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

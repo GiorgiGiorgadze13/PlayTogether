@@ -3,6 +3,15 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { User } from '../types/api';
 import { api, ApiError } from '../services/api';
 
+export interface SavedCard {
+  last4: string;
+  type: 'visa' | 'mastercard' | 'amex' | 'generic';
+  holderName: string;
+  expiry: string;
+}
+
+const CARD_STORAGE_KEY = 'playTogether_payment_card';
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -16,6 +25,11 @@ interface AuthContextType {
   authModalMode: 'login' | 'register';
   openAuthModal: (mode?: 'login' | 'register') => void;
   closeAuthModal: () => void;
+  // ── Payment card ──
+  savedCard: SavedCard | null;
+  hasPaymentCard: boolean;
+  saveCard: (card: SavedCard) => void;
+  removeCard: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,6 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
+  const [savedCard, setSavedCard] = useState<SavedCard | null>(() => {
+    try { const s = localStorage.getItem(CARD_STORAGE_KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+  });
 
   useEffect(() => {
     let isMounted = true;
@@ -162,6 +179,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const saveCard = (card: SavedCard) => {
+    localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(card));
+    setSavedCard(card);
+  };
+
+  const removeCard = () => {
+    localStorage.removeItem(CARD_STORAGE_KEY);
+    setSavedCard(null);
+  };
+
   const openAuthModal = (mode: 'login' | 'register' = 'login') => {
     setAuthModalMode(mode);
     setIsAuthModalOpen(true);
@@ -186,6 +213,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         authModalMode,
         openAuthModal,
         closeAuthModal,
+        savedCard,
+        hasPaymentCard: !!savedCard,
+        saveCard,
+        removeCard,
       }}
     >
       {children}

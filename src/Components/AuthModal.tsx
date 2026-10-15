@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import type { TranslationContent } from '../types/translations';
 import { ApiError } from '../services/api';
+import { PaymentCardModal } from './PaymentCardModal';
 
 interface AuthModalProps {
   c: TranslationContent;
@@ -15,6 +16,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ c }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showCardModal, setShowCardModal] = useState(false);
 
   // Error states
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -129,15 +131,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ c }) => {
       if (authModalMode === 'login') {
         await login(email, password);
         setSuccessMsg(`🎉 Welcome back! Login successful.`);
+        setTimeout(() => { closeAuthModal(); }, 1400);
       } else {
         await register(name, email, password);
-        setSuccessMsg(`🎉 Account created successfully! Welcome to PlayTogether, ${name}!`);
+        setSuccessMsg(`🎉 Account created! Setting up your payment method...`);
+        // After register: open card modal after short delay
+        setTimeout(() => {
+          setShowCardModal(true);
+        }, 1000);
       }
-
-      // Automatically close modal after brief success feedback
-      setTimeout(() => {
-        closeAuthModal();
-      }, 1400);
     } catch (err) {
       if (err instanceof ApiError) {
         setErrorMsg(err.message);
@@ -150,6 +152,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ c }) => {
       setIsSubmitting(false);
     }
   };
+
+  if (showCardModal) {
+    return (
+      <PaymentCardModal
+        onClose={() => { setShowCardModal(false); closeAuthModal(); }}
+        onSuccess={() => { setShowCardModal(false); closeAuthModal(); }}
+        actionLabel="Complete Setup"
+      />
+    );
+  }
 
   return (
     <div
