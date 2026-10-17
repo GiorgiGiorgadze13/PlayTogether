@@ -237,7 +237,8 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
       style={{
         position: 'fixed', inset: 0, zIndex: 99999,
         background: 'rgba(0,0,0,0.87)', backdropFilter: 'blur(16px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 'clamp(8px, 3vw, 20px)',
       }}
       onClick={(e) => { if (e.target === e.currentTarget && !isProcessing) onClose(); }}
     >
@@ -245,10 +246,12 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
         width: '100%', maxWidth: '460px',
         background: '#121416',
         border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '28px', padding: '36px 32px 32px',
+        borderRadius: '28px',
+        padding: 'clamp(20px, 5vw, 36px) clamp(16px, 4vw, 32px) clamp(16px, 4vw, 32px)',
         boxShadow: '0 40px 120px rgba(0,0,0,0.9)',
-        maxHeight: '95vh', overflowY: 'auto',
+        maxHeight: '95vh', overflowY: 'auto', overflowX: 'hidden',
         position: 'relative',
+        boxSizing: 'border-box',
       }}>
         {/* Close */}
         {!isProcessing && (

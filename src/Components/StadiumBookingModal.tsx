@@ -371,7 +371,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '20px',
+        padding: 'clamp(8px, 3vw, 20px)',
       }}
       onClick={onClose}
     >
@@ -382,12 +382,14 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           background: '#151719',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           borderRadius: '24px',
-          padding: '32px',
+          padding: 'clamp(16px, 4vw, 32px)',
           boxShadow: '0 30px 90px rgba(0, 0, 0, 0.8)',
           position: 'relative',
           color: '#ffffff',
-          maxHeight: '90vh',
+          maxHeight: '92vh',
           overflowY: 'auto',
+          overflowX: 'hidden',
+          boxSizing: 'border-box',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -431,9 +433,9 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               />
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '1px', textTransform: 'uppercase' }}>
-              Step {step} of 5 · {step === 1 ? 'Choose Sport' : step === 2 ? 'Choose Venue' : step === 3 ? 'Date & Time Slots' : step === 4 ? 'Review & Confirm' : 'Payment Method'}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+            <span style={{ fontSize: 'clamp(10px, 2.5vw, 11px)', fontWeight: 800, color: '#c9ff35', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+              Step {step} of 5 · {step === 1 ? 'Sport' : step === 2 ? 'Venue' : step === 3 ? 'Date & Time' : step === 4 ? 'Review' : 'Payment'}
             </span>
             {step > 1 && (
               <button
@@ -522,6 +524,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   color: '#fff',
                   fontSize: '14px',
                   outline: 'none',
+                  boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -715,15 +718,22 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                               border: 'none',
                               borderRadius: '10px',
                               fontWeight: 900,
-                              fontSize: '14px',
+                              fontSize: 'clamp(11px, 2.5vw, 14px)',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               gap: '6px',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              padding: '0 12px',
                             }}
                           >
-                            Select {activeVenue.name} & Continue →
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              Select {activeVenue.name.length > 20 ? activeVenue.name.slice(0, 18) + '...' : activeVenue.name} &amp; Continue
+                            </span>
+                            <span style={{ flexShrink: 0 }}>→</span>
                           </button>
                         </div>
                       </div>
@@ -806,6 +816,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   color: '#fff',
                   fontSize: '14px',
                   outline: 'none',
+                  boxSizing: 'border-box',
                 }}
               />
             </div>

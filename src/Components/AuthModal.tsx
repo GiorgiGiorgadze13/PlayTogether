@@ -137,7 +137,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ c }) => {
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.8)', backdropFilter: 'blur(8px)',
-        zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
+        zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 'clamp(8px, 3vw, 20px)',
       }}
       onClick={closeAuthModal}
     >
@@ -145,8 +146,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ c }) => {
         style={{
           width: '100%', maxWidth: '440px', background: '#151719',
           border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '20px',
-          padding: '32px', boxShadow: '0 25px 70px rgba(0, 0, 0, 0.7)',
-          position: 'relative', color: '#ffffff', maxHeight: '90vh', overflowY: 'auto',
+          padding: 'clamp(20px, 5vw, 32px)',
+          boxShadow: '0 25px 70px rgba(0, 0, 0, 0.7)',
+          position: 'relative', color: '#ffffff', maxHeight: '92vh',
+          overflowY: 'auto', overflowX: 'hidden', boxSizing: 'border-box',
         }}
         onClick={(e) => e.stopPropagation()}
       >

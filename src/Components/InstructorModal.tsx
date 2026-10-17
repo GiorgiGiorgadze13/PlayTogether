@@ -35,7 +35,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '20px',
+        padding: 'clamp(8px, 3vw, 20px)',
         animation: 'fadeIn 0.25s ease',
       }}
       onClick={onClose}
@@ -44,15 +44,17 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
         style={{
           background: '#151719',
           border: '1px solid rgba(255, 255, 255, 0.14)',
-          borderRadius: '24px',
+          borderRadius: '20px',
           width: '100%',
           maxWidth: '900px',
-          maxHeight: '90vh',
+          maxHeight: '92vh',
           overflowY: 'auto',
+          overflowX: 'hidden',
           boxShadow: '0 25px 80px rgba(0, 0, 0, 0.7)',
-          padding: '32px',
+          padding: 'clamp(16px, 4vw, 32px)',
           color: '#ffffff',
           position: 'relative',
+          boxSizing: 'border-box',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -81,27 +83,29 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
         </button>
 
         {/* Modal Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px', paddingRight: '40px' }}>
           <div
             style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '16px',
+              width: '48px',
+              height: '48px',
+              minWidth: '48px',
+              borderRadius: '14px',
               background: 'rgba(201, 255, 53, 0.12)',
               border: '1px solid rgba(201, 255, 53, 0.3)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '28px',
+              fontSize: '24px',
+              flexShrink: 0,
             }}
           >
             {sport.icon}
           </div>
-          <div>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: '10px', fontWeight: 800, color: '#c9ff35', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
               {c.officialInstructors}
             </div>
-            <h2 style={{ fontSize: '26px', fontWeight: 800, margin: '2px 0 0', color: '#fff' }}>
+            <h2 style={{ fontSize: 'clamp(18px, 4vw, 24px)', fontWeight: 800, margin: '2px 0 0', color: '#fff', lineHeight: 1.2 }}>
               {sport.name} {c.coachingAcademy}
             </h2>
           </div>
@@ -326,105 +330,108 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
         ) : (
           <div>
             {/* List of Available Instructors for this Sport */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {sport.instructors.map((instructor) => (
                 <div
                   key={instructor.id}
                   style={{
                     background: '#0d0f11',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '20px',
-                    padding: '24px',
-                    display: 'grid',
-                    gridTemplateColumns: 'auto 1fr auto',
-                    gap: '24px',
-                    alignItems: 'center',
+                    borderRadius: '18px',
+                    padding: 'clamp(14px, 3vw, 24px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px',
                   }}
                 >
-                  {/* Avatar & Rating */}
-                  <div style={{ textAlign: 'center' }}>
-                    <img
-                      src={instructor.avatarUrl}
-                      alt={instructor.name}
-                      style={{ width: '88px', height: '88px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(201, 255, 53, 0.4)', marginBottom: '8px' }}
-                    />
-                    <div
-                      style={{
-                        background: 'rgba(201, 255, 53, 0.12)',
-                        color: '#c9ff35',
-                        padding: '3px 10px',
-                        borderRadius: '12px',
-                        fontSize: '12px',
-                        fontWeight: 900,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
-                    >
-                      ⭐ {instructor.rating} ({instructor.reviewCount})
+                  {/* Top Row: Avatar + Main Details */}
+                  <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                    {/* Avatar & Rating */}
+                    <div style={{ textAlign: 'center', flexShrink: 0 }}>
+                      <img
+                        src={instructor.avatarUrl}
+                        alt={instructor.name}
+                        style={{ width: '76px', height: '76px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(201, 255, 53, 0.4)', marginBottom: '6px', display: 'block' }}
+                      />
+                      <div
+                        style={{
+                          background: 'rgba(201, 255, 53, 0.12)',
+                          color: '#c9ff35',
+                          padding: '2px 7px',
+                          borderRadius: '10px',
+                          fontSize: '11px',
+                          fontWeight: 900,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '3px',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        ⭐ {instructor.rating} ({instructor.reviewCount})
+                      </div>
+                    </div>
+
+                    {/* Main Details */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3 style={{ fontSize: 'clamp(16px, 3.5vw, 20px)', fontWeight: 800, margin: '0 0 3px', color: '#fff' }}>
+                        {instructor.name}
+                      </h3>
+                      <div style={{ fontSize: '13px', color: '#c9ff35', fontWeight: 700, marginBottom: '8px', lineHeight: 1.3 }}>
+                        {instructor.title}
+                      </div>
+
+                      <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', margin: '0 0 10px', lineHeight: 1.5 }}>
+                        {instructor.bio}
+                      </p>
+
+                      {/* Qualifications badges */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '8px' }}>
+                        {instructor.qualifications.map((q) => (
+                          <span
+                            key={q}
+                            style={{
+                              background: 'rgba(255,255,255,0.06)',
+                              border: '1px solid rgba(255,255,255,0.12)',
+                              color: 'rgba(255,255,255,0.8)',
+                              padding: '2px 8px',
+                              borderRadius: '6px',
+                              fontSize: '10px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            🎖️ {q}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)', fontWeight: 600 }}>
+                        📍 {instructor.location} • 🏆 {instructor.experienceYears} {c.yearsExperience}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Main Details */}
-                  <div>
-                    <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 4px', color: '#fff' }}>
-                      {instructor.name}
-                    </h3>
-                    <div style={{ fontSize: '13px', color: '#c9ff35', fontWeight: 700, marginBottom: '10px' }}>
-                      {instructor.title}
-                    </div>
-
-                    <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.65)', margin: '0 0 12px', lineHeight: 1.45 }}>
-                      {instructor.bio}
-                    </p>
-
-                    {/* Qualifications badges */}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-                      {instructor.qualifications.map((q) => (
-                        <span
-                          key={q}
-                          style={{
-                            background: 'rgba(255,255,255,0.06)',
-                            border: '1px solid rgba(255,255,255,0.12)',
-                            color: 'rgba(255,255,255,0.8)',
-                            padding: '3px 9px',
-                            borderRadius: '6px',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                          }}
-                        >
-                          🎖️ {q}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', fontWeight: 600 }}>
-                      📍 {instructor.location} • 🏆 {instructor.experienceYears} {c.yearsExperience}
-                    </div>
-                  </div>
-
-                  {/* Pricing & Booking CTA */}
+                  {/* Bottom Row: Pricing & Booking CTA */}
                   <div
                     style={{
                       display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-end',
-                      justifyContent: 'center',
-                      borderLeft: '1px solid rgba(255,255,255,0.08)',
-                      paddingLeft: '24px',
-                      height: '100%',
-                      minWidth: '160px',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '12px',
+                      borderTop: '1px solid rgba(255,255,255,0.07)',
+                      paddingTop: '14px',
                     }}
                   >
-                    <div style={{ fontSize: '10px', fontWeight: 800, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                      {c.oneOnOneLesson}
-                    </div>
-                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#c9ff35', margin: '2px 0 10px' }}>
-                      ₾{instructor.hourlyRate1on1} <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>/ hr</span>
-                    </div>
-
-                    <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '16px' }}>
-                      {c.groupPriceLabel}: ₾{instructor.hourlyRateGroup} {c.perHourShort}
+                    <div>
+                      <div style={{ fontSize: '10px', fontWeight: 800, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>
+                        {c.oneOnOneLesson}
+                      </div>
+                      <div style={{ fontSize: '20px', fontWeight: 900, color: '#c9ff35' }}>
+                        ₾{instructor.hourlyRate1on1} <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 600 }}>/ hr</span>
+                      </div>
+                      <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                        {c.groupPriceLabel}: ₾{instructor.hourlyRateGroup} {c.perHourShort}
+                      </div>
                     </div>
 
                     <button
@@ -433,13 +440,14 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         background: '#c9ff35',
                         color: '#070809',
                         border: 'none',
-                        padding: '10px 18px',
+                        padding: '11px 20px',
                         borderRadius: '10px',
                         fontWeight: 800,
-                        fontSize: '12px',
+                        fontSize: '13px',
                         cursor: 'pointer',
                         whiteSpace: 'nowrap',
                         transition: 'transform 0.2s ease',
+                        flexShrink: 0,
                       }}
                     >
                       {c.bookLesson} →

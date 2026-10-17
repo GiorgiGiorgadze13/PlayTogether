@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import type { Language, TranslationContent } from '../types/translations';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +23,19 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
+
+  // Lock body scroll when drawer is open to prevent double-scroll
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <div className="navbar-sticky-wrapper">
@@ -150,238 +164,257 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
         </div>
       </header>
 
-      {/* Mobile Drawer Overlay */}
-      {isMobileMenuOpen && (
+      {/* Mobile Drawer — rendered via portal to escape backdrop-filter stacking context */}
+      {isMobileMenuOpen && createPortal(
         <div
-          className="mobile-drawer-backdrop"
           onClick={() => setIsMobileMenuOpen(false)}
           style={{
             position: 'fixed',
-            top: '72px',
+            top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            background: 'rgba(7, 8, 9, 0.96)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            zIndex: 999,
-            padding: '24px 20px 40px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            overflowY: 'auto',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            zIndex: 9998,
+            background: 'rgba(7, 8, 9, 0.55)',
           }}
         >
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <NavLink
-              to="/stadiums"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              🏟️ {c.stadiums}
-            </NavLink>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'fixed',
+              top: '64px',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 9999,
+              background: 'rgba(7, 8, 9, 0.97)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              padding: '24px 20px 40px',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <NavLink
+                to="/stadiums"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#070809' : '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                })}
+              >
+                🏟️ {c.stadiums}
+              </NavLink>
 
-            <NavLink
-              to="/games"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              🎮 {c.findGameBtn}
-            </NavLink>
+              <NavLink
+                to="/games"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#070809' : '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                })}
+              >
+                🎮 {c.findGameBtn}
+              </NavLink>
 
-            <NavLink
-              to="/find-players"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              👥 {c.findPlayers}
-            </NavLink>
+              <NavLink
+                to="/find-players"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#070809' : '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                })}
+              >
+                👥 {c.findPlayers}
+              </NavLink>
 
-            <NavLink
-              to="/tournaments"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              🏆 {c.tournaments}
-            </NavLink>
+              <NavLink
+                to="/tournaments"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#070809' : '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                })}
+              >
+                🏆 {c.tournaments}
+              </NavLink>
 
-            <NavLink
-              to="/learn"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : '#151719',
-                color: isActive ? '#070809' : '#fff',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              })}
-            >
-              🥊 {c.learn}
-            </NavLink>
+              <NavLink
+                to="/learn"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(255,255,255,0.06)',
+                  color: isActive ? '#070809' : '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                })}
+              >
+                🥊 {c.learn}
+              </NavLink>
 
-            <NavLink
-              to="/playpass"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={({ isActive }) => ({
-                padding: '12px 16px',
-                borderRadius: '12px',
-                background: isActive ? '#c9ff35' : 'rgba(201,255,53,0.08)',
-                color: isActive ? '#070809' : '#c9ff35',
-                fontWeight: 800,
-                fontSize: '15px',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                border: '1px solid rgba(201,255,53,0.25)',
-              })}
-            >
-              🎫 PlayPass
-            </NavLink>
-          </nav>
+              <NavLink
+                to="/playpass"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={({ isActive }) => ({
+                  padding: '14px 18px',
+                  borderRadius: '12px',
+                  background: isActive ? '#c9ff35' : 'rgba(201,255,53,0.1)',
+                  color: isActive ? '#070809' : '#c9ff35',
+                  fontWeight: 800,
+                  fontSize: '15px',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: '1px solid rgba(201,255,53,0.3)',
+                })}
+              >
+                🎫 PlayPass
+              </NavLink>
+            </nav>
 
-          <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '10px 0' }} />
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.12)', margin: '4px 0' }} />
 
-          {/* User / Auth Actions in Mobile Drawer */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {isAuthenticated && user ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {isAdmin && (
+            {/* User / Auth Actions in Mobile Drawer */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {isAuthenticated && user ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        height: '48px', borderRadius: '12px', fontWeight: 800, fontSize: '14px',
+                        textDecoration: 'none', background: 'rgba(201,255,53,0.12)',
+                        border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35',
+                      }}
+                    >
+                      🛡️ {c.adminPanel}
+                    </Link>
+                  )}
                   <Link
-                    to="/admin"
+                    to="/profile"
                     onClick={() => setIsMobileMenuOpen(false)}
+                    className="username-pill"
+                    style={{ justifyContent: 'center', height: '48px', width: '100%' }}
+                  >
+                    <span>👤</span>
+                    <span>{user.name || 'giorgadze1313'}</span>
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
                     style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                      height: '44px', borderRadius: '12px', fontWeight: 800, fontSize: '14px',
-                      textDecoration: 'none', background: 'rgba(201,255,53,0.12)',
-                      border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35',
+                      width: '100%',
+                      height: '48px',
+                      background: 'rgba(255, 77, 77, 0.15)',
+                      color: '#ff4d4d',
+                      border: '1px solid rgba(255, 77, 77, 0.3)',
+                      borderRadius: '12px',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      cursor: 'pointer',
                     }}
                   >
-                    🛡️ {c.adminPanel}
-                  </Link>
-                )}
-                <Link
-                  to="/profile"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="username-pill"
-                  style={{ justifyContent: 'center', height: '44px', width: '100%' }}
-                >
-                  <span>👤</span>
-                  <span>{user.name || 'giorgadze1313'}</span>
-                </Link>
-
-                <button
-                  onClick={() => {
-                    logout();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  style={{
-                    width: '100%',
-                    height: '44px',
-                    background: 'rgba(255, 77, 77, 0.15)',
-                    color: '#ff4d4d',
-                    border: '1px solid rgba(255, 77, 77, 0.3)',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {c.logout}
-                </button>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <button
-                  onClick={() => {
-                    openAuthModal('login');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  style={{
-                    height: '44px',
-                    background: '#151719',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    color: '#fff',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {c.login}
-                </button>
-                <button
-                  onClick={() => {
-                    openAuthModal('register');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  style={{
-                    height: '44px',
-                    background: '#c9ff35',
-                    color: '#070809',
-                    border: 'none',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {c.signup}
-                </button>
-              </div>
-            )}
+                    {c.logout}
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <button
+                    onClick={() => {
+                      openAuthModal('login');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      height: '48px',
+                      background: 'rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      color: '#ffffff',
+                      borderRadius: '12px',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {c.login}
+                  </button>
+                  <button
+                    onClick={() => {
+                      openAuthModal('register');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{
+                      height: '48px',
+                      background: '#c9ff35',
+                      color: '#070809',
+                      border: 'none',
+                      borderRadius: '12px',
+                      fontWeight: 800,
+                      fontSize: '14px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {c.signup}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -104,7 +104,9 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
 
       {/* ── HERO ── */}
       <section style={{
-        position: 'relative', padding: '80px 24px 64px', textAlign: 'center',
+        position: 'relative',
+        padding: 'clamp(48px, 8vw, 80px) clamp(16px, 5vw, 24px) clamp(40px, 6vw, 64px)',
+        textAlign: 'center',
         overflow: 'hidden',
         background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,255,53,0.12) 0%, transparent 70%)',
       }}>
@@ -178,10 +180,20 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
       )}
 
       {/* ── DURATION SELECTOR ── */}
-      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px 0' }}>
+      <section style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 24px) 0' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 800, letterSpacing: 2, marginBottom: 10 }}>{c.chooseDuration}</div>
-          <div style={{ display: 'inline-flex', gap: 8, background: '#0d0f11', borderRadius: 14, padding: 6, border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{
+            display: 'inline-flex',
+            gap: 8,
+            background: '#0d0f11',
+            borderRadius: 14,
+            padding: 6,
+            border: '1px solid rgba(255,255,255,0.08)',
+            maxWidth: '100%',
+            overflowX: 'auto',
+            flexWrap: 'nowrap',
+          }}>
             {SUBSCRIPTION_DURATIONS.map((d) => {
               const savings = monthlySavings('GOLD', d);
               const isSelected = selectedDuration === d;
@@ -277,13 +289,14 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
       </section>
 
       {/* ── COMPARISON TABLE ── */}
-      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px 80px' }}>
+      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 clamp(12px, 4vw, 24px) 80px' }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>{c.comparePlans}</div>
-          <h2 style={{ fontSize: 34, fontWeight: 800, letterSpacing: -1.5, color: '#fff' }}>{c.everythingIncluded}</h2>
+          <h2 style={{ fontSize: 'clamp(24px, 5vw, 34px)', fontWeight: 800, letterSpacing: -1.5, color: '#fff' }}>{c.everythingIncluded}</h2>
         </div>
 
-        <div style={{ background: '#0d0f11', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <div style={{ background: '#0d0f11', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden', minWidth: 520 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
             <div style={{ padding: '18px 20px', fontSize: 12, fontWeight: 800, color: 'rgba(255,255,255,0.4)', letterSpacing: 1 }}>{c.featureLabel}</div>
             {PLAN_META.map(p => (
@@ -299,6 +312,7 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
               ))}
             </div>
           ))}
+        </div>
         </div>
       </section>
 
@@ -353,8 +367,8 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
 
       {/* ── CHECKOUT MODAL ── */}
       {checkoutStep !== 'idle' && checkoutTier && (
-        <div onClick={() => { setCheckoutStep('idle'); setCheckoutTier(null); }} style={{ position: 'fixed', inset: 0, background: 'rgba(7,8,9,0.92)', backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#151719', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 24, padding: '40px 36px', maxWidth: 480, width: '100%', textAlign: 'center', boxShadow: '0 40px 100px rgba(0,0,0,0.6)' }}>
+        <div onClick={() => { setCheckoutStep('idle'); setCheckoutTier(null); }} style={{ position: 'fixed', inset: 0, background: 'rgba(7,8,9,0.92)', backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, padding: 'clamp(12px, 4vw, 20px)' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#151719', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 24, padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 36px)', maxWidth: 480, width: '100%', textAlign: 'center', boxShadow: '0 40px 100px rgba(0,0,0,0.6)', boxSizing: 'border-box', maxHeight: '92vh', overflowY: 'auto' }}>
             {checkoutStep === 'confirm' && (() => {
               const plan = PLAN_META.find(p => p.tier === checkoutTier)!;
               const price = PLAYPASS_PRICES[checkoutTier][selectedDuration];
