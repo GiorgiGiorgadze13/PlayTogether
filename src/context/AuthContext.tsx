@@ -89,26 +89,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
-    // ── Hardcoded ADMIN superuser (always works, no backend needed) ──
-    const ADMIN_EMAIL = 'admin@playtogether.ge';
-    const ADMIN_PASSWORD = 'Admin@PT2025';
-    if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      const adminUser: User = {
-        id: 'admin-superuser-001',
-        name: 'Admin',
-        email: ADMIN_EMAIL,
-        role: 'ADMIN',
-        avatarUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=admin&backgroundColor=c9ff35`,
-        createdAt: '2025-01-01T00:00:00.000Z',
-      };
-      const adminToken = 'admin-token-' + Date.now();
-      localStorage.setItem('playTogetherToken', adminToken);
-      localStorage.setItem('playTogetherUser', JSON.stringify(adminUser));
-      setToken(adminToken);
-      setUser(adminUser);
-      return;
-    }
-
     try {
       const response = await api.login({ email, password });
       localStorage.setItem('playTogetherToken', response.token);
@@ -116,25 +96,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(response.token);
       setUser(response.user);
     } catch (error) {
-      // If network error / offline backend, fallback to local demo user session
-      if (error instanceof Error && (error.message.includes('fetch') || error.message.includes('NetworkError') || error.message.includes('Failed to fetch'))) {
-        const fallbackUser: User = {
-          id: 'user-' + Date.now(),
-          name: email.split('@')[0] || 'Sports Fan',
-          email: email,
-          role: 'USER',
-          avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(email)}`,
-          createdAt: new Date().toISOString(),
-        };
-        const fallbackToken = 'demo-token-' + Date.now();
-        localStorage.setItem('playTogetherToken', fallbackToken);
-        localStorage.setItem('playTogetherUser', JSON.stringify(fallbackUser));
-        setToken(fallbackToken);
-        setUser(fallbackUser);
-        return;
-      }
       if (error instanceof ApiError) {
         throw error;
+      }
+      if (error instanceof Error && (error.message.includes('fetch') || error.message.includes('NetworkError') || error.message.includes('Failed to fetch'))) {
+        throw new Error('Cannot connect to server. Please ensure the backend is running and try again.');
       }
       throw new Error(error instanceof Error ? error.message : 'Login failed. Please check your credentials.');
     }
@@ -148,25 +114,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(response.token);
       setUser(response.user);
     } catch (error) {
-      // If network error / offline backend, fallback to local demo user session
-      if (error instanceof Error && (error.message.includes('fetch') || error.message.includes('NetworkError') || error.message.includes('Failed to fetch'))) {
-        const fallbackUser: User = {
-          id: 'user-' + Date.now(),
-          name: name || email.split('@')[0] || 'Sports Fan',
-          email: email,
-          role: 'USER',
-          avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name || email)}`,
-          createdAt: new Date().toISOString(),
-        };
-        const fallbackToken = 'demo-token-' + Date.now();
-        localStorage.setItem('playTogetherToken', fallbackToken);
-        localStorage.setItem('playTogetherUser', JSON.stringify(fallbackUser));
-        setToken(fallbackToken);
-        setUser(fallbackUser);
-        return;
-      }
       if (error instanceof ApiError) {
         throw error;
+      }
+      if (error instanceof Error && (error.message.includes('fetch') || error.message.includes('NetworkError') || error.message.includes('Failed to fetch'))) {
+        throw new Error('Cannot connect to server. Please ensure the backend is running and try again.');
       }
       throw new Error(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     }

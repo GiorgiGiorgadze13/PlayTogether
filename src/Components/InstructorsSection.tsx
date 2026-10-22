@@ -3,6 +3,7 @@ import { getLocalizedLearnSports, type LearnSport } from '../constants/instructo
 import type { TranslationContent } from '../types/translations';
 import { InstructorModal } from './InstructorModal';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 interface InstructorsSectionProps {
   c: TranslationContent;
@@ -10,6 +11,7 @@ interface InstructorsSectionProps {
 
 export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => {
   const { lang } = useLanguage();
+  const { isAuthenticated, openAuthModal } = useAuth();
   const [activeCategory, setActiveCategory] = useState<'all' | 'racket' | 'team' | 'combat'>('all');
   const [selectedSport, setSelectedSport] = useState<LearnSport | null>(null);
 
@@ -312,6 +314,8 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
           sport={selectedSport}
           onClose={() => setSelectedSport(null)}
           c={c}
+          isAuthenticated={isAuthenticated}
+          openAuthModal={openAuthModal}
         />
       )}
     </section>

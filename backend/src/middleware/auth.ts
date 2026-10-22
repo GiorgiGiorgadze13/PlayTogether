@@ -19,10 +19,23 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
     req.user = {
       userId: decoded.userId,
       email: decoded.email,
+      role: decoded.role || 'USER',
     };
     next();
   } catch {
     res.status(401).json({ message: 'Invalid or expired token.' });
     return;
   }
+};
+
+export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Authentication required.' });
+    return;
+  }
+  if (req.user.role !== 'ADMIN') {
+    res.status(403).json({ message: 'Admin access required.' });
+    return;
+  }
+  next();
 };

@@ -217,5 +217,77 @@ export const api = {
       method: 'DELETE',
     });
   },
+
+  // ── Instructor Bookings API ──────────────────────────────────────
+  createInstructorBooking: (data: {
+    instructorId: string;
+    instructorName: string;
+    sport: string;
+    lessonType: '1-on-1' | 'Group Coaching';
+    slot: string;
+    amount: number;
+    notes?: string;
+  }): Promise<{ message: string; booking: InstructorBooking }> => {
+    return fetchApi<{ message: string; booking: InstructorBooking }>('/instructor-bookings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  getMyInstructorBookings: (): Promise<{ bookings: InstructorBooking[] }> => {
+    return fetchApi<{ bookings: InstructorBooking[] }>('/instructor-bookings/my', {
+      method: 'GET',
+    });
+  },
+
+  // ── Admin API ──────────────────────────────────────────────────
+  admin: {
+    getStats: (): Promise<{ stats: AdminStats }> => {
+      return fetchApi<{ stats: AdminStats }>('/admin/stats', { method: 'GET' });
+    },
+    getBookings: (): Promise<{ bookings: InstructorBooking[] }> => {
+      return fetchApi<{ bookings: InstructorBooking[] }>('/admin/bookings', { method: 'GET' });
+    },
+    getUsers: (): Promise<{ users: AdminUser[] }> => {
+      return fetchApi<{ users: AdminUser[] }>('/admin/users', { method: 'GET' });
+    },
+  },
 };
+
+// ── Shared types for new API endpoints ──────────────────────────────
+export interface InstructorBooking {
+  id: string;
+  userId: string;
+  instructorId: string;
+  instructorName: string;
+  sport: string;
+  lessonType: '1-on-1' | 'Group Coaching';
+  slot: string;
+  amount: number;
+  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+  user?: { id: string; name: string; email: string };
+}
+
+export interface AdminStats {
+  totalUsers: number;
+  totalInstructorBookings: number;
+  totalGames: number;
+  activeSubscriptions: number;
+}
+
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  _count: {
+    instructorBookings: number;
+    createdGames: number;
+  };
+}
+
 

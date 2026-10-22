@@ -44,12 +44,13 @@ export const register = async (req: Request, res: Response, next: NextFunction):
         id: true,
         name: true,
         email: true,
+        role: true,
         createdAt: true,
       },
     });
 
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
     );
@@ -82,7 +83,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     }
 
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { userId: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
     );
@@ -93,6 +94,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
         createdAt: user.createdAt,
       },
       token,
@@ -114,6 +116,7 @@ export const me = async (req: Request, res: Response, next: NextFunction): Promi
         id: true,
         name: true,
         email: true,
+        role: true,
         createdAt: true,
       },
     });

@@ -1,4 +1,6 @@
+# ───────────────────────────────────────────────
 # Logs
+# ───────────────────────────────────────────────
 logs
 *.log
 npm-debug.log*
@@ -7,16 +9,71 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# ───────────────────────────────────────────────
+# Dependencies
+# ───────────────────────────────────────────────
+node_modules/
+
+# ───────────────────────────────────────────────
+# Build output
+# ───────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
 *.local
 
-# Editor directories and files
+# ───────────────────────────────────────────────
+# Environment files — NEVER commit real secrets
+# ───────────────────────────────────────────────
+.env
+.env.*
+# Allow the example template
+!.env.example
+
+# ───────────────────────────────────────────────
+# SQLite / Prisma local databases
+# Keep schema.prisma AND migrations tracked.
+# Only ignore the binary database files.
+# ───────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+backend/prisma/dev.db
+backend/prisma/dev.db.backup
+
+# ───────────────────────────────────────────────
+# Test & Coverage
+# ───────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ───────────────────────────────────────────────
+# Cache directories
+# ───────────────────────────────────────────────
+.cache/
+.vite/
+.turbo/
+.eslintcache
+.oxlintcache
+
+# ───────────────────────────────────────────────
+# OS-generated files
+# ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ───────────────────────────────────────────────
+# Editor / IDE
+# ───────────────────────────────────────────────
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj

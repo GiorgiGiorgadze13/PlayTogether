@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../services/api';
+import type { InstructorBooking, AdminStats, AdminUser } from '../services/api';
 
 // ── Storage keys (must match FindPlayersSection) ──
 const POSTS_KEY = 'playTogether_player_posts';
@@ -71,13 +73,15 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-type Tab = 'dashboard' | 'posts' | 'comments' | 'users' | 'reports';
+type Tab = 'dashboard' | 'bookings' | 'posts' | 'comments' | 'users' | 'reports' | 'dbusers';
 
 export const AdminPage: React.FC = () => {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+
+  // Local-storage content (posts, comments, bans, reports)
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [bannedUsers, setBannedUsers] = useState<BannedUser[]>([]);
@@ -86,6 +90,13 @@ export const AdminPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmDelete, setConfirmDelete] = useState<{ type: string; id: string } | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+
+  // API-sourced data
+  const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
+  const [bookings, setBookings] = useState<InstructorBooking[]>([]);
+  const [dbUsers, setDbUsers] = useState<AdminUser[]>([]);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   // ── Auth guard ──
   useEffect(() => {
@@ -99,7 +110,8 @@ export const AdminPage: React.FC = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const loadData = useCallback(() => {
+  // Load localStorage content
+  const loadLocalData = useCallback(() => {
     const storedPosts: Post[] = JSON.parse(localStorage.getItem(POSTS_KEY) || '[]');
     const storedComments: Comment[] = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
     const storedBanned: BannedUser[] = JSON.parse(localStorage.getItem(BANNED_KEY) || '[]');
@@ -110,13 +122,35 @@ export const AdminPage: React.FC = () => {
     setReports(storedReports);
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  // Load real API data
+  const loadApiData = useCallback(async () => {
+    if (!isAdmin) return;
+    setApiLoading(true);
+    setApiError(null);
+    try {
+      const [statsRes, bookingsRes, usersRes] = await Promise.all([
+        api.admin.getStats(),
+        api.admin.getBookings(),
+        api.admin.getUsers(),
+      ]);
+      setAdminStats(statsRes.stats);
+      setBookings(bookingsRes.bookings);
+      setDbUsers(usersRes.users);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to load admin data from server.';
+      setApiError(msg);
+    } finally {
+      setApiLoading(false);
+    }
+  }, [isAdmin]);
+
+  useEffect(() => { loadLocalData(); }, [loadLocalData]);
+  useEffect(() => { loadApiData(); }, [loadApiData]);
 
   // ── Actions ──
   const deletePost = (postId: string) => {
     const updated = posts.filter((p) => p.id !== postId);
     localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
-    // Also delete comments for that post
     const updatedComments = comments.filter((c) => c.postId !== postId);
     localStorage.setItem(COMMENTS_KEY, JSON.stringify(updatedComments));
     setPosts(updated);
@@ -181,8 +215,16 @@ export const AdminPage: React.FC = () => {
 
   if (!isAdmin) return null;
 
+  const statusColor = (s: string) => {
+    if (s === 'CONFIRMED') return '#60d394';
+    if (s === 'CANCELLED') return '#ef5350';
+    return '#ffb74d';
+  };
+
   const tabs: { id: Tab; label: string; icon: string; count?: number }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'bookings', label: 'Bookings', icon: '📚', count: bookings.length },
+    { id: 'dbusers', label: 'DB Users', icon: '👥', count: dbUsers.length },
     { id: 'posts', label: 'Player Posts', icon: '📋', count: totalPosts },
     { id: 'comments', label: 'Comments', icon: '💬', count: totalComments },
     { id: 'users', label: 'Banned Users', icon: '🚫', count: totalBanned },
@@ -258,7 +300,7 @@ export const AdminPage: React.FC = () => {
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img src={user?.avatarUrl} alt="admin"
+          <img src={user?.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${user?.email}`} alt="admin"
             style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #c9ff35' }}
           />
           <span style={{ fontSize: '13px', fontWeight: 700, color: '#c9ff35' }}>
@@ -322,6 +364,24 @@ export const AdminPage: React.FC = () => {
         {/* ── MAIN CONTENT ── */}
         <div style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
 
+          {/* API Error Banner */}
+          {apiError && (
+            <div style={{
+              background: 'rgba(239,83,80,0.1)', border: '1px solid rgba(239,83,80,0.3)',
+              borderRadius: '12px', padding: '14px 18px', marginBottom: '24px',
+              display: 'flex', alignItems: 'center', gap: '10px',
+            }}>
+              <span style={{ fontSize: '18px' }}>⚠️</span>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '14px', color: '#ef5350', marginBottom: '2px' }}>Backend API Error</div>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.55)' }}>{apiError}</div>
+              </div>
+              <button onClick={loadApiData} style={{ marginLeft: 'auto', padding: '6px 14px', borderRadius: '8px', background: 'rgba(239,83,80,0.15)', border: '1px solid rgba(239,83,80,0.3)', color: '#ef5350', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}>
+                Retry
+              </button>
+            </div>
+          )}
+
           {/* ══════════ DASHBOARD ══════════ */}
           {activeTab === 'dashboard' && (
             <div>
@@ -335,10 +395,12 @@ export const AdminPage: React.FC = () => {
               {/* Stat Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '40px' }}>
                 {[
+                  { label: 'DB Users', value: adminStats?.totalUsers ?? '—', icon: '👥', color: '#60d394', sub: 'registered accounts' },
+                  { label: 'Instructor Bookings', value: adminStats?.totalInstructorBookings ?? '—', icon: '📚', color: '#c9ff35', sub: 'saved in database' },
+                  { label: 'Games Created', value: adminStats?.totalGames ?? '—', icon: '⚽', color: '#64b5f6', sub: 'all time' },
+                  { label: 'Active Subscriptions', value: adminStats?.activeSubscriptions ?? '—', icon: '⭐', color: '#ffb74d', sub: 'PlayPass members' },
                   { label: 'Player Listings', value: totalPosts, icon: '📋', color: '#c9ff35', sub: 'user-created posts' },
-                  { label: 'Comments', value: totalComments, icon: '💬', color: '#60d394', sub: 'across all listings' },
-                  { label: 'Banned Users', value: totalBanned, icon: '🚫', color: '#ef5350', sub: 'total bans issued' },
-                  { label: 'Open Reports', value: pendingReports, icon: '🚩', color: '#ffb74d', sub: 'awaiting review' },
+                  { label: 'Open Reports', value: pendingReports, icon: '🚩', color: '#ef5350', sub: 'awaiting review' },
                 ].map((stat) => (
                   <div key={stat.label} style={{
                     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
@@ -346,7 +408,7 @@ export const AdminPage: React.FC = () => {
                   }}>
                     <div style={{ position: 'absolute', top: '-10px', right: '-10px', fontSize: '60px', opacity: 0.06 }}>{stat.icon}</div>
                     <div style={{ fontSize: '32px', marginBottom: '8px' }}>{stat.icon}</div>
-                    <div style={{ fontSize: '36px', fontWeight: 800, color: stat.color }}>{stat.value}</div>
+                    <div style={{ fontSize: '36px', fontWeight: 800, color: stat.color }}>{apiLoading && typeof stat.value === 'string' ? '…' : stat.value}</div>
                     <div style={{ fontSize: '14px', fontWeight: 700, color: '#fff', marginTop: '4px' }}>{stat.label}</div>
                     <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', marginTop: '2px' }}>{stat.sub}</div>
                   </div>
@@ -357,9 +419,9 @@ export const AdminPage: React.FC = () => {
               <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', marginBottom: '16px' }}>Quick Actions</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
                 {[
-                  { label: 'Moderate Posts', desc: 'Review and remove player listings', tab: 'posts' as Tab, icon: '📋', color: '#c9ff35' },
-                  { label: 'Review Comments', desc: 'Remove inappropriate comments', tab: 'comments' as Tab, icon: '💬', color: '#60d394' },
-                  { label: 'Manage Bans', desc: 'View and lift user bans', tab: 'users' as Tab, icon: '🚫', color: '#ef5350' },
+                  { label: 'View Bookings', desc: 'See all instructor bookings from DB', tab: 'bookings' as Tab, icon: '📚', color: '#c9ff35' },
+                  { label: 'DB Users', desc: 'View all registered users', tab: 'dbusers' as Tab, icon: '👥', color: '#60d394' },
+                  { label: 'Moderate Posts', desc: 'Review and remove player listings', tab: 'posts' as Tab, icon: '📋', color: '#64b5f6' },
                   { label: 'Handle Reports', desc: 'Resolve flagged content', tab: 'reports' as Tab, icon: '🚩', color: '#ffb74d' },
                 ].map((a) => (
                   <button key={a.tab} onClick={() => setActiveTab(a.tab)}
@@ -377,18 +439,114 @@ export const AdminPage: React.FC = () => {
                   </button>
                 ))}
               </div>
+            </div>
+          )}
 
-              {/* Admin credentials reminder */}
-              <div style={{
-                marginTop: '32px', background: 'rgba(201,255,53,0.06)', border: '1px solid rgba(201,255,53,0.2)',
-                borderRadius: '14px', padding: '20px',
-              }}>
-                <div style={{ fontWeight: 800, fontSize: '14px', color: '#c9ff35', marginBottom: '8px' }}>🔐 Admin Credentials</div>
-                <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.8 }}>
-                  <strong style={{ color: '#fff' }}>Email:</strong> admin@playtogether.ge<br />
-                  <strong style={{ color: '#fff' }}>Password:</strong> Admin@PT2025
+          {/* ══════════ BOOKINGS TAB ══════════ */}
+          {activeTab === 'bookings' && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', margin: 0 }}>Instructor Bookings</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '13px', marginTop: '4px' }}>{bookings.length} bookings saved in the database</p>
                 </div>
+                <button onClick={loadApiData} style={{ padding: '9px 16px', borderRadius: '10px', background: 'rgba(201,255,53,0.1)', border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                  🔄 Refresh
+                </button>
               </div>
+
+              {apiLoading ? (
+                <div style={{ textAlign: 'center', padding: '60px', color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>Loading…</div>
+              ) : bookings.length === 0 ? (
+                <EmptyState icon="📚" text="No instructor bookings yet. They will appear here once users start booking." />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {bookings.map((booking) => (
+                    <div key={booking.id} style={{
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '14px', padding: '20px',
+                    }}>
+                      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                        <div style={{ flex: 1, minWidth: '200px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                            <span style={{ fontWeight: 800, fontSize: '15px', color: '#fff' }}>{booking.user?.name || 'Unknown User'}</span>
+                            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>{booking.user?.email}</span>
+                            <span style={{
+                              background: `rgba(${booking.status === 'CONFIRMED' ? '96,211,148' : booking.status === 'CANCELLED' ? '239,83,80' : '255,183,77'},0.15)`,
+                              color: statusColor(booking.status),
+                              border: `1px solid rgba(${booking.status === 'CONFIRMED' ? '96,211,148' : booking.status === 'CANCELLED' ? '239,83,80' : '255,183,77'},0.3)`,
+                              padding: '2px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700,
+                            }}>{booking.status}</span>
+                          </div>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px,1fr))', gap: '8px', fontSize: '13px' }}>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Instructor: </span><strong style={{ color: '#fff' }}>{booking.instructorName}</strong></div>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Sport: </span><strong style={{ color: '#fff' }}>{booking.sport}</strong></div>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Type: </span><strong style={{ color: '#c9ff35' }}>{booking.lessonType}</strong></div>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Slot: </span><strong style={{ color: '#fff' }}>🕒 {booking.slot}</strong></div>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Amount: </span><strong style={{ color: '#c9ff35' }}>₾{booking.amount}</strong></div>
+                            <div><span style={{ color: 'rgba(255,255,255,0.4)' }}>Booked: </span><span style={{ color: 'rgba(255,255,255,0.6)' }}>{timeAgo(booking.createdAt)}</span></div>
+                          </div>
+                          {booking.notes && (
+                            <div style={{ marginTop: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                              📝 {booking.notes}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ══════════ DB USERS TAB ══════════ */}
+          {activeTab === 'dbusers' && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', margin: 0 }}>Database Users</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '13px', marginTop: '4px' }}>{dbUsers.length} registered accounts</p>
+                </div>
+                <button onClick={loadApiData} style={{ padding: '9px 16px', borderRadius: '10px', background: 'rgba(201,255,53,0.1)', border: '1px solid rgba(201,255,53,0.3)', color: '#c9ff35', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}>
+                  🔄 Refresh
+                </button>
+              </div>
+
+              {apiLoading ? (
+                <div style={{ textAlign: 'center', padding: '60px', color: 'rgba(255,255,255,0.4)', fontSize: '14px' }}>Loading…</div>
+              ) : dbUsers.length === 0 ? (
+                <EmptyState icon="👥" text="No users found in the database." />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {dbUsers.map((u) => (
+                    <div key={u.id} style={{
+                      background: 'rgba(255,255,255,0.04)', border: `1px solid ${u.role === 'ADMIN' ? 'rgba(201,255,53,0.2)' : 'rgba(255,255,255,0.08)'}`,
+                      borderRadius: '14px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
+                    }}>
+                      <img
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(u.email)}`}
+                        alt={u.name}
+                        style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.15)', flexShrink: 0 }}
+                      />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <span style={{ fontWeight: 800, fontSize: '14px', color: '#fff' }}>{u.name}</span>
+                          {u.role === 'ADMIN' && (
+                            <span style={{ background: '#c9ff35', color: '#070809', padding: '1px 7px', borderRadius: '5px', fontSize: '10px', fontWeight: 800 }}>ADMIN</span>
+                          )}
+                        </div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)' }}>{u.email}</div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                        <span>📚 {u._count.instructorBookings} bookings</span>
+                        <span>⚽ {u._count.createdGames} games</span>
+                        <span>Joined {timeAgo(u.createdAt)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -630,15 +788,6 @@ export const AdminPage: React.FC = () => {
                   ))}
                 </div>
               )}
-
-              {/* How to add reports info */}
-              <div style={{ marginTop: '24px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '16px' }}>
-                <div style={{ fontWeight: 700, fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '6px' }}>ℹ️ About Reports</div>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
-                  Reports are generated when users flag content as inappropriate. They are stored in <code style={{ color: '#c9ff35' }}>playTogether_reports</code> in localStorage.
-                  You can also manually add reports via the browser console or the Find Players page once the report button is visible.
-                </p>
-              </div>
             </div>
           )}
 

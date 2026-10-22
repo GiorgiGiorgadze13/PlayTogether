@@ -27,17 +27,27 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
+// NOTE: SQLite does not support native enums — these strings are enforced at the application layer.
+// PaymentMethod: "CASH" | "CARD"
+// PaymentStatus: "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED"
+// UserRole: "USER" | "ADMIN"
+// InstructorBookingStatus: "PENDING" | "CONFIRMED" | "CANCELLED"
+
 model User {
   id           String       @id @default(uuid())
   name         String
   email        String       @unique
   passwordHash String
+  // Role — "USER" (default) or "ADMIN". Set via admin seed script or promote endpoint.
+  role         String       @default("USER")
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  createdGames    Game[]            @relation("GameCreator")
-  gameMemberships GamePlayer[]
-  subscriptions   UserSubscription[]
+  createdGames        Game[]              @relation("GameCreator")
+  gameMemberships     GamePlayer[]
+  subscriptions       UserSubscription[]
+  payments            Payment[]
+  instructorBookings  InstructorBooking[]
 
   @@map("users")
 }
@@ -78,12 +88,15 @@ model Game {
   selectedPhotoUrl        String?
   selectedPhotoAttribution String?
   status                  GameStatus @default(UPCOMING)
+  // Payment method used when booking: "CASH" | "CARD" | null
+  paymentMethod           String?
   createdAt               DateTime   @default(now())
   updatedAt               DateTime   @updatedAt
 
   stadium   Stadium    @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
   creator   User       @relation("GameCreator", fields: [creatorId], references: [id], onDelete: Cascade)
   players   GamePlayer[]
+  payment   Payment?
 
   // Prevent duplicate bookings at identical start times for the same stadium and date
   @@unique([stadiumId, date, startTime])
@@ -141,4 +154,53 @@ model WeeklyUsage {
 
   @@unique([subscriptionId, weekKey])
   @@map("weekly_usages")
+}
+
+// Payment record for a stadium game booking or instructor session
+model Payment {
+  id                  String    @id @default(uuid())
+  userId              String
+  // One of these will be set depending on payment type
+  gameId              String?   @unique
+  instructorBookingId String?   @unique
+  amount              Float
+  // "CASH" | "CARD"
+  method              String    @default("CASH")
+  // "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED"
+  status              String    @default("PENDING")
+  // External transaction reference (e.g. from payment provider). Null for simulated/cash.
+  transactionRef      String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game                Game?     @relation(fields: [gameId], references: [id], onDelete: SetNull)
+  instructorBooking   InstructorBooking? @relation(fields: [instructorBookingId], references: [id], onDelete: SetNull)
+
+  @@map("payments")
+}
+
+// Instructor lesson booking
+model InstructorBooking {
+  id             String   @id @default(uuid())
+  userId         String
+  // Identifier of the instructor (from constants — not a DB user for now)
+  instructorId   String
+  instructorName String
+  sport          String
+  // "1-on-1" | "Group Coaching"
+  lessonType     String
+  // The time slot selected (e.g. "Mon 10:00-11:00")
+  slot           String
+  amount         Float
+  // "PENDING" | "CONFIRMED" | "CANCELLED"
+  status         String   @default("PENDING")
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payment Payment?
+
+  @@map("instructor_bookings")
 }

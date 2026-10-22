@@ -568,6 +568,7 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c, lang }) => 
                     src={stadium.selectedPhotoUrl || stadium.imageUrl}
                     alt={displayName}
                     className="clean-stadium-img"
+                    loading="lazy"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80';
                     }}

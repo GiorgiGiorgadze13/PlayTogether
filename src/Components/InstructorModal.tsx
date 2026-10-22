@@ -1,27 +1,68 @@
 import React, { useState } from 'react';
 import type { LearnSport, InstructorProfile } from '../constants/instructors';
 import type { TranslationContent } from '../types/translations';
+import { api } from '../services/api';
+import { ApiError } from '../services/api';
 
 interface InstructorModalProps {
   sport: LearnSport;
   onClose: () => void;
   c: TranslationContent;
+  isAuthenticated: boolean;
+  openAuthModal: (mode?: 'login' | 'register') => void;
 }
 
-export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose, c }) => {
+export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose, c, isAuthenticated, openAuthModal }) => {
   const [selectedInstructor, setSelectedInstructor] = useState<InstructorProfile | null>(null);
   const [lessonType, setLessonType] = useState<'1-on-1' | 'Group Coaching'>('1-on-1');
   const [selectedSlot, setSelectedSlot] = useState<string>('');
   const [bookingConfirmed, setBookingConfirmed] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [bookingError, setBookingError] = useState<string | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState<boolean>(false);
 
   const handleStartBooking = (instructor: InstructorProfile) => {
+    if (!isAuthenticated) {
+      setShowLoginPrompt(true);
+      return;
+    }
     setSelectedInstructor(instructor);
     setSelectedSlot(instructor.availableSlots[0] || '');
     setBookingConfirmed(false);
+    setBookingError(null);
   };
 
-  const handleConfirmBooking = () => {
-    setBookingConfirmed(true);
+  const handleConfirmBooking = async () => {
+    if (!selectedInstructor || !selectedSlot) return;
+    if (!isAuthenticated) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    setIsLoading(true);
+    setBookingError(null);
+    try {
+      const rate = lessonType === '1-on-1'
+        ? selectedInstructor.hourlyRate1on1
+        : selectedInstructor.hourlyRateGroup;
+
+      await api.createInstructorBooking({
+        instructorId: selectedInstructor.id,
+        instructorName: selectedInstructor.name,
+        sport: sport.name,
+        lessonType,
+        slot: selectedSlot,
+        amount: rate,
+      });
+      setBookingConfirmed(true);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setBookingError(error.message);
+      } else {
+        setBookingError('Failed to create booking. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -111,8 +152,64 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           </div>
         </div>
 
-        {/* Active Booking Flow vs Instructor Selection List */}
-        {selectedInstructor ? (
+        {/* Login Prompt */}
+        {showLoginPrompt ? (
+          <div
+            style={{
+              background: 'rgba(201, 255, 53, 0.06)',
+              border: '1px solid rgba(201, 255, 53, 0.25)',
+              borderRadius: '20px',
+              padding: '40px 30px',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ fontSize: '48px', marginBottom: '12px' }}>🔒</div>
+            <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
+              Sign In to Book a Lesson
+            </h3>
+            <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', maxWidth: '420px', margin: '0 auto 28px', lineHeight: 1.6 }}>
+              You need to be logged in to book an instructor lesson. Create a free account or sign in to continue.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => { openAuthModal('login'); onClose(); }}
+                style={{
+                  background: '#c9ff35',
+                  color: '#070809',
+                  border: 'none',
+                  padding: '12px 28px',
+                  borderRadius: '12px',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                }}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => { openAuthModal('register'); onClose(); }}
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  padding: '12px 28px',
+                  borderRadius: '12px',
+                  fontWeight: 800,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                }}
+              >
+                Create Account
+              </button>
+            </div>
+            <button
+              onClick={() => setShowLoginPrompt(false)}
+              style={{ marginTop: '16px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '13px', cursor: 'pointer' }}
+            >
+              ← Back to Instructors
+            </button>
+          </div>
+        ) : selectedInstructor ? (
           <div>
             {/* Back Button */}
             <button
@@ -305,10 +402,26 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                   </div>
                 </div>
 
+                {/* Error message */}
+                {bookingError && (
+                  <div style={{
+                    background: 'rgba(239,83,80,0.1)',
+                    border: '1px solid rgba(239,83,80,0.3)',
+                    borderRadius: '10px',
+                    padding: '12px 16px',
+                    marginBottom: '16px',
+                    color: '#ef5350',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                  }}>
+                    ❌ {bookingError}
+                  </div>
+                )}
+
                 {/* Confirm Booking Button */}
                 <button
                   onClick={handleConfirmBooking}
-                  disabled={!selectedSlot}
+                  disabled={!selectedSlot || isLoading}
                   style={{
                     width: '100%',
                     height: '50px',
@@ -318,12 +431,24 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     borderRadius: '12px',
                     fontWeight: 800,
                     fontSize: '15px',
-                    cursor: selectedSlot ? 'pointer' : 'not-allowed',
-                    opacity: selectedSlot ? 1 : 0.5,
+                    cursor: (selectedSlot && !isLoading) ? 'pointer' : 'not-allowed',
+                    opacity: (selectedSlot && !isLoading) ? 1 : 0.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
                   }}
                 >
-                  {c.confirmBookingWith} {selectedInstructor.name} →
+                  {isLoading ? (
+                    <>
+                      <span style={{ display: 'inline-block', width: '16px', height: '16px', border: '2px solid #07080966', borderTopColor: '#070809', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                      Confirming…
+                    </>
+                  ) : (
+                    <>{c.confirmBookingWith} {selectedInstructor.name} →</>
+                  )}
                 </button>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
               </div>
             )}
           </div>
@@ -450,7 +575,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         flexShrink: 0,
                       }}
                     >
-                      {c.bookLesson} →
+                      {isAuthenticated ? `${c.bookLesson} →` : '🔒 Sign In to Book'}
                     </button>
                   </div>
                 </div>
