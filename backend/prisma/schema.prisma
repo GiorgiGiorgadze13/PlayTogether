@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -26,12 +26,6 @@ enum SubscriptionStatus {
   CANCELLED
   EXPIRED
 }
-
-// NOTE: SQLite does not support native enums — these strings are enforced at the application layer.
-// PaymentMethod: "CASH" | "CARD"
-// PaymentStatus: "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED"
-// UserRole: "USER" | "ADMIN"
-// InstructorBookingStatus: "PENDING" | "CONFIRMED" | "CANCELLED"
 
 model User {
   id           String       @id @default(uuid())
