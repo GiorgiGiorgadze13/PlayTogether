@@ -1,12 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+// Initial data for the localStorage "database" (copied from the old backend seed).
+import type { VenuePlace } from '../types/api';
 
-const prisma = new PrismaClient();
-
-async function main() {
-  console.log('Seeding database...');
-
-  // Seed Stadiums
-  const stadiums = [
+export const SEED_STADIUMS: Array<{
+  name: string;
+  description: string;
+  location: string;
+  sport: string;
+  imageUrl: string;
+  price: number;
+}> = [
     {
       name: 'ლისი აბანოს სტადიონი',
       description: 'საუკეთესო საფეხბურთო მოედანი ლისის ტბის მიმდებარედ, განათებითა და გასახდელებით.',
@@ -105,26 +107,135 @@ async function main() {
     },
   ];
 
-  for (const stadiumData of stadiums) {
-    const existing = await prisma.stadium.findFirst({
-      where: { name: stadiumData.name },
-    });
-
-    if (!existing) {
-      await prisma.stadium.create({
-        data: stadiumData,
-      });
-    }
-  }
-
-  console.log('Seeding completed successfully!');
-}
-
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export const FALLBACK_VENUES: VenuePlace[] = [
+  {
+    id: 'stadium-football-1',
+    name: 'Mikheil Meskhi Stadium',
+    address: '74 Chavchavadze Ave, Tbilisi, Georgia',
+    location: 'Tbilisi, Vake',
+    latitude: 41.7231,
+    longitude: 44.7897,
+    imageUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.8,
+    placeId: 'ChIJj7939GkUREAR879w_football1',
+    sport: 'Football',
+    price: 15.0,
+  },
+  {
+    id: 'stadium-football-2',
+    name: 'Mikheil Meskhi Stadium',
+    address: '74 Chavchavadze Ave, Tbilisi, Georgia',
+    location: 'Tbilisi, Vake',
+    latitude: 41.7092,
+    longitude: 44.7554,
+    imageUrl: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.6,
+    placeId: 'ChIJX99201kUREAR4491_football2',
+    sport: 'Football',
+    price: 15.0,
+  },
+  {
+    id: 'stadium-football-3',
+    name: 'Tbilisi Sports Arena Field',
+    address: 'Saburtalo Sports Complex, Tbilisi, Georgia',
+    location: 'Tbilisi, Saburtalo',
+    latitude: 41.7265,
+    longitude: 44.7612,
+    imageUrl: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.7,
+    placeId: 'ChIJN15542kUREAR1123_football3',
+    sport: 'Football',
+    price: 15.0,
+  },
+  {
+    id: 'stadium-tennis-1',
+    name: 'Leila Meskhi Tennis Academy & Club',
+    address: '18 Marjanishvili St, Tbilisi, Georgia',
+    location: 'Tbilisi, Marjanishvili',
+    latitude: 41.7088,
+    longitude: 44.7955,
+    imageUrl: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.7,
+    placeId: 'ChIJW98111kUREAR3322_tennis1',
+    sport: 'Tennis',
+    price: 30.0,
+  },
+  {
+    id: 'stadium-tennis-2',
+    name: 'Mziuri Tennis Courts',
+    address: 'Mziuri Park, Vake, Tbilisi, Georgia',
+    location: 'Tbilisi, Mziuri',
+    latitude: 41.7103,
+    longitude: 44.7731,
+    imageUrl: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.5,
+    placeId: 'ChIJK00991kUREAR8821_tennis2',
+    sport: 'Tennis',
+    price: 30.0,
+  },
+  {
+    id: 'stadium-basketball-1',
+    name: 'Tbilisi Olympic Palace',
+    address: 'University St 6, Tbilisi, Georgia',
+    location: 'Tbilisi, Saburtalo',
+    latitude: 41.7198,
+    longitude: 44.7405,
+    imageUrl: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.9,
+    placeId: 'ChIJL22331kUREAR4433_basket1',
+    sport: 'Basketball',
+    price: 10.0,
+  },
+  {
+    id: 'stadium-basketball-2',
+    name: 'Vake Sports Hall Basketball Court',
+    address: '37 Chavchavadze Ave, Tbilisi, Georgia',
+    location: 'Tbilisi, Vake',
+    latitude: 41.7081,
+    longitude: 44.7689,
+    imageUrl: 'https://images.unsplash.com/photo-1519766304817-4f37bda74a29?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.5,
+    placeId: 'ChIJP44551kUREAR6655_basket2',
+    sport: 'Basketball',
+    price: 10.0,
+  },
+  {
+    id: 'stadium-volleyball-1',
+    name: 'New Volleyball Arena Digomi',
+    address: 'Digomi Olympic Complex, Tbilisi, Georgia',
+    location: 'Tbilisi, Digomi',
+    latitude: 41.7654,
+    longitude: 44.7699,
+    imageUrl: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.6,
+    placeId: 'ChIJM77881kUREAR9988_volley1',
+    sport: 'Volleyball',
+    price: 15.0,
+  },
+  {
+    id: 'stadium-rugby-1',
+    name: 'Shevardeni Rugby Stadium',
+    address: 'Bagebi Complex, Tbilisi, Georgia',
+    location: 'Tbilisi, Bagebi',
+    latitude: 41.7012,
+    longitude: 44.7321,
+    imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.7,
+    placeId: 'ChIJQ11221kUREAR7711_rugby1',
+    sport: 'Rugby',
+    price: 15.0,
+  },
+  {
+    id: 'stadium-badminton-1',
+    name: 'Central Badminton Complex',
+    address: '12 Navtlughi St, Tbilisi, Georgia',
+    location: 'Tbilisi, Isani',
+    latitude: 41.6891,
+    longitude: 44.8399,
+    imageUrl: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=1000&q=80',
+    rating: 4.6,
+    placeId: 'ChIJR33441kUREAR8833_badmin1',
+    sport: 'Badminton',
+    price: 20.0,
+  },
+];
