@@ -86,7 +86,6 @@ export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', color: '#ffffff' }}>
-      {/* Hero Mission Statement */}
       <div
         style={{
           background: 'linear-gradient(135deg, #151719 0%, #0d0f11 100%)',
@@ -116,7 +115,6 @@ export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
           PlayTogether is Georgia's modern sports community platform. We bridge the gap between amateur players, local teams, and certified stadium venues. Our mission is to make finding, booking, and playing sports seamless for everyone.
         </p>
 
-        {/* Platform Stats */}
         <div
           style={{
             display: 'grid',
@@ -145,7 +143,6 @@ export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
         </div>
       </div>
 
-      {/* Key Features Grid */}
       <div style={{ marginBottom: '60px' }}>
         <div style={{ marginBottom: '28px', textAlign: 'center' }}>
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '2px', textTransform: 'uppercase' }}>
@@ -194,7 +191,6 @@ export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
         </div>
       </div>
 
-      {/* FAQ Accordion */}
       <div style={{ marginBottom: '60px', background: '#151719', borderRadius: '24px', padding: '36px', border: '1px solid rgba(255,255,255,0.1)' }}>
         <div style={{ marginBottom: '28px', textAlign: 'center' }}>
           <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '2px', textTransform: 'uppercase' }}>
@@ -252,7 +248,6 @@ export const AboutFeaturesSection: React.FC<AboutFeaturesSectionProps> = () => {
         </div>
       </div>
 
-      {/* Call to Action Banner */}
       <div
         style={{
           background: 'linear-gradient(135deg, rgba(201,255,53,0.15) 0%, rgba(13,15,17,0.95) 100%)',

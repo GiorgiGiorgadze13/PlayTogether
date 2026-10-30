@@ -1,11 +1,3 @@
-/**
- * PlayTogether — frontend-only data layer.
- *
- * There is no backend any more: everything (users, stadiums, games, subscriptions,
- * instructor bookings) is stored in the browser's localStorage. The exported `api`
- * object keeps exactly the same methods/return shapes as the old HTTP client, so the
- * rest of the app did not need to change.
- */
 import type {
   AuthResponse,
   User,
@@ -30,7 +22,6 @@ export class ApiError extends Error {
   }
 }
 
-// ── Local "database" ────────────────────────────────────────────────────────
 
 const DB_KEY = 'playTogether_db_v1';
 const TOKEN_KEY = 'playTogetherToken';
@@ -93,7 +84,6 @@ async function hashPassword(password: string): Promise<string> {
       .map((b) => b.toString(16).padStart(2, '0'))
       .join('');
   } catch {
-    // crypto.subtle is unavailable on non-secure origins — simple fallback
     let h = 5381;
     for (const c of `playtogether:${password}`) h = ((h << 5) + h + c.charCodeAt(0)) | 0;
     return `fallback-${h}`;
@@ -112,7 +102,7 @@ function seedDb(): Db {
   };
 }
 
-let memoryDb: Db | null = null; // used only if localStorage is unavailable
+let memoryDb: Db | null = null;
 
 function loadDb(): Db {
   try {
@@ -138,7 +128,6 @@ function saveDb(db: Db): void {
   }
 }
 
-/** Make sure the default admin account exists (same credentials as the old seed-admin script). */
 let adminEnsured = false;
 async function ensureAdmin(): Promise<void> {
   if (adminEnsured) return;
@@ -157,7 +146,6 @@ async function ensureAdmin(): Promise<void> {
   }
 }
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
 
 const publicUser = (u: DbUser): User => ({
   id: u.id,
@@ -227,7 +215,6 @@ function getWeekKey(date: Date): string {
 
 const WEEKLY_LIMITS: Record<string, number> = { SILVER: 2, GOLD: 3 };
 
-/** Simulate network latency so loading states still render. */
 const tick = <T,>(fn: () => T | Promise<T>): Promise<T> =>
   new Promise<T>((resolve, reject) => {
     setTimeout(() => {
@@ -239,10 +226,8 @@ const tick = <T,>(fn: () => T | Promise<T>): Promise<T> =>
 
 const makeToken = (userId: string) => `local.${userId}`;
 
-// ── Public API (same shape as the old HTTP client) ──────────────────────────
 
 export const api = {
-  // Auth
   register: (data: { name: string; email: string; password: string }): Promise<AuthResponse> =>
     tick(async () => {
       await ensureAdmin();
@@ -292,7 +277,6 @@ export const api = {
       return { user: publicUser(user) };
     }),
 
-  // Stadiums
   getStadiums: (sport?: string): Promise<{ stadiums: Stadium[] }> =>
     tick(() => {
       const db = loadDb();
@@ -369,7 +353,6 @@ export const api = {
       return { available: true, message: 'Time slot is available for booking.', stadiumId, date, startTime, endTime, bookedSlots };
     }),
 
-  // Games
   getGames: (params?: { stadiumId?: string; sport?: string; date?: string }): Promise<{ games: Game[] }> =>
     tick(() => {
       const db = loadDb();
@@ -412,7 +395,6 @@ export const api = {
       const db = loadDb();
       let stadium = db.stadiums.find((s) => s.id === data.stadiumId);
       if (!stadium) {
-        // External / suggested venue: store it locally the first time it is booked
         stadium = {
           id: data.stadiumId,
           name: data.venueName || 'Sports Stadium',
@@ -489,7 +471,6 @@ export const api = {
       return { message: 'Left game successfully' };
     }),
 
-  // PlayPass subscriptions
   getMySubscription: (): Promise<{ subscription: any; weeklyUsage: any }> =>
     tick(() => {
       const userId = currentUserId();
@@ -573,7 +554,6 @@ export const api = {
       return { message: 'Subscription cancelled successfully.' };
     }),
 
-  // Instructor bookings
   createInstructorBooking: (data: {
     instructorId: string;
     instructorName: string;
@@ -634,7 +614,6 @@ export const api = {
       return { bookings };
     }),
 
-  // Admin
   admin: {
     getStats: (): Promise<{ stats: AdminStats }> =>
       tick(() => {
@@ -677,7 +656,6 @@ export const api = {
   },
 };
 
-// ── Shared types for new API endpoints ──────────────────────────────
 export interface InstructorBooking {
   id: string;
   userId: string;

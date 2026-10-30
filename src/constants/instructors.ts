@@ -370,8 +370,6 @@ export function getLearnSportById(id: string): LearnSport | undefined {
   return LEARN_SPORTS.find((sport) => sport.id === id.toLowerCase());
 }
 
-// ── Georgian localizations ──────────────────────────────────────────────────
-// Only the text fields are translated; numeric/image/icon fields stay unchanged.
 export interface SportL10n {
   name: string;
   tagline: string;
@@ -552,7 +550,6 @@ export const LEARN_SPORTS_KA: Record<string, SportL10n> = {
   },
 };
 
-/** Returns a sport card with text localised to `lang`. Falls back to English. */
 export function getLocalizedLearnSports(lang: 'en' | 'ka'): LearnSport[] {
   if (lang === 'en') return LEARN_SPORTS;
   return LEARN_SPORTS.map((sport) => {

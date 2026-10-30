@@ -27,7 +27,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLang(lang === 'en' ? 'ka' : 'en');
   };
 
-  // Set document lang on mount
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);

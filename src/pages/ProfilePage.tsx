@@ -67,7 +67,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
     );
   }
 
-  // Filter user games
   const myCreatedGames = games.filter(
     (g) => g.creatorId === user.id || g.creator?.id === user.id
   );
@@ -105,7 +104,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 20px', color: '#ffffff' }}>
-      {/* Profile Header Banner */}
       <div
         style={{
           background: 'linear-gradient(135deg, #151719 0%, #0d0f11 100%)',
@@ -150,7 +148,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
           </div>
         </div>
 
-        {/* Stats Badges */}
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
           <div
             style={{
@@ -225,7 +222,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
         </div>
       )}
 
-      {/* Navigation Tabs */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
         <button
           onClick={() => setActiveTab('all')}
@@ -277,7 +273,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
         </button>
       </div>
 
-      {/* Booked Games Grid */}
       {isLoading ? (
         <div style={{ padding: '60px', textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '16px' }}>
           {c.loadingBookings}
@@ -343,7 +338,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                   transition: 'transform 0.2s ease, border-color 0.2s ease',
                 }}
               >
-                {/* Stadium Picture Header */}
                 <div style={{ position: 'relative', height: '180px', width: '100%', overflow: 'hidden' }}>
                   <img
                     src={stadiumPhoto}
@@ -385,7 +379,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                   </div>
                 </div>
 
-                {/* Card Content */}
                 <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 4px', color: '#fff' }}>
                     {game.title || `${sportType} Match`}
@@ -394,7 +387,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                     📍 {stadiumName} · <span style={{ opacity: 0.8 }}>{stadiumAddress}</span>
                   </p>
 
-                  {/* Date & Time Slot Info */}
                   <div
                     style={{
                       background: '#0d0f11',
@@ -421,7 +413,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                     </div>
                   </div>
 
-                  {/* Registered Players & Progress Bar */}
                   <div style={{ marginBottom: '16px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px', fontSize: '12px' }}>
                       <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>
@@ -432,7 +423,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                       </span>
                     </div>
 
-                    {/* Progress Bar */}
                     <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden', marginBottom: '12px' }}>
                       <div
                         style={{
@@ -445,7 +435,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                       />
                     </div>
 
-                    {/* Registered Players List */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
                       {game.players && game.players.length > 0 ? (
                         game.players.map((p, idx) => {
@@ -476,7 +465,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ c }) => {
                     </div>
                   </div>
 
-                  {/* Actions */}
                   <div style={{ marginTop: 'auto', paddingTop: '12px', display: 'flex', gap: '10px' }}>
                     {!isCreator && (
                       <button

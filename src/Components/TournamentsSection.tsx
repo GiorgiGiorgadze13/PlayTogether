@@ -164,7 +164,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
         </div>
       </div>
 
-      {/* Sport Category Filter Tabs */}
       <div
         style={{
           display: 'flex',
@@ -226,7 +225,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
         </div>
       )}
 
-      {/* Tournament Cards Grid */}
       <div
         style={{
           display: 'grid',
@@ -253,7 +251,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 transition: 'transform 0.3s ease, border-color 0.3s ease',
               }}
             >
-              {/* Stadium Photo Banner */}
               <div style={{ position: 'relative', height: '190px', width: '100%', overflow: 'hidden', background: '#1c1f22' }}>
                 <img
                   src={t.stadiumPhoto}
@@ -300,7 +297,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                 </div>
               </div>
 
-              {/* Tournament Details */}
               <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 <h3 style={{ fontSize: '20px', fontWeight: 800, margin: '0 0 8px', color: '#ffffff', lineHeight: 1.25 }}>
                   {t.title}
@@ -309,7 +305,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   📍 <strong>{t.stadiumName}</strong> · {t.stadiumLocation}
                 </p>
 
-                {/* Tournament Date & Info Box */}
                 <div
                   style={{
                     background: '#0d0f11',
@@ -336,7 +331,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   </div>
                 </div>
 
-                {/* Registered Teams Progress Bar */}
                 <div style={{ marginBottom: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '8px' }}>
                     <span>{c.registeredTeamsLabel}</span>
@@ -362,7 +356,6 @@ export const TournamentsSection: React.FC<TournamentsSectionProps> = ({ c }) => 
                   </div>
                 </div>
 
-                {/* Register Action Button */}
                 <button
                   onClick={() => handleRegisterTournament(t)}
                   disabled={isFull || isRegistered}

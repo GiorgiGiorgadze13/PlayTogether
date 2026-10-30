@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { useState, useEffect, useCallback } from 'react';
 import type { Stadium, AvailabilityResponse, VenuePlace } from '../types/api';
 import { api, ApiError } from '../services/api';
@@ -42,7 +41,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
-  // Helper to generate 7 upcoming dates
   const getUpcomingDays = () => {
     const days = [];
     const today = new Date();
@@ -59,11 +57,9 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const upcomingDays = getUpcomingDays();
 
-  // Flow Step: 1 = Sport, 2 = Venue, 3 = Date & Time, 4 = Review, 5 = Payment
   const [step, setStep] = useState<number>(stadium ? 3 : initialSport ? 2 : 1);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card' | null>(null);
 
-  // Form State
   const activeSport = stadium?.sport || initialSport || 'Football';
   const [selectedSport, setSelectedSport] = useState<string>(activeSport);
   const [selectedVenue, setSelectedVenue] = useState<VenuePlace | Stadium | null>(
@@ -90,7 +86,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   const [currentVenueIndex, setCurrentVenueIndex] = useState<number>(0);
   const [isSearchingVenues, setIsSearchingVenues] = useState(false);
 
-  const [date, setDate] = useState<string>(upcomingDays[1].isoDate); // Default Tomorrow
+  const [date, setDate] = useState<string>(upcomingDays[1].isoDate);
   const [startTime, setStartTime] = useState('18:00');
   const [endTime, setEndTime] = useState('20:00');
   const [isCustomTime, setIsCustomTime] = useState(false);
@@ -107,7 +103,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
 
   const sportReq = getSportRequirements(selectedSport);
 
-  // Fetch real Google Places venues for chosen sport with fallbacks
   const fetchVenues = useCallback(async (sportName: string, queryText: string) => {
     try {
       setIsSearchingVenues(true);
@@ -140,7 +135,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
     fetchVenues(selectedSport, searchQuery);
   }, [selectedSport, searchQuery, fetchVenues]);
 
-  // Check Slot Availability & Load Booked Slots for Selected Date
   useEffect(() => {
     if (!selectedVenue || !date) return;
 
@@ -175,7 +169,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
     };
   }, [selectedVenue, date, startTime, endTime]);
 
-  // Helper to check if a preset slot is already booked
   const isSlotBooked = (slotStart: string, slotEnd: string) => {
     return bookedSlots.some((b) => slotStart < b.endTime && slotEnd > b.startTime);
   };
@@ -195,7 +188,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
       return;
     }
 
-    // Go to payment step
     setStep(5);
   };
 
@@ -204,7 +196,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
     if (method === 'cash') {
       await executeBooking();
     } else {
-      // Card requires details — open PaymentCardModal
       setPendingBooking(true);
       setShowPaymentModal(true);
     }
@@ -261,7 +252,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
         }
       }
 
-      // If backend network request failed (offline/unreachable backend server), create local fallback game
       const isNetworkError =
         !err.statusCode &&
         (err?.message?.toLowerCase().includes('fetch') ||
@@ -337,7 +327,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
     }
   };
 
-  // Render payment modal if triggered
   if (showPaymentModal) {
     return (
       <PaymentCardModal
@@ -353,7 +342,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
   }
 
   const isSelectedSlotAvailable = !isSlotBooked(startTime, endTime) && (availability?.available !== false);
-  const initialRegistered = 1; // Creator auto-joins
+  const initialRegistered = 1;
   const remainingSpots = Math.max(0, sportReq.maxPlayers - initialRegistered);
   const capacityPercent = Math.min(100, Math.round((initialRegistered / sportReq.maxPlayers) * 100));
 
@@ -415,7 +404,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           ✕
         </button>
 
-        {/* Step Indicator Header */}
         <div style={{ marginBottom: '24px' }}>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
             {[1, 2, 3, 4, 5].map((s) => (
@@ -455,7 +443,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
         </div>
 
-        {/* STEP 1: CHOOSE SPORT */}
         {step === 1 && (
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>1. Choose Sport</h2>
@@ -500,7 +487,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
         )}
 
-        {/* STEP 2: CHOOSE VENUE (Interactive Carousel with Left/Right Navigation) */}
         {step === 2 && (
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>2. Choose Stadium / Venue</h2>
@@ -539,7 +525,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               </div>
             ) : (
               <div>
-                {/* Main Active Stadium Carousel Card */}
                 {(() => {
                   const activeVenue = venues[currentVenueIndex] || venues[0];
                   const photoSrc = activeVenue.selectedPhotoUrl || activeVenue.imageUrl;
@@ -568,7 +553,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                           boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
                         }}
                       >
-                        {/* Left Arrow Button */}
                         <button
                           type="button"
                           onClick={handlePrev}
@@ -598,7 +582,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                           ←
                         </button>
 
-                        {/* Right Arrow Button */}
                         <button
                           type="button"
                           onClick={handleNext}
@@ -628,7 +611,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                           →
                         </button>
 
-                        {/* Image Header */}
                         <div style={{ position: 'relative', height: '185px', width: '100%', overflow: 'hidden' }}>
                           <img
                             src={photoSrc}
@@ -673,7 +655,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                           </div>
                         </div>
 
-                        {/* Venue Info Details */}
                         <div style={{ padding: '16px' }}>
                           <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 4px', color: '#fff' }}>
                             {activeVenue.name}
@@ -738,7 +719,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                         </div>
                       </div>
 
-                      {/* Bottom Thumbnail Strip */}
                       <div
                         style={{
                           display: 'flex',
@@ -788,7 +768,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
         )}
 
-        {/* STEP 3: MODERN INTERACTIVE DATE & TIME SLOTS GRID */}
         {step === 3 && selectedVenue && (
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '4px' }}>3. Select Date & Time Slot</h2>
@@ -796,7 +775,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               Venue: <strong style={{ color: '#fff' }}>{selectedVenue.name}</strong>
             </p>
 
-            {/* Match Title Input */}
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: '6px' }}>
                 Match Title (Optional)
@@ -821,7 +799,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               />
             </div>
 
-            {/* 1. HORIZONTAL UPCOMING DAYS STRIP */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '12px', fontWeight: 700, color: '#c9ff35', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -877,7 +854,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               </div>
             </div>
 
-            {/* 2. SPECIFIC TIME SLOTS GRID */}
             <div style={{ marginBottom: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <span style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>
@@ -905,7 +881,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   Checking venue time slot availability...
                 </div>
               ) : isCustomTime ? (
-                /* Custom Time Inputs */
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', background: '#0d0f11', padding: '16px', borderRadius: '12px' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginBottom: '6px' }}>
@@ -947,7 +922,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   </div>
                 </div>
               ) : (
-                /* Preset Slots Grid */
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', maxHeight: '220px', overflowY: 'auto' }}>
                   {PRESET_SLOTS.map((slot) => {
                     const booked = isSlotBooked(slot.startTime, slot.endTime);
@@ -1018,7 +992,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               )}
             </div>
 
-            {/* Selected Slot Summary */}
             <div
               style={{
                 padding: '12px',
@@ -1061,7 +1034,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </div>
         )}
 
-        {/* STEP 4: PLAYER CAPACITY & CONFIRMATION */}
         {step === 4 && selectedVenue && (
           <form onSubmit={handleBookGame}>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>4. Review & Create Game</h2>
@@ -1069,7 +1041,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               Confirm match capacity and details before publishing.
             </p>
 
-            {/* Stadium Visual Preview Card */}
             <div
               style={{
                 background: '#0d0f11',
@@ -1099,7 +1070,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                 </div>
               </div>
 
-              {/* Player Capacity Bar Requirement */}
               <div style={{ background: '#151719', borderRadius: '12px', padding: '14px', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, marginBottom: '6px' }}>
                   <span>{sportReq.name} Capacity</span>
@@ -1108,7 +1078,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                   </span>
                 </div>
 
-                {/* Progress Bar */}
                 <div style={{ height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden', marginBottom: '8px' }}>
                   <div
                     style={{
@@ -1150,7 +1119,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
           </form>
         )}
 
-        {/* STEP 5: PAYMENT METHOD */}
         {step === 5 && selectedVenue && (
           <div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '6px' }}>5. Choose Payment Method</h2>
@@ -1158,7 +1126,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               How would you like to pay for your booking?
             </p>
 
-            {/* Booking Summary */}
             <div
               style={{
                 background: '#0d0f11',
@@ -1183,9 +1150,7 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
               </div>
             </div>
 
-            {/* Payment Method Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' }}>
-              {/* CASH */}
               <button
                 type="button"
                 onClick={() => handlePaymentChoice('cash')}
@@ -1238,7 +1203,6 @@ export const StadiumBookingModal: React.FC<StadiumBookingModalProps> = ({
                 </div>
               </button>
 
-              {/* CARD */}
               <button
                 type="button"
                 onClick={() => handlePaymentChoice('card')}

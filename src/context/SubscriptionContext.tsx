@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { UserSubscription, WeeklyUsage } from '../types/subscription';
 import type { SubscriptionTier, SubscriptionDuration } from '../constants/subscriptionConfig';
@@ -17,12 +16,11 @@ interface SubscriptionContextType {
   cancel: () => Promise<void>;
   refresh: () => Promise<void>;
   hasActiveSubscription: boolean;
-  canUseCredit: boolean; // true if unlimited or credits remaining > 0
+  canUseCredit: boolean;
 }
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(undefined);
 
-// ── ISO week key helper (mirrors backend logic) ──────────────────────────────
 function getWeekKey(date: Date): string {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   const dayNum = d.getUTCDay() || 7;
@@ -44,13 +42,11 @@ const WEEKLY_LIMITS: Record<SubscriptionTier, number | null> = {
   UNLIMITED: null,
 };
 
-// ── Local storage helpers ────────────────────────────────────────────────────
 function loadLocalSub(): UserSubscription | null {
   try {
     const raw = localStorage.getItem(LOCAL_SUB_KEY);
     if (!raw) return null;
     const sub: UserSubscription = JSON.parse(raw);
-    // Check expiry
     if (new Date(sub.endDate) < new Date()) {
       sub.status = 'EXPIRED';
       localStorage.setItem(LOCAL_SUB_KEY, JSON.stringify(sub));
@@ -75,7 +71,6 @@ function loadLocalUsage(sub: UserSubscription | null): WeeklyUsage | null {
   } catch { return null; }
 }
 
-// ── Provider ─────────────────────────────────────────────────────────────────
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   const [subscription, setSubscription] = useState<UserSubscription | null>(() => loadLocalSub());
@@ -99,7 +94,6 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       if (sub) localStorage.setItem(LOCAL_SUB_KEY, JSON.stringify(sub));
       else localStorage.removeItem(LOCAL_SUB_KEY);
     } catch {
-      // Backend offline — use local storage
       const localSub = loadLocalSub();
       setSubscription(localSub);
       setWeeklyUsage(loadLocalUsage(localSub));
@@ -127,7 +121,6 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       await (api as any).subscribe({ tier, durationMonths: duration, pricePaid });
       await refresh();
     } catch {
-      // Backend offline — create local subscription
       const now = new Date();
       const endDate = addMonths(now, duration);
       const newSub: UserSubscription = {
@@ -154,7 +147,6 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       await (api as any).cancelSubscription();
       await refresh();
     } catch {
-      // Backend offline — cancel locally
       const localSub = loadLocalSub();
       if (localSub) {
         localSub.status = 'CANCELLED';

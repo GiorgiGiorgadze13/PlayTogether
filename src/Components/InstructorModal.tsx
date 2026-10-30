@@ -99,7 +99,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
         <button
           onClick={onClose}
           style={{
@@ -123,7 +122,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           ✕
         </button>
 
-        {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px', paddingRight: '40px' }}>
           <div
             style={{
@@ -152,7 +150,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           </div>
         </div>
 
-        {/* Login Prompt */}
         {showLoginPrompt ? (
           <div
             style={{
@@ -211,7 +208,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           </div>
         ) : selectedInstructor ? (
           <div>
-            {/* Back Button */}
             <button
               onClick={() => setSelectedInstructor(null)}
               style={{
@@ -290,7 +286,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
               </div>
             ) : (
               <div>
-                {/* Instructor Profile Header */}
                 <div
                   style={{
                     display: 'flex',
@@ -323,7 +318,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                   </div>
                 </div>
 
-                {/* Lesson Format Selector */}
                 <div style={{ marginBottom: '24px' }}>
                   <label style={{ fontSize: '11px', fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
                     {c.selectLessonType}
@@ -375,7 +369,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                   </div>
                 </div>
 
-                {/* Slot Selector */}
                 <div style={{ marginBottom: '28px' }}>
                   <label style={{ fontSize: '11px', fontWeight: 800, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>
                     {c.availableTimeSlots}
@@ -402,7 +395,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                   </div>
                 </div>
 
-                {/* Error message */}
                 {bookingError && (
                   <div style={{
                     background: 'rgba(239,83,80,0.1)',
@@ -418,7 +410,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                   </div>
                 )}
 
-                {/* Confirm Booking Button */}
                 <button
                   onClick={handleConfirmBooking}
                   disabled={!selectedSlot || isLoading}
@@ -454,7 +445,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
           </div>
         ) : (
           <div>
-            {/* List of Available Instructors for this Sport */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {sport.instructors.map((instructor) => (
                 <div
@@ -469,9 +459,7 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     gap: '16px',
                   }}
                 >
-                  {/* Top Row: Avatar + Main Details */}
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-                    {/* Avatar & Rating */}
                     <div style={{ textAlign: 'center', flexShrink: 0 }}>
                       <img
                         src={instructor.avatarUrl}
@@ -496,7 +484,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                       </div>
                     </div>
 
-                    {/* Main Details */}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h3 style={{ fontSize: 'clamp(16px, 3.5vw, 20px)', fontWeight: 800, margin: '0 0 3px', color: '#fff' }}>
                         {instructor.name}
@@ -509,7 +496,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                         {instructor.bio}
                       </p>
 
-                      {/* Qualifications badges */}
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '8px' }}>
                         {instructor.qualifications.map((q) => (
                           <span
@@ -535,7 +521,6 @@ export const InstructorModal: React.FC<InstructorModalProps> = ({ sport, onClose
                     </div>
                   </div>
 
-                  {/* Bottom Row: Pricing & Booking CTA */}
                   <div
                     style={{
                       display: 'flex',

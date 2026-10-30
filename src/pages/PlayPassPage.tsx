@@ -102,7 +102,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
   return (
     <div style={{ minHeight: '100vh', color: '#fff', fontFamily: 'Manrope, sans-serif' }}>
 
-      {/* ── HERO ── */}
       <section style={{
         position: 'relative',
         padding: 'clamp(48px, 8vw, 80px) clamp(16px, 5vw, 24px) clamp(40px, 6vw, 64px)',
@@ -134,7 +133,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── ACTIVE SUBSCRIPTION BANNER ── */}
       {hasActiveSubscription && subscription && (
         <div style={{ maxWidth: 1000, margin: '0 auto 0', padding: '0 24px 32px' }}>
           <div style={{ background: 'linear-gradient(135deg, rgba(201,255,53,0.12) 0%, rgba(201,255,53,0.04) 100%)', border: '1px solid rgba(201,255,53,0.35)', borderRadius: 20, padding: '24px 28px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
@@ -179,7 +177,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       )}
 
-      {/* ── DURATION SELECTOR ── */}
       <section style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 24px) 0' }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 800, letterSpacing: 2, marginBottom: 10 }}>{c.chooseDuration}</div>
@@ -212,7 +209,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── PLAN CARDS ── */}
       <section style={{ maxWidth: 1120, margin: '0 auto', padding: '12px 24px 60px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24, alignItems: 'stretch' }}>
           {PLAN_META.map((plan) => {
@@ -288,7 +284,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── COMPARISON TABLE ── */}
       <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 clamp(12px, 4vw, 24px) 80px' }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>{c.comparePlans}</div>
@@ -316,7 +311,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
       <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 24px 80px' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>{c.howItWorksPlayPass}</div>
@@ -334,7 +328,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
       <section style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px 100px' }}>
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>{c.faqTitle}</div>
@@ -347,7 +340,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── CTA BOTTOM ── */}
       <section style={{ maxWidth: 800, margin: '0 auto', padding: '0 24px 80px', textAlign: 'center' }}>
         <div style={{ background: 'linear-gradient(135deg, rgba(201,255,53,0.1) 0%, rgba(201,255,53,0.04) 100%)', border: '1px solid rgba(201,255,53,0.2)', borderRadius: 28, padding: '56px 40px' }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>⚡</div>
@@ -365,7 +357,6 @@ export const PlayPassPage: React.FC<PlayPassPageProps> = ({ c }) => {
         </div>
       </section>
 
-      {/* ── CHECKOUT MODAL ── */}
       {checkoutStep !== 'idle' && checkoutTier && (
         <div onClick={() => { setCheckoutStep('idle'); setCheckoutTier(null); }} style={{ position: 'fixed', inset: 0, background: 'rgba(7,8,9,0.92)', backdropFilter: 'blur(16px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, padding: 'clamp(12px, 4vw, 20px)' }}>
           <div onClick={e => e.stopPropagation()} style={{ background: '#151719', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 24, padding: 'clamp(24px, 5vw, 40px) clamp(16px, 4vw, 36px)', maxWidth: 480, width: '100%', textAlign: 'center', boxShadow: '0 40px 100px rgba(0,0,0,0.6)', boxSizing: 'border-box', maxHeight: '92vh', overflowY: 'auto' }}>

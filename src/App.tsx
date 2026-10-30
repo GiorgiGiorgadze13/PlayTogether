@@ -9,7 +9,6 @@ import { Footer } from './Components/Footer'
 import { ScrollToTop } from './Components/ScrollToTop'
 import { SubscriptionProvider } from './context/SubscriptionContext'
 
-// Route-level lazy loading: each page chunk is only downloaded when first visited
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
 const SportsPage = lazy(() => import('./pages/SportsPage').then(m => ({ default: m.SportsPage })));
 const StadiumsPage = lazy(() => import('./pages/StadiumsPage').then(m => ({ default: m.StadiumsPage })));
@@ -22,7 +21,6 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage').then(m => ({ defaul
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
 const PlayPassPage = lazy(() => import('./pages/PlayPassPage').then(m => ({ default: m.PlayPassPage })));
 
-/** Minimal full-screen loading state shown while a lazy chunk is downloading */
 function PageLoader() {
   return (
     <div style={{

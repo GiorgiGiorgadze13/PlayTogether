@@ -2,7 +2,6 @@ import type { Language, TranslationContent } from '../types/translations';
 
 export const t: Record<Language, TranslationContent> = {
   en: {
-    // ── Navigation ──
     home: 'Home',
     sports: 'Sports',
     stadiums: 'Stadiums',
@@ -16,7 +15,6 @@ export const t: Record<Language, TranslationContent> = {
     logout: 'Logout',
     adminPanel: 'Admin Panel',
 
-    // ── Hero ──
     findGameBtn: 'Find a Game',
     createGameBtn: 'Create a Game',
     eyebrow: 'THE SPORTS COMMUNITY',
@@ -27,20 +25,17 @@ export const t: Record<Language, TranslationContent> = {
     activePlayers: 'Active players',
     sportsVenues: 'Sports venues',
 
-    // ── Search ──
     searchEyebrow: 'FIND YOUR NEXT GAME',
     searchTitle: 'What do you want to play?',
     searchSubtitle: 'Choose your sport, location and preferred time.',
     searchBtn: 'Search Games',
 
-    // ── Sports ──
     exploreSports: 'EXPLORE SPORTS',
     chooseGame: 'Choose your game',
     viewAllSports: 'View all sports',
     bookNow: 'Book Now',
     viewDetails: 'View Details',
 
-    // ── Games Section ──
     playSoon: 'Ready to play?',
     upcomingGames: 'Upcoming games',
     seeAllGames: 'See all games',
@@ -56,7 +51,6 @@ export const t: Record<Language, TranslationContent> = {
     joinedSuccess: 'Successfully joined the game!',
     leftSuccess: 'Successfully left the game.',
 
-    // ── Tournaments ──
     comingTogether: 'COMING TOGETHER',
     playTournament: 'Play in a tournament',
     tournamentDesc: 'Compete, meet new players and experience the game beyond a single match.',
@@ -74,7 +68,6 @@ export const t: Record<Language, TranslationContent> = {
     registrationFull: 'Registration Full',
     allSportsFilter: '🏆 All Sports',
 
-    // ── How It Works ──
     howItWorks: 'HOW IT WORKS',
     howTitle1: 'From searching',
     howTitle2: 'to playing',
@@ -86,7 +79,6 @@ export const t: Record<Language, TranslationContent> = {
     step3Title: 'Play together',
     step3Desc: 'Show up, meet your team and enjoy the game.',
 
-    // ── Footer ──
     footerDesc: 'Find your game. Find your people.',
     explore: 'EXPLORE',
     company: 'COMPANY',
@@ -94,7 +86,6 @@ export const t: Record<Language, TranslationContent> = {
     contact: 'Contact',
     rights: 'Built for people who love to play.',
 
-    // ── Instructors ──
     learnEyebrow: 'INSTRUCTORS & LEARNING HUB',
     learnTitle: 'Master Your Favorite Sport',
     learnSubtitle: 'Discover top certified instructors, level up your technique, and book 1-on-1 or group lessons.',
@@ -115,7 +106,6 @@ export const t: Record<Language, TranslationContent> = {
     individualLesson: '1-on-1 Private',
     groupLesson: 'Group Session',
     selectSlot: 'Select Time Slot',
-    // Card inline strings
     fromPrice: 'From',
     perHourShort: '/ hr',
     coachesLabel: 'Coaches',
@@ -168,7 +158,6 @@ export const t: Record<Language, TranslationContent> = {
     hidePassword: 'Hide Password',
     completeSetup: 'Complete Setup',
 
-    // ── Profile ──
     accessRequired: 'Access Required',
     accessRequiredDesc: 'Please sign in to view your stadium bookings and registered matches.',
     activeAthlete: 'ACTIVE ATHLETE',
@@ -193,7 +182,6 @@ export const t: Record<Language, TranslationContent> = {
     noPlayersYet: 'No players registered yet.',
     successLeft: 'Successfully left the match.',
 
-    // ── PlayPass ──
     introducingPlayPass: 'INTRODUCING PLAYPASS',
     playMorePayLess: 'Play More.',
     playMorePayLessHighlight: 'Pay Less.',
@@ -269,7 +257,6 @@ export const t: Record<Language, TranslationContent> = {
     faq5q: 'Is payment secure?',
     faq5a: 'Payment integration is currently pending. Your subscription will be activated immediately after the confirmation step. Real card processing will be available soon.',
 
-    // ── Stadiums ──
     stadiumsEyebrow: 'SPORTS STADIUMS',
     stadiumsTitle: 'Find your field',
     stadiumsSubtitle: 'Book top-rated stadiums across the city.',
@@ -286,7 +273,6 @@ export const t: Record<Language, TranslationContent> = {
     showAllStadiums2: 'Show All Stadiums',
     noStadiumsForFilter: (sport) => `No Stadiums Found for "${sport}"`,
 
-    // ── Booking Modal ──
     chooseSport: 'Choose Sport',
     chooseVenue: 'Choose Venue',
     dateTimeSlots: 'Date & Time Slots',
@@ -335,7 +321,6 @@ export const t: Record<Language, TranslationContent> = {
     submittingBooking: 'Booking...',
     continueNext: 'Continue →',
 
-    // ── Payment Card Modal ──
     paymentTitle: 'Card Payment',
     paymentSecure: '🔒 Secure Payment',
     cardNumber: 'Card Number',
@@ -357,7 +342,6 @@ export const t: Record<Language, TranslationContent> = {
     paymentErrorTitle: 'Payment Failed',
     tryAgain: 'Try Again',
 
-    // ── Find Players ──
     findPlayersEyebrow: 'COMMUNITY',
     findPlayersTitle: 'Find a player to play with',
     findPlayersSubtitle: 'Connect with athletes looking for teammates in your area.',
@@ -383,7 +367,6 @@ export const t: Record<Language, TranslationContent> = {
     viewComments: 'View comments',
     hideComments: 'Hide comments',
 
-    // ── General ──
     loading: 'Loading...',
     error: 'Error',
     cancel: 'Cancel',
@@ -397,7 +380,6 @@ export const t: Record<Language, TranslationContent> = {
   },
 
   ka: {
-    // ── Navigation ──
     home: 'მთავარი',
     sports: 'სპორტი',
     stadiums: 'სტადიონები',
@@ -411,7 +393,6 @@ export const t: Record<Language, TranslationContent> = {
     logout: 'გამოსვლა',
     adminPanel: 'ადმინ პანელი',
 
-    // ── Hero ──
     findGameBtn: 'იპოვე თამაში',
     createGameBtn: 'შექმენი თამაში',
     eyebrow: 'სპორტული საზოგადოება',
@@ -422,20 +403,17 @@ export const t: Record<Language, TranslationContent> = {
     activePlayers: 'აქტიური მოთამაშე',
     sportsVenues: 'სპორტული მოედანი',
 
-    // ── Search ──
     searchEyebrow: 'იპოვე შენი შემდეგი თამაში',
     searchTitle: 'რის თამაში გსურს?',
     searchSubtitle: 'აირჩიე სპორტი, მდებარეობა და სასურველი დრო.',
     searchBtn: 'თამაშების ძებნა',
 
-    // ── Sports ──
     exploreSports: 'აღმოაჩინე სპორტი',
     chooseGame: 'აირჩიე შენი თამაში',
     viewAllSports: 'ყველა სპორტის ნახვა',
     bookNow: 'დაჯავშნე',
     viewDetails: 'დეტალების ნახვა',
 
-    // ── Games Section ──
     playSoon: 'მზად ხარ თამაშისთვის?',
     upcomingGames: 'მომავალი თამაშები',
     seeAllGames: 'ყველა თამაშის ნახვა',
@@ -451,7 +429,6 @@ export const t: Record<Language, TranslationContent> = {
     joinedSuccess: 'წარმატებით შეუერთდი თამაშს!',
     leftSuccess: 'წარმატებით გამოხვედი თამაშიდან.',
 
-    // ── Tournaments ──
     comingTogether: 'გაერთიანება',
     playTournament: 'მიიღე მონაწილეობა ტურნირში',
     tournamentDesc: 'შეეჯიბრე, გაიცანი ახალი მოთამაშეები და მიიღე ახალი ემოციები.',
@@ -469,7 +446,6 @@ export const t: Record<Language, TranslationContent> = {
     registrationFull: 'რეგისტრაცია დასრულდა',
     allSportsFilter: '🏆 ყველა სპორტი',
 
-    // ── How It Works ──
     howItWorks: 'როგორ მუშაობს',
     howTitle1: 'ძებნიდან',
     howTitle2: 'თამაშამდე',
@@ -481,7 +457,6 @@ export const t: Record<Language, TranslationContent> = {
     step3Title: 'ითამაშეთ ერთად',
     step3Desc: 'მიდი მოედანზე, გაიცანი გუნდი და ისიამოვნე თამაშით.',
 
-    // ── Footer ──
     footerDesc: 'იპოვე შენი თამაში. იპოვე შენი გუნდი.',
     explore: 'ნავიგაცია',
     company: 'კომპანია',
@@ -489,7 +464,6 @@ export const t: Record<Language, TranslationContent> = {
     contact: 'კონტაქტი',
     rights: 'შეიქმნა მათთვის, ვისაც თამაში უყვარს.',
 
-    // ── Instructors ──
     learnEyebrow: 'სწავლება და ინსტრუქტორები',
     learnTitle: 'დაეუფლე შენს საყვარელ სპორტს',
     learnSubtitle: 'აღმოაჩინე სერტიფიცირებული ინსტრუქტორები, გააუმჯობესე ტექნიკა და დაჯავშნე ინდივიდუალური ან ჯგუფური გაკვეთილები.',
@@ -510,7 +484,6 @@ export const t: Record<Language, TranslationContent> = {
     individualLesson: '1-on-1 ინდივიდუალური',
     groupLesson: 'ჯგუფური გაკვეთილი',
     selectSlot: 'აირჩიე დროის სლოტი',
-    // Card inline strings
     fromPrice: 'დან',
     perHourShort: '/ სთ',
     coachesLabel: 'მწვრთნელი',
@@ -563,7 +536,6 @@ export const t: Record<Language, TranslationContent> = {
     hidePassword: 'პაროლის დამალვა',
     completeSetup: 'დასრულება',
 
-    // ── Profile ──
     accessRequired: 'საჭიროა ავტორიზაცია',
     accessRequiredDesc: 'გთხოვ, შედი შენს სტადიონის ჯავშნებისა და თამაშების სანახავად.',
     activeAthlete: 'აქტიური სპორტსმენი',
@@ -588,7 +560,6 @@ export const t: Record<Language, TranslationContent> = {
     noPlayersYet: 'ჯერ მოთამაშეები არ არიან.',
     successLeft: 'წარმატებით დატოვე მატჩი.',
 
-    // ── PlayPass ──
     introducingPlayPass: 'წარგიდგენთ PLAYPASS-ს',
     playMorePayLess: 'ითამაშე მეტი.',
     playMorePayLessHighlight: 'გადაიხადე ნაკლები.',
@@ -664,7 +635,6 @@ export const t: Record<Language, TranslationContent> = {
     faq5q: 'გადახდა უსაფრთხოა?',
     faq5a: 'გადახდის ინტეგრაცია მიმდინარეობს. გამოწერა მყისიერად გააქტიურდება დადასტურების შემდეგ.',
 
-    // ── Stadiums ──
     stadiumsEyebrow: 'სპორტული სტადიონები',
     stadiumsTitle: 'იპოვე შენი მოედანი',
     stadiumsSubtitle: 'დაჯავშნე საუკეთესო სტადიონები ქალაქში.',
@@ -681,7 +651,6 @@ export const t: Record<Language, TranslationContent> = {
     showAllStadiums2: 'ყველა სტადიონის ნახვა',
     noStadiumsForFilter: (sport) => `"სპორტი: ${sport}" — სტადიონი ვერ მოიძებნა`,
 
-    // ── Booking Modal ──
     chooseSport: 'სპორტის არჩევა',
     chooseVenue: 'ვენიუს არჩევა',
     dateTimeSlots: 'თარიღი და დრო',
@@ -730,7 +699,6 @@ export const t: Record<Language, TranslationContent> = {
     submittingBooking: 'ჯავშანი...',
     continueNext: 'გაგრძელება →',
 
-    // ── Payment Card Modal ──
     paymentTitle: 'ბარათით გადახდა',
     paymentSecure: '🔒 უსაფრთხო გადახდა',
     cardNumber: 'ბარათის ნომერი',
@@ -752,7 +720,6 @@ export const t: Record<Language, TranslationContent> = {
     paymentErrorTitle: 'გადახდა ვერ განხორციელდა',
     tryAgain: 'თავიდან ცდა',
 
-    // ── Find Players ──
     findPlayersEyebrow: 'საზოგადოება',
     findPlayersTitle: 'იპოვე სათამაშო პარტნიორი',
     findPlayersSubtitle: 'დაუკავშირდი სპორტსმენებს, რომლებიც მეგობრებს ეძებენ შენს მხარეში.',
@@ -778,7 +745,6 @@ export const t: Record<Language, TranslationContent> = {
     viewComments: 'კომენტარების ნახვა',
     hideComments: 'კომენტარების დამალვა',
 
-    // ── General ──
     loading: 'იტვირთება...',
     error: 'შეცდომა',
     cancel: 'გაუქმება',

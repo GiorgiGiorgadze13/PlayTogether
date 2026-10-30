@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -6,8 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 interface PaymentCardModalProps {
   onClose: () => void;
   onSuccess: () => void;
-  amount?: number;        // e.g. 15 (GEL per player)
-  actionLabel?: string;  // e.g. "Confirm Booking" / "Join Game"
+  amount?: number;
+  actionLabel?: string;
 }
 
 interface CardData {
@@ -59,23 +58,18 @@ const CardFront: React.FC<{ cardData: CardData; cardType: string }> = ({ cardDat
       boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
       position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
     }}>
-      {/* Top Row: chip + card type */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        {/* Chip */}
         <div style={{ width: '46px', height: '34px', borderRadius: '6px', background: 'linear-gradient(135deg, #f9d71c, #d4a017)', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: '11px', left: 0, right: 0, height: '2px', background: 'rgba(0,0,0,0.25)' }} />
           <div style={{ position: 'absolute', top: 0, bottom: 0, left: '50%', width: '2px', background: 'rgba(0,0,0,0.15)' }} />
         </div>
-        {/* Card Type */}
         <CardTypeBadge type={cardType} />
       </div>
 
-      {/* Card Number */}
       <div style={{ fontFamily: 'monospace', fontSize: '20px', letterSpacing: '3px', color: 'rgba(255,255,255,0.92)', fontWeight: 700, textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
         {displayNumber}
       </div>
 
-      {/* Bottom Row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
         <div>
           <div style={{ fontSize: '9px', letterSpacing: '1.5px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: '4px' }}>Card Holder</div>
@@ -89,7 +83,6 @@ const CardFront: React.FC<{ cardData: CardData; cardType: string }> = ({ cardDat
         </div>
       </div>
 
-      {/* Decorative circles */}
       <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '160px', height: '160px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
       <div style={{ position: 'absolute', top: '20px', right: '20px', width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
     </div>
@@ -104,9 +97,7 @@ const CardBack: React.FC<{ cardData: CardData; cardType: string }> = ({ cardData
     boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
   }}>
-    {/* Magnetic stripe */}
     <div style={{ marginTop: '40px', height: '44px', background: '#111', width: '100%' }} />
-    {/* Signature panel + CVV */}
     <div style={{ padding: '16px 28px', display: 'flex', alignItems: 'center', gap: '12px', marginTop: '16px' }}>
       <div style={{ flex: 1, height: '36px', background: 'linear-gradient(90deg, #e8e0d0, #f0ebe0)', borderRadius: '4px', display: 'flex', alignItems: 'center', padding: '0 10px' }}>
         <span style={{ color: '#aaa', fontSize: '12px', fontStyle: 'italic', letterSpacing: '1px' }}>{'////'}</span>
@@ -173,7 +164,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
 
   const cardType = detectCardType(cardData.number);
 
-  // Prevent body scroll
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
@@ -199,14 +189,12 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
     if (!validate()) return;
     setIsProcessing(true);
 
-    // Simulate processing steps
     const steps = ['Encrypting card data...', 'Verifying with bank...', 'Payment authorized!'];
     for (let i = 0; i < steps.length; i++) {
       setProcessingStep(i);
       await new Promise(r => setTimeout(r, 900));
     }
 
-    // Save card (masked) to context/localStorage
     const clean = cardData.number.replace(/\s/g, '');
     saveCard({
       last4: clean.slice(-4),
@@ -253,7 +241,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
         position: 'relative',
         boxSizing: 'border-box',
       }}>
-        {/* Close */}
         {!isProcessing && (
           <button onClick={onClose} style={{
             position: 'absolute', top: '18px', right: '18px',
@@ -263,7 +250,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
           }}>✕</button>
         )}
 
-        {/* Header */}
         <div style={{ marginBottom: '28px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
             <div style={{
@@ -290,7 +276,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
           )}
         </div>
 
-        {/* ── ANIMATED 3D CARD ── */}
         <div style={{ perspective: '1000px', marginBottom: '28px', height: '190px', position: 'relative' }}>
           <div style={{
             width: '100%', height: '100%',
@@ -303,7 +288,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
           </div>
         </div>
 
-        {/* ── PROCESSING OVERLAY ── */}
         {isProcessing && (
           <div style={{
             position: 'absolute', inset: '140px 32px 32px',
@@ -319,7 +303,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               </div>
             ) : (
               <>
-                {/* Spinner */}
                 <div style={{
                   width: '52px', height: '52px', borderRadius: '50%',
                   border: '4px solid rgba(201,255,53,0.15)',
@@ -347,10 +330,8 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
           </div>
         )}
 
-        {/* ── FORM FIELDS ── */}
         {!isProcessing && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {/* Card Number */}
             <div>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
                 {c.cardNumber}
@@ -375,7 +356,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               {errors.number && <span style={{ color: '#ef5350', fontSize: '12px', marginTop: '4px', display: 'block' }}>⚠ {errors.number}</span>}
             </div>
 
-            {/* Cardholder Name */}
             <div>
               <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
                 {c.cardHolder}
@@ -397,7 +377,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               {errors.name && <span style={{ color: '#ef5350', fontSize: '12px', marginTop: '4px', display: 'block' }}>⚠ {errors.name}</span>}
             </div>
 
-            {/* Expiry + CVV */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '6px' }}>
@@ -448,7 +427,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               </div>
             </div>
 
-            {/* Security note */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '10px' }}>
               <span style={{ fontSize: '14px' }}>🔒</span>
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', lineHeight: 1.5 }}>
@@ -456,7 +434,6 @@ export const PaymentCardModal: React.FC<PaymentCardModalProps> = ({
               </span>
             </div>
 
-            {/* Submit Button */}
             <button
               id="payment-submit-btn"
               onClick={handleSubmit}

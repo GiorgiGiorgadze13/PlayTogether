@@ -1,17 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
-
-/* =========================================
-   განულება და საბაზისო პარამეტრები (RESET)
-========================================= */
-
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* ზომებში ბორდერების და პედინგების ავტომატური გათვალისწინება */
+  box-sizing: border-box;
 }
 
-/* ძირითადი ფერები, ფონტები და ცვლადები მთელი საიტისთვის */
 :root {
   font-family: 'Manrope', sans-serif;
   color: #ffffff;
@@ -21,7 +15,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 
-  /* ფერების პალიტრა */
   --black: #070809;
   --black-soft: #0d0f11;
   --black-card: #151719;
@@ -35,19 +28,18 @@
   --line: rgba(255, 255, 255, 0.1);
   --line-dark: rgba(0, 0, 0, 0.1);
 
-  --accent: #c9ff35; /* ძირითადი აქცენტი (ღია მწვანე / ლიმნისფერი) */
+  --accent: #c9ff35;
 }
 
 html {
-  scroll-behavior: smooth; /* გვერდზე ლინკებით გადასვლისას გლუვი სქროლი */
+  scroll-behavior: smooth;
   height: 100%;
-  overflow-x: hidden; /* prevent horizontal scroll at root level */
+  overflow-x: hidden;
 }
-
 
 body {
   min-width: 320px;
-  overflow-x: hidden; /* eliminate horizontal scrollbar at body level */
+  overflow-x: hidden;
   background-color: #151719;
   background-image:
     radial-gradient(circle at 70% 20%, rgba(201, 255, 53, 0.09) 0%, transparent 45%),
@@ -59,14 +51,13 @@ body {
   color: #ffffff;
 }
 
-/* Prevent background scrolling when mobile drawer is open */
 body.no-scroll {
   overflow: hidden;
 }
 
 button,
 a {
-  font: inherit; /* ფონტის მემკვიდრეობით მიღება ღილაკებსა და ლინკებზე */
+  font: inherit;
 }
 
 button {
@@ -79,32 +70,22 @@ a {
   text-decoration: none;
 }
 
-
-/* =========================================
-   მთლიანი აპლიკაციის კონტეინერი (APP)
-========================================= */
-
 .app {
   width: 100%;
   min-height: 100vh;
   position: relative;
   background: transparent;
   overflow-x: hidden;
-  /* Do NOT add overflow-y here — it creates a new scroll context that causes double scrollbars */
+
 }
-
-
-/* =========================================
-   ნავიგაცია / მენიუ (NAVBAR)
-========================================= */
 
 .navbar-sticky-wrapper {
   position: sticky;
   top: 0;
   z-index: 1000;
   width: 100%;
-  /* max-width: 100vw intentionally omitted — causes subpixel scroll jitter */
-  overflow: hidden; /* clip any child overflow without creating scroll context */
+
+  overflow: hidden;
   box-sizing: border-box;
   background: rgba(7, 8, 9, 0.85);
   backdrop-filter: blur(12px);
@@ -127,7 +108,6 @@ a {
   gap: 20px;
 }
 
-/* ლოგოს დიზაინი */
 .logo {
   display: flex;
   align-items: center;
@@ -146,7 +126,6 @@ a {
   color: rgba(255, 255, 255, 0.48);
 }
 
-/* 3-Zone Center Nav Links */
 .nav-links {
   display: flex;
   align-items: center;
@@ -195,7 +174,6 @@ a {
   font-weight: 600;
 }
 
-/* Zone 3: Nav Actions */
 .nav-actions {
   display: flex;
   align-items: center;
@@ -215,7 +193,7 @@ a {
   background: rgba(201, 255, 53, 0.12);
   border: 1px solid rgba(201, 255, 53, 0.3);
   padding: 0 16px;
-  border-radius: 9999px; /* rounded-full */
+  border-radius: 9999px;
   height: 36px;
   box-sizing: border-box;
   white-space: nowrap;
@@ -295,11 +273,6 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-
-/* =========================================
-   მთავარი სექცია (HERO SECTION)
-========================================= */
-
 .hero {
   width: min(1280px, calc(100% - 64px));
   min-height: 720px;
@@ -307,7 +280,7 @@ a {
   margin: 0 auto;
 
   display: grid;
-  grid-template-columns: 1.02fr 0.98fr; /* მარცხენა ტექსტური და მარჯვენა ვიზუალური ნაწილები */
+  grid-template-columns: 1.02fr 0.98fr;
 
   align-items: center;
   gap: 50px;
@@ -321,7 +294,6 @@ a {
   padding: 50px 0 80px;
 }
 
-/* ჰიროს ზედა პატარა წარწერა (Eyebrow) */
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -332,7 +304,6 @@ a {
   letter-spacing: 2px;
 }
 
-/* პატარა მწვანე მანათობელი წერტილი ზედა წარწერასთან */
 .eyebrow-dot {
   width: 7px;
   height: 7px;
@@ -343,24 +314,22 @@ a {
     0 0 18px rgba(201, 255, 53, 0.35);
 }
 
-/* მთავარი დიდი სათაური */
 .hero h1 {
   max-width: 760px;
   margin-top: 25px;
   color: var(--white);
-  font-size: clamp(36px, 6vw, 84px); /* responsive size — clamp now starts from 36px for tiny screens */
+  font-size: clamp(36px, 6vw, 84px);
   line-height: 0.96;
-  letter-spacing: clamp(-2px, -0.06em, -5px); /* scale letter-spacing with font size */
+  letter-spacing: clamp(-2px, -0.06em, -5px);
   font-weight: 700;
-  word-break: break-word; /* prevent text overflow on very narrow screens */
+  word-break: break-word;
   overflow-wrap: break-word;
 }
 
 .hero h1 span {
-  color: rgba(255, 255, 255, 0.38); /* სათაურის შეფერადებული ნაწილი */
+  color: rgba(255, 255, 255, 0.38);
 }
 
-/* ჰიროს აღწერა / ტექსტი */
 .hero-description {
   max-width: 510px;
   margin-top: 30px;
@@ -369,7 +338,6 @@ a {
   line-height: 1.8;
 }
 
-/* მოქმედების ღილაკები ჰიროში */
 .hero-buttons {
   display: flex;
   align-items: center;
@@ -391,7 +359,6 @@ a {
     border 0.25s ease;
 }
 
-/* მთავარი გამოკვეთილი ღილაკი */
 .primary-button {
   display: flex;
   align-items: center;
@@ -412,7 +379,6 @@ a {
   transform: translateY(-3px);
 }
 
-/* მეორეული ღილაკი */
 .secondary-button {
   color: var(--white);
   background: rgba(255, 255, 255, 0.03);
@@ -424,9 +390,6 @@ a {
   border-color: rgba(255, 255, 255, 0.28);
   transform: translateY(-3px);
 }
-
-
-/* ჰიროს ქვედა სტატისტიკა (META) */
 
 .hero-meta {
   display: flex;
@@ -460,11 +423,6 @@ a {
   background: rgba(255, 255, 255, 0.12);
 }
 
-
-/* =========================================
-   ჰიროს ვიზუალური ნაწილი / ორბიტები (HERO VISUAL)
-========================================= */
-
 .hero-visual {
   min-height: 600px;
   position: relative;
@@ -473,7 +431,6 @@ a {
   justify-content: center;
 }
 
-/* ფონური მბზინავი ეფექტი (Glow) */
 .visual-glow {
   position: absolute;
   width: 360px;
@@ -483,7 +440,6 @@ a {
   filter: blur(75px);
 }
 
-/* სტატიკური წრეები ფონში (ოდნავ გამუქებული ხაზით) */
 .visual-circle {
   position: absolute;
   border-radius: 50%;
@@ -501,7 +457,6 @@ a {
   border-color: rgba(201, 255, 53, 0.28);
 }
 
-/* ცენტრალური წრე (გლობუსი / ცენტრი) */
 .hero-center {
   width: 210px;
   height: 210px;
@@ -551,19 +506,17 @@ a {
   letter-spacing: 1px;
 }
 
-/* მოძრავი ორბიტები და სპორტული იკონები */
 .sport-orbit {
   position: absolute;
   top: 50%;
   left: 50%;
   border-radius: 50%;
-  /* ორბიტების ხაზები (გამუქებულია უკეთესი გამოკვეთისთვის) */
+
   border: 1px solid rgba(255, 255, 255, 0.13);
   transform: translate(-50%, -50%);
   animation: rotateOrbit linear infinite;
 }
 
-/* თითოეული ორბიტის ზომა და ბრუნვის სიჩქარე */
 .orbit-one {
   width: 300px;
   height: 300px;
@@ -574,7 +527,7 @@ a {
   width: 380px;
   height: 380px;
   animation-duration: 28s;
-  animation-direction: reverse; /* საპირისპირო მიმართულებით ბრუნვა */
+  animation-direction: reverse;
 }
 
 .orbit-three {
@@ -603,7 +556,6 @@ a {
   animation-direction: reverse;
 }
 
-/* ორბიტებზე მომოძრავე ობიექტები/იკონები */
 .sport-object {
   width: 44px;
   height: 44px;
@@ -619,7 +571,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.22);
   font-size: 19px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-  animation: counterRotate linear infinite; /* რომ იკონები თავის ღერძზე არ ბრუნავდნენ უწესრიგოდ */
+  animation: counterRotate linear infinite;
 }
 
 .orbit-one .sport-object { animation-duration: 22s; }
@@ -629,7 +581,6 @@ a {
 .orbit-five .sport-object { animation-duration: 50s; }
 .orbit-six .sport-object { animation-duration: 60s; animation-direction: reverse; }
 
-/* ვიზუალური დეკორატიული წარწერები ფონში */
 .visual-label {
   position: absolute;
   color: rgba(170, 250, 31, 0.27);
@@ -641,7 +592,6 @@ a {
 .label-top { top: 15%; right: 7%; }
 .label-bottom { bottom: 15%; left: 4%; }
 
-/* ორბიტების ბრუნვის ანიმაციები */
 @keyframes rotateOrbit {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to { transform: translate(-50%, -50%) rotate(360deg); }
@@ -652,24 +602,18 @@ a {
   to { transform: rotate(-360deg); }
 }
 
-
-/* =========================================
-   ძებნის ბლოკი (SEARCH SECTION) - გამოყოფილი ჩარჩო
-========================================= */
-
 .search-section {
   width: 100%;
   padding: 60px max(32px, calc((100% - 1280px) / 2));
   background: transparent;
 }
 
-/* ცალკე გამოტანილი თეთრი ჩარჩო მომრგვალებული კიდეებით */
 .search-container-card {
   width: 100%;
   padding: 70px 60px;
   background: var(--white-soft);
-  border-radius: 24px; /* გვერდების მომრგვალება */
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4); /* ჩრდილი შავ ფონზე გამოსაყოფად */
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
 }
 
 .search-intro {
@@ -701,7 +645,6 @@ a {
   line-height: 1.7;
 }
 
-/* ძებნის მთავარი მართკუთხედი (ფილტრების ბადე) */
 .search-box {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr auto;
@@ -741,7 +684,6 @@ a {
   font-size: 12px;
 }
 
-/* ძებნის ღილაკი */
 .search-button {
   min-width: 155px;
   margin: 0;
@@ -762,11 +704,6 @@ a {
   background: #282a27;
   transform: translateY(-2px);
 }
-
-
-/* =========================================
-   საერთო კონტენტისა და სექციების სათაურები
-========================================= */
 
 .content-section,
 .games-section,
@@ -819,11 +756,6 @@ a {
   color: var(--white);
 }
 
-
-/* =========================================
-   სპორტის სექცია / ბენტო ბადე (SPORTS BENTO GRID)
-========================================= */
-
 .content-section {
   padding: 112px 0 120px;
 }
@@ -835,7 +767,6 @@ a {
   gap: 14px;
 }
 
-/* სპორტის ცალკეული ბარათი */
 .sport-card {
   min-width: 0;
   position: relative;
@@ -856,7 +787,6 @@ a {
   border-color: rgba(201, 255, 53, 0.25);
 }
 
-/* დიდი ბარათი (რომელიც ორ რიგზე იჭიმება) */
 .sport-card-large {
   grid-row: span 2;
   background:
@@ -911,7 +841,6 @@ a {
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-/* Clean stadium picture utility - removes bottom-left watermarks & logos */
 .clean-stadium-img {
   width: 100% !important;
   height: 100% !important;
@@ -929,7 +858,6 @@ a {
   opacity: 1;
 }
 
-/* სურათების ზომის და ცენტრის ზუსტი რეგულირება (ფეხბურთი ყველაზე დიდი, სხვები გაზრდილი და სიმეტრიული) */
 .football-visual {
   right: 12%;
   bottom: 20%;
@@ -981,11 +909,6 @@ a {
   color: rgba(255, 255, 255, 0.35);
   font-size: 9px;
 }
-
-
-/* =========================================
-   თამაშები / მატჩები (GAMES SECTION)
-========================================= */
 
 .games-section {
   padding-bottom: 120px;
@@ -1110,11 +1033,6 @@ a {
   color: var(--black);
   background: var(--accent);
 }
-
-
-/* =========================================
-   ტურნირები (TOURNAMENTS SECTION)
-========================================= */
 
 .tournaments-section {
   width: 100%;
@@ -1287,11 +1205,6 @@ a {
   color: var(--accent);
 }
 
-
-/* =========================================
-   როგორ მუშაობს (HOW IT WORKS SECTION)
-========================================= */
-
 .how-section {
   width: min(1280px, calc(100% - 64px));
   margin: 110px auto;
@@ -1404,11 +1317,6 @@ a {
   line-height: 1.7;
 }
 
-
-/* =========================================
-   ფუტერი / ბოლო ნაწილი (FOOTER)
-========================================= */
-
 .footer {
   width: min(1280px, calc(100% - 64px));
   margin: 0 auto;
@@ -1474,11 +1382,6 @@ a {
   color: rgba(255, 255, 255, 0.24);
   font-size: 8px;
 }
-
-
-/* =========================================
-   რესპონსივი — ტაბლეტებისთვის (MAX 1050px)
-========================================= */
 
 @media (max-width: 1050px) {
   body {
@@ -1546,11 +1449,6 @@ a {
   }
 }
 
-
-/* =========================================
-   რესპონსივი — მობილურებისთვის (MAX 700px)
-========================================= */
-
 @media (max-width: 700px) {
   body {
     background-image:
@@ -1572,7 +1470,7 @@ a {
   }
 
   .nav-links {
-    display: none; /* მობილურში მთავარი მენიუს დამალვა */
+    display: none;
   }
 
   .nav-actions {
@@ -1655,7 +1553,6 @@ a {
     font-size: 15px;
   }
 
-  /* mobile orbit sizes — keep outer orbits within viewport to avoid horizontal scroll */
   .sport-orbit {
     width: min(250px, 65vw);
     height: min(250px, 65vw);
@@ -1675,7 +1572,7 @@ a {
 
   .label-top,
   .label-bottom {
-    display: none; /* დეკორატიული წარწერების დამალვა მობილურში */
+    display: none;
   }
 
   .search-section {
@@ -1807,11 +1704,6 @@ a {
   }
 }
 
-/* =========================================
-   Header Responsive Burger Menu Rules
-========================================= */
-
-/* At 1280px: reduce nav font size and gaps slightly */
 @media (max-width: 1280px) {
   .navbar {
     gap: 16px;
@@ -1825,7 +1717,6 @@ a {
   }
 }
 
-/* At 1200px: switch to hamburger menu */
 @media (max-width: 1200px) {
   .desktop-only-nav {
     display: none !important;
@@ -1842,7 +1733,6 @@ a {
     height: 64px;
   }
 
-  /* Mobile drawer: fixed overlay anchored below the header */
   .mobile-drawer-backdrop {
     position: fixed !important;
     top: 64px !important;
@@ -1856,7 +1746,6 @@ a {
   }
 }
 
-/* At 768px: tighten mobile header */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 16px;
@@ -1872,12 +1761,8 @@ a {
   }
 }
 
-/* =========================================
-   მაღალი გარჩევადობა — ფართო ეკრანები (MIN 1600px)
-========================================= */
-
 @media (min-width: 1600px) {
-  /* Force all major sections to be centered with consistent max-width */
+
   .hero {
     width: min(1440px, calc(100% - 120px));
     margin: 0 auto;
@@ -1935,51 +1820,40 @@ a {
   }
 }
 
-
-/* =========================================
-   Extra-small mobile fixes (MAX 480px)
-========================================= */
-
 @media (max-width: 480px) {
-  /* Make preset slot grid single-column on very small phones */
+
   .slot-grid-2col {
     grid-template-columns: 1fr !important;
   }
 
-  /* Section headings */
   .section-heading h2 {
     font-size: 26px;
     letter-spacing: -1px;
   }
 
-  /* Games / tournament grids already 1-col, keep tight */
   .games-grid,
   .tournament-grid {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
-  /* PlayPass plan cards full-width */
   .content-section,
   .games-section {
     padding-left: 12px;
     padding-right: 12px;
   }
 
-  /* Clip hero orbit overflow so rotating circles don't cause horizontal scroll */
   .hero-visual {
     overflow: hidden;
     max-width: 100vw;
   }
 
-  /* Keep hero h1 readable on tiny 320px screens */
   .hero h1 {
     font-size: clamp(26px, 9vw, 36px);
     letter-spacing: -1px;
     line-height: 1.05;
   }
 
-  /* FAQ buttons full readable */
   .faq-question {
     font-size: 13px !important;
   }

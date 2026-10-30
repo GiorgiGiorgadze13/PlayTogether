@@ -23,7 +23,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
 
   return (
     <section className="content-section" id="learn" style={{ maxWidth: '1280px', margin: '0 auto', padding: '60px 24px 100px' }}>
-      {/* Section Header */}
       <div className="section-heading" style={{ marginBottom: '36px', flexDirection: 'column', alignItems: 'flex-start', gap: '16px' }}>
         <div>
           <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '2px', color: '#c9ff35', textTransform: 'uppercase' }}>
@@ -37,7 +36,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
           </p>
         </div>
 
-        {/* Category Filters */}
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '8px' }}>
           <button
             onClick={() => setActiveCategory('all')}
@@ -106,7 +104,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
         </div>
       </div>
 
-      {/* Grid of Sport Learning Cards */}
       <div
         style={{
           display: 'grid',
@@ -130,7 +127,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
               position: 'relative',
             }}
           >
-            {/* Visual Card Image Header */}
             <div style={{ position: 'relative', height: '210px', width: '100%', overflow: 'hidden', background: '#1c1f22' }}>
               <img
                 src={sport.imageUrl}
@@ -154,7 +150,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                 }}
               />
 
-              {/* Sport Icon Badge */}
               <div
                 style={{
                   position: 'absolute',
@@ -178,7 +173,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                 {sport.name.toUpperCase()}
               </div>
 
-              {/* Price Pill */}
               <div
                 style={{
                   position: 'absolute',
@@ -197,7 +191,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
               </div>
             </div>
 
-            {/* Card Body */}
             <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
               <h3 style={{ fontSize: '22px', fontWeight: 800, margin: '0 0 4px', color: '#ffffff' }}>
                 {sport.name}
@@ -210,7 +203,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                 {sport.description}
               </p>
 
-              {/* Popular Skills / Topics */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
                 {sport.popularTopics.map((topic) => (
                   <span
@@ -230,7 +222,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                 ))}
               </div>
 
-              {/* Instructor Avatars Preview */}
               <div
                 style={{
                   display: 'flex',
@@ -268,7 +259,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
                 </span>
               </div>
 
-              {/* Dual Action Buttons */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: 'auto' }}>
                 <button
                   onClick={() => setSelectedSport(sport)}
@@ -308,7 +298,6 @@ export const InstructorsSection: React.FC<InstructorsSectionProps> = ({ c }) => 
         ))}
       </div>
 
-      {/* Instructor Discovery Modal */}
       {selectedSport && (
         <InstructorModal
           sport={selectedSport}

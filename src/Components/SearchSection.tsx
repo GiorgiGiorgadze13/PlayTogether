@@ -11,10 +11,8 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Get today's YYYY-MM-DD string
   const getTodayStr = () => new Date().toISOString().split('T')[0];
 
-  // State management for interactive selection
   const [sport, setSport] = useState<string>(searchParams.get('sport') || 'Football');
   const [location, setLocation] = useState<string>(searchParams.get('location') || 'All Locations (Tbilisi)');
   const [date, setDate] = useState<string>(searchParams.get('date') || getTodayStr());
@@ -29,7 +27,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
       onSearchFilter(filters);
     }
 
-    // Build URL query params
     const queryParams = new URLSearchParams();
     if (sport && sport !== 'All Sports') queryParams.append('sport', sport);
     if (location && !location.startsWith('All Locations')) queryParams.append('location', location);
@@ -39,7 +36,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
     const queryString = queryParams.toString();
     navigate(`/games${queryString ? `?${queryString}` : ''}#games`);
 
-    // Smooth scroll down to games section if present on page
     setTimeout(() => {
       const el = document.getElementById('games');
       if (el) {
@@ -60,7 +56,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
         </div>
 
         <form onSubmit={handleSearch} className="search-box">
-          {/* SPORT SELECTOR */}
           <div className="search-field">
             <small>SPORT</small>
             <div className="field-value">
@@ -90,7 +85,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
             </div>
           </div>
 
-          {/* LOCATION SELECTOR */}
           <div className="search-field">
             <small>LOCATION</small>
             <div className="field-value">
@@ -120,7 +114,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
             </div>
           </div>
 
-          {/* DATE PICKER */}
           <div className="search-field">
             <small>DATE</small>
             <div className="field-value">
@@ -145,7 +138,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
             </div>
           </div>
 
-          {/* TIME SLOT SELECTOR */}
           <div className="search-field">
             <small>TIME</small>
             <div className="field-value">
@@ -177,7 +169,6 @@ export const SearchSection: React.FC<SearchSectionProps> = ({ c, onSearchFilter 
             </div>
           </div>
 
-          {/* SUBMIT BUTTON */}
           <button type="submit" className="search-button">
             {c.searchBtn} <span>↗</span>
           </button>

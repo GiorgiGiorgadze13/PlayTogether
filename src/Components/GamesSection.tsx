@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { TranslationContent } from '../types/translations';
@@ -204,7 +203,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
       setIsLoading(true);
       setError(null);
       const res = await api.getGames();
-      // Combine API games with fallback sport games if few are returned
       const combined = [...res.games];
       for (const fg of FALLBACK_SPORT_GAMES) {
         if (!combined.some((g) => g.id === fg.id || g.title === fg.title)) {
@@ -234,7 +232,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
 
     try {
       if (gameId.startsWith('game-')) {
-        // Fallback local update
         setGames((prev) =>
           prev.map((g) => {
             if (g.id === gameId) {
@@ -314,7 +311,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
     }
   };
 
-  // Filter games by sport tab
   const filteredGames = games.filter((g) => {
     if (selectedSportFilter === 'All') return true;
     const sportName = g.stadium?.sport || 'Football';
@@ -331,7 +327,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
         <Link to="/games">{c.seeAllGames} <span>→</span></Link>
       </div>
 
-      {/* Sport Category Filter Chips */}
       <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '16px', marginBottom: '24px' }}>
         <button
           onClick={() => setSelectedSportFilter('All')}
@@ -406,7 +401,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
 
             return (
               <article key={game.id} className="game-card" style={{ display: 'flex', flexDirection: 'column' }}>
-                {/* Stadium Photo Banner */}
                 {cardPhoto && (
                   <div style={{ position: 'relative', width: '100%', height: '160px', borderRadius: '14px', overflow: 'hidden', marginBottom: '14px' }}>
                     <img
@@ -444,7 +438,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                   </div>
                 </div>
 
-                {/* Capacity Progress Bar Component */}
                 <div style={{ marginTop: '14px', background: '#0d0f11', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '6px' }}>
                     <span>{sportReq.name} Capacity</span>
@@ -513,7 +506,6 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ c }) => {
                   )}
                 </div>
 
-                {/* Player Roster preview */}
                 {game.players && game.players.length > 0 && (
                   <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.08)', fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
                     <span>Registered: </span>

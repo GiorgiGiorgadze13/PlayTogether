@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { User } from '../types/api';
 import { api, ApiError } from '../services/api';
@@ -25,7 +24,6 @@ interface AuthContextType {
   authModalMode: 'login' | 'register';
   openAuthModal: (mode?: 'login' | 'register') => void;
   closeAuthModal: () => void;
-  // ── Payment card ──
   savedCard: SavedCard | null;
   hasPaymentCard: boolean;
   saveCard: (card: SavedCard) => void;
@@ -57,7 +55,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setToken(storedToken);
           }
         } catch {
-          // If backend network request fails, restore local session if present
           const storedUser = localStorage.getItem('playTogetherUser');
           if (storedUser && isMounted) {
             try {

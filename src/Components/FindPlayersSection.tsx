@@ -1,4 +1,3 @@
-/* oxlint-disable */
 import React, { useState, useEffect, useRef } from 'react';
 import type { TranslationContent } from '../types/translations';
 import { useAuth } from '../context/AuthContext';
@@ -133,7 +132,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
   const [activeCommentsPostId, setActiveCommentsPostId] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
 
-  // Post form state
   const [form, setForm] = useState({
     sport: 'Football' as Sport,
     skill: 'Intermediate' as SkillLevel,
@@ -244,7 +242,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
   return (
     <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px 80px' }}>
 
-      {/* ── PAGE HEADER ── */}
       <div style={{ marginBottom: '40px' }}>
         <span style={{ fontSize: '11px', fontWeight: 800, color: '#c9ff35', letterSpacing: '2px', textTransform: 'uppercase' }}>
           ⚡ COMMUNITY HUB
@@ -277,9 +274,7 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
       </div>
 
-      {/* ── FILTERS ── */}
       <div style={{ marginBottom: '36px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-        {/* Sport Filter */}
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
           <span style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginRight: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>Sport:</span>
           {(['All', ...SPORTS] as const).map((s) => (
@@ -300,7 +295,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
 
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-          {/* Skill Filter */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px' }}>Skill:</span>
             {(['All', ...SKILLS] as const).map((s) => (
@@ -320,7 +314,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
             ))}
           </div>
 
-          {/* Location search */}
           <div style={{ flex: 1, minWidth: '200px', position: 'relative' }}>
             <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px', opacity: 0.5 }}>📍</span>
             <input
@@ -340,12 +333,10 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
       </div>
 
-      {/* ── RESULTS COUNT ── */}
       <div style={{ marginBottom: '20px', color: 'rgba(255,255,255,0.4)', fontSize: '13px', fontWeight: 600 }}>
         {filteredPosts.length} {filteredPosts.length === 1 ? 'listing' : 'listings'} found
       </div>
 
-      {/* ── PLAYER GRID ── */}
       {filteredPosts.length === 0 ? (
         <div style={{
           textAlign: 'center', padding: '80px 24px',
@@ -390,14 +381,12 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
                 }}
               >
-                {/* Glow accent */}
                 <div style={{
                   position: 'absolute', top: 0, right: 0, width: '120px', height: '120px',
                   background: `radial-gradient(circle at top right, rgba(201,255,53,0.06) 0%, transparent 70%)`,
                   borderRadius: '0 20px 0 100%', pointerEvents: 'none',
                 }} />
 
-                {/* Card Header */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '16px' }}>
                   <img
                     src={post.authorAvatar}
@@ -424,7 +413,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   </div>
                 </div>
 
-                {/* Sport Badge */}
                 <div style={{ marginBottom: '12px' }}>
                   <span style={{
                     padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700,
@@ -434,7 +422,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   </span>
                 </div>
 
-                {/* Bio */}
                 <p style={{
                   color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 1.7,
                   marginBottom: '16px', display: '-webkit-box', WebkitLineClamp: 3,
@@ -443,7 +430,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   {post.bio}
                 </p>
 
-                {/* Available Days */}
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
                   {DAYS.map(day => (
                     <span key={day} style={{
@@ -457,7 +443,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   ))}
                 </div>
 
-                {/* Contact Icons */}
                 <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
                   {post.phone && (
                     <a
@@ -504,7 +489,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
                   )}
                 </div>
 
-                {/* Comment Button */}
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <button
                     id={`comment-btn-${post.id}`}
@@ -553,9 +537,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
       )}
 
-      {/* ════════════════════════════════════════
-          COMMENTS DRAWER / MODAL
-      ════════════════════════════════════════ */}
       {activeCommentsPostId && activePost && (
         <div
           onClick={e => { if (e.target === e.currentTarget) setActiveCommentsPostId(null); }}
@@ -570,7 +551,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
             display: 'flex', flexDirection: 'column',
             animation: 'slideInRight 0.25s ease',
           }}>
-            {/* Drawer Header */}
             <div style={{
               padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.07)',
               display: 'flex', alignItems: 'center', gap: '12px',
@@ -593,12 +573,10 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               </button>
             </div>
 
-            {/* Post Bio Summary */}
             <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
               <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, margin: 0 }}>{activePost.bio}</p>
             </div>
 
-            {/* Comments List */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {postComments(activePost.id).length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '40px 0', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
@@ -625,7 +603,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               )}
             </div>
 
-            {/* Comment Input */}
             <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: '10px', alignItems: 'center' }}>
               <img
                 src={user?.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name || 'user')}`}
@@ -666,9 +643,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
       )}
 
-      {/* ════════════════════════════════════════
-          POST A LISTING MODAL
-      ════════════════════════════════════════ */}
       {showPostModal && (
         <div
           onClick={e => { if (e.target === e.currentTarget) setShowPostModal(false); }}
@@ -694,7 +668,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               </button>
             </div>
 
-            {/* Sport */}
             <label style={labelStyle}>Sport</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
               {SPORTS.map(s => (
@@ -710,7 +683,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               ))}
             </div>
 
-            {/* Skill */}
             <label style={labelStyle}>Skill Level</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
               {SKILLS.map(s => {
@@ -729,7 +701,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               })}
             </div>
 
-            {/* Location */}
             <label style={labelStyle}>Location *</label>
             <input
               id="post-location-input"
@@ -741,7 +712,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
             />
 
-            {/* Available Days */}
             <label style={labelStyle}>Available Days *</label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
               {DAYS.map((d) => (
@@ -757,7 +727,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               ))}
             </div>
 
-            {/* Short Bio */}
             <label style={labelStyle}>About You / What You're Looking For *</label>
             <textarea
               id="post-bio-input"
@@ -773,7 +742,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
               {form.bio.length}/250
             </div>
 
-            {/* Contact — at least one required */}
             <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '14px', padding: '18px', marginBottom: '20px' }}>
               <p style={{ fontSize: '12px', fontWeight: 700, color: 'rgba(255,255,255,0.5)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>
                 Contact Info <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400, textTransform: 'none' }}>(at least one required)</span>
@@ -820,7 +788,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
         </div>
       )}
 
-      {/* Keyframe animations */}
       <style>{`
         @keyframes slideInRight {
           from { transform: translateX(100%); opacity: 0; }
@@ -835,7 +802,6 @@ export const FindPlayersSection: React.FC<FindPlayersSectionProps> = ({ c: _c })
   );
 };
 
-// ── Shared mini-styles ──
 const labelStyle: React.CSSProperties = {
   display: 'block', fontSize: '12px', fontWeight: 700,
   color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.8px',

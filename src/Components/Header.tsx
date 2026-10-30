@@ -15,7 +15,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Close mobile drawer automatically on route navigation
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
@@ -24,14 +23,12 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
     setIsMobileMenuOpen((prev) => !prev);
   };
 
-  // Lock body scroll when drawer is open to prevent double-scroll
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.classList.add('no-scroll');
     } else {
       document.body.classList.remove('no-scroll');
     }
-    // Cleanup on unmount
     return () => {
       document.body.classList.remove('no-scroll');
     };
@@ -40,7 +37,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
   return (
     <div className="navbar-sticky-wrapper">
       <header className="navbar">
-        {/* Zone 1: Logo */}
         <Link 
           to="/" 
           className="logo" 
@@ -64,7 +60,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           </span>
         </Link>
 
-        {/* Zone 2: Centered Nav Links (Desktop Only) */}
         <nav className="nav-links desktop-only-nav">
           <NavLink to="/stadiums" className={({ isActive }) => (isActive ? 'active-link' : '')}>
             {c.stadiums}
@@ -93,7 +88,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           </NavLink>
         </nav>
 
-        {/* Zone 3: Right Actions (Desktop Only) */}
         <div className="nav-actions desktop-only-nav">
           {isAuthenticated && user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -136,7 +130,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
           </button>
         </div>
 
-        {/* Mobile Right Controls (< 1100px) */}
         <div className="mobile-only-controls" style={{ display: 'none', alignItems: 'center', gap: '10px' }}>
           <button className="lang-switcher" onClick={onToggleLanguage}>
             {lang === 'en' ? 'GEO' : 'ENG'}
@@ -164,7 +157,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
         </div>
       </header>
 
-      {/* Mobile Drawer — rendered via portal to escape backdrop-filter stacking context */}
       {isMobileMenuOpen && createPortal(
         <div
           onClick={() => setIsMobileMenuOpen(false)}
@@ -323,7 +315,6 @@ export const Header: React.FC<HeaderProps> = ({ lang, onToggleLanguage, c }) => 
 
             <div style={{ height: '1px', background: 'rgba(255,255,255,0.12)', margin: '4px 0' }} />
 
-            {/* User / Auth Actions in Mobile Drawer */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {isAuthenticated && user ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

@@ -1,4 +1,3 @@
-// Initial data for the localStorage "database" (copied from the old backend seed).
 import type { VenuePlace } from '../types/api';
 
 export const SEED_STADIUMS: Array<{

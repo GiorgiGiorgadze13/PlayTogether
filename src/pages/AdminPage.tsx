@@ -1,17 +1,14 @@
-/* oxlint-disable */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 import type { InstructorBooking, AdminStats, AdminUser } from '../services/api';
 
-// ── Storage keys (must match FindPlayersSection) ──
 const POSTS_KEY = 'playTogether_player_posts';
 const COMMENTS_KEY = 'playTogether_player_comments';
 const BANNED_KEY = 'playTogether_banned_users';
 const REPORTS_KEY = 'playTogether_reports';
 
-// ── Types ──
 interface Post {
   id: string;
   authorId: string;
@@ -55,7 +52,6 @@ interface Report {
   createdAt: string;
 }
 
-// ── Demo posts that always exist (from FindPlayersSection) ──
 const DEMO_AUTHOR_IDS = ['demo-user-1', 'demo-user-2', 'demo-user-3', 'demo-user-4', 'demo-user-5', 'demo-user-6'];
 
 const SPORT_EMOJIS: Record<string, string> = {
@@ -81,7 +77,6 @@ export const AdminPage: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
-  // Local-storage content (posts, comments, bans, reports)
   const [posts, setPosts] = useState<Post[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [bannedUsers, setBannedUsers] = useState<BannedUser[]>([]);
@@ -91,14 +86,12 @@ export const AdminPage: React.FC = () => {
   const [confirmDelete, setConfirmDelete] = useState<{ type: string; id: string } | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
-  // API-sourced data
   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
   const [bookings, setBookings] = useState<InstructorBooking[]>([]);
   const [dbUsers, setDbUsers] = useState<AdminUser[]>([]);
   const [apiLoading, setApiLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
-  // ── Auth guard ──
   useEffect(() => {
     if (!isAdmin) {
       navigate('/', { replace: true });
@@ -110,7 +103,6 @@ export const AdminPage: React.FC = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // Load localStorage content
   const loadLocalData = useCallback(() => {
     const storedPosts: Post[] = JSON.parse(localStorage.getItem(POSTS_KEY) || '[]');
     const storedComments: Comment[] = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
@@ -122,7 +114,6 @@ export const AdminPage: React.FC = () => {
     setReports(storedReports);
   }, []);
 
-  // Load real API data
   const loadApiData = useCallback(async () => {
     if (!isAdmin) return;
     setApiLoading(true);
@@ -147,7 +138,6 @@ export const AdminPage: React.FC = () => {
   useEffect(() => { loadLocalData(); }, [loadLocalData]);
   useEffect(() => { loadApiData(); }, [loadApiData]);
 
-  // ── Actions ──
   const deletePost = (postId: string) => {
     const updated = posts.filter((p) => p.id !== postId);
     localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
@@ -197,7 +187,6 @@ export const AdminPage: React.FC = () => {
 
   const isBanned = (userId: string) => bannedUsers.some((b) => b.id === userId);
 
-  // ── Stats ──
   const totalPosts = posts.length;
   const totalComments = comments.length;
   const totalBanned = bannedUsers.length;
@@ -234,7 +223,6 @@ export const AdminPage: React.FC = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0b0d', display: 'flex', flexDirection: 'column' }}>
 
-      {/* ── TOAST ── */}
       {toast && (
         <div style={{
           position: 'fixed', top: '24px', right: '24px', zIndex: 99999,
@@ -247,7 +235,6 @@ export const AdminPage: React.FC = () => {
         </div>
       )}
 
-      {/* ── CONFIRM DIALOG ── */}
       {confirmDelete && (
         <div style={{
           position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
@@ -281,7 +268,6 @@ export const AdminPage: React.FC = () => {
         </div>
       )}
 
-      {/* ── ADMIN TOPBAR ── */}
       <div style={{
         background: 'rgba(7,8,9,0.95)', borderBottom: '1px solid rgba(201,255,53,0.15)',
         padding: '0 32px', height: '60px', display: 'flex', alignItems: 'center',
@@ -323,7 +309,6 @@ export const AdminPage: React.FC = () => {
 
       <div style={{ display: 'flex', flex: 1 }}>
 
-        {/* ── SIDEBAR ── */}
         <div style={{
           width: '220px', flexShrink: 0, background: 'rgba(13,15,17,0.98)',
           borderRight: '1px solid rgba(255,255,255,0.06)', padding: '24px 12px',
@@ -361,10 +346,8 @@ export const AdminPage: React.FC = () => {
           ))}
         </div>
 
-        {/* ── MAIN CONTENT ── */}
         <div style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
 
-          {/* API Error Banner */}
           {apiError && (
             <div style={{
               background: 'rgba(239,83,80,0.1)', border: '1px solid rgba(239,83,80,0.3)',
@@ -382,7 +365,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ DASHBOARD ══════════ */}
           {activeTab === 'dashboard' && (
             <div>
               <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>
@@ -392,7 +374,6 @@ export const AdminPage: React.FC = () => {
                 Here's an overview of the PlayTogether community.
               </p>
 
-              {/* Stat Cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '40px' }}>
                 {[
                   { label: 'DB Users', value: adminStats?.totalUsers ?? '—', icon: '👥', color: '#60d394', sub: 'registered accounts' },
@@ -415,7 +396,6 @@ export const AdminPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* Quick Actions */}
               <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#fff', marginBottom: '16px' }}>Quick Actions</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
                 {[
@@ -442,7 +422,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ BOOKINGS TAB ══════════ */}
           {activeTab === 'bookings' && (
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
@@ -500,7 +479,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ DB USERS TAB ══════════ */}
           {activeTab === 'dbusers' && (
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
@@ -550,7 +528,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ POSTS TAB ══════════ */}
           {activeTab === 'posts' && (
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
@@ -626,7 +603,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ COMMENTS TAB ══════════ */}
           {activeTab === 'comments' && (
             <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
@@ -708,7 +684,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ BANNED USERS TAB ══════════ */}
           {activeTab === 'users' && (
             <div>
               <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>Banned Users</h2>
@@ -744,7 +719,6 @@ export const AdminPage: React.FC = () => {
             </div>
           )}
 
-          {/* ══════════ REPORTS TAB ══════════ */}
           {activeTab === 'reports' && (
             <div>
               <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#fff', marginBottom: '8px' }}>Content Reports</h2>
@@ -804,7 +778,6 @@ export const AdminPage: React.FC = () => {
   );
 };
 
-// ── Shared button styles ──
 const dangerBtn: React.CSSProperties = {
   padding: '7px 14px', borderRadius: '8px', border: '1px solid rgba(239,83,80,0.3)',
   background: 'rgba(239,83,80,0.1)', color: '#ef5350', fontSize: '12px', fontWeight: 700, cursor: 'pointer',
@@ -823,7 +796,6 @@ const successBtn: React.CSSProperties = {
   transition: 'all 0.15s ease',
 };
 
-// ── Empty State ──
 const EmptyState: React.FC<{ icon: string; text: string }> = ({ icon, text }) => (
   <div style={{
     textAlign: 'center', padding: '60px 24px',

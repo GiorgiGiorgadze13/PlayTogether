@@ -11,7 +11,6 @@ interface SportsSectionProps {
 export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
 
-  // Convert SPORT_REQUIREMENTS map to array for display
   const sportsList: SportRequirement[] = Object.values(SPORT_REQUIREMENTS);
 
   return (
@@ -48,7 +47,6 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
         </Link>
       </div>
 
-      {/* Grid of Sport Cards */}
       <div
         style={{
           display: 'grid',
@@ -75,7 +73,6 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                 position: 'relative',
               }}
             >
-              {/* Sport Image Header */}
               <div style={{ position: 'relative', height: '190px', width: '100%', overflow: 'hidden', background: '#1c1f22' }}>
                 <img
                   src={sportItem.imageUrl}
@@ -129,7 +126,6 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                 </div>
               </div>
 
-              {/* Card Body Info */}
               <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                   <h3 style={{ fontSize: '20px', fontWeight: 800, margin: 0, color: '#ffffff' }}>
@@ -142,7 +138,6 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
                   {sportItem.description}
                 </p>
 
-                {/* Booking Steps Flow Indicator */}
                 <div
                   style={{
                     background: '#0d0f11',
@@ -210,7 +205,6 @@ export const SportsSection: React.FC<SportsSectionProps> = ({ c }) => {
         })}
       </div>
 
-      {/* Booking Modal with pre-selected Sport */}
       {selectedSport && (
         <StadiumBookingModal
           initialSport={selectedSport}

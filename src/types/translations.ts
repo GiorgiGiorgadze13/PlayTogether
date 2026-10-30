@@ -1,7 +1,6 @@
 export type Language = 'en' | 'ka';
 
 export interface TranslationContent {
-  // ── Navigation ──
   home: string;
   sports: string;
   stadiums: string;
@@ -15,7 +14,6 @@ export interface TranslationContent {
   logout: string;
   adminPanel: string;
 
-  // ── Hero ──
   findGameBtn: string;
   createGameBtn: string;
   eyebrow: string;
@@ -26,20 +24,17 @@ export interface TranslationContent {
   activePlayers: string;
   sportsVenues: string;
 
-  // ── Search ──
   searchEyebrow: string;
   searchTitle: string;
   searchSubtitle: string;
   searchBtn: string;
 
-  // ── Sports ──
   exploreSports: string;
   chooseGame: string;
   viewAllSports: string;
   bookNow: string;
   viewDetails: string;
 
-  // ── Games section ──
   playSoon: string;
   upcomingGames: string;
   seeAllGames: string;
@@ -55,13 +50,11 @@ export interface TranslationContent {
   joinedSuccess: string;
   leftSuccess: string;
 
-  // ── Tournaments ──
   comingTogether: string;
   playTournament: string;
   tournamentDesc: string;
   exploreTournaments: string;
   viewTournament: string;
-  // Tournament card UI
   datesLabel: string;
   entryFeeLabel: string;
   entryFeePerPlayer: string;
@@ -74,7 +67,6 @@ export interface TranslationContent {
   registrationFull: string;
   allSportsFilter: string;
 
-  // ── How It Works ──
   howItWorks: string;
   howTitle1: string;
   howTitle2: string;
@@ -86,7 +78,6 @@ export interface TranslationContent {
   step3Title: string;
   step3Desc: string;
 
-  // ── Footer ──
   footerDesc: string;
   explore: string;
   company: string;
@@ -94,7 +85,6 @@ export interface TranslationContent {
   contact: string;
   rights: string;
 
-  // ── Instructors / Learn ──
   learnEyebrow: string;
   learnTitle: string;
   learnSubtitle: string;
@@ -115,7 +105,6 @@ export interface TranslationContent {
   individualLesson: string;
   groupLesson: string;
   selectSlot: string;
-  // Card inline strings
   fromPrice: string;
   perHourShort: string;
   coachesLabel: string;
@@ -135,7 +124,6 @@ export interface TranslationContent {
   yearsExperience: string;
   reviewsLabel: string;
 
-  // ── Auth Modal ──
   loginSubtitle: string;
   registerSubtitle: string;
   fullName: string;
@@ -152,7 +140,6 @@ export interface TranslationContent {
   done: string;
   dontHaveAccount: string;
   alreadyHaveAccount: string;
-  // Validation
   validationErrors: string;
   nameRequired: string;
   nameMinLength: string;
@@ -165,14 +152,12 @@ export interface TranslationContent {
   unexpectedError: string;
   loginSuccess: string;
   registerSuccess: string;
-  // Placeholders
   fullNamePlaceholder: string;
   emailPlaceholder: string;
   showPassword: string;
   hidePassword: string;
   completeSetup: string;
 
-  // ── Profile Page ──
   accessRequired: string;
   accessRequiredDesc: string;
   activeAthlete: string;
@@ -197,7 +182,6 @@ export interface TranslationContent {
   noPlayersYet: string;
   successLeft: string;
 
-  // ── PlayPass Page ──
   introducingPlayPass: string;
   playMorePayLess: string;
   playMorePayLessHighlight: string;
@@ -244,7 +228,6 @@ export interface TranslationContent {
   readyToPlayDesc: string;
   viewPlans: string;
   noCommitment: string;
-  // Checkout modal
   checkoutDurationLabel: string;
   checkoutPlan: string;
   checkoutDuration: string;
@@ -259,12 +242,10 @@ export interface TranslationContent {
   close: string;
   bookSportNow: string;
   somethingWentWrong: string;
-  // Duration labels
   duration1: string;
   duration2: string;
   duration3: string;
   duration5: string;
-  // FAQ items
   faq1q: string;
   faq1a: string;
   faq2q: string;
@@ -276,7 +257,6 @@ export interface TranslationContent {
   faq5q: string;
   faq5a: string;
 
-  // ── Stadiums Section ──
   stadiumsEyebrow: string;
   stadiumsTitle: string;
   stadiumsSubtitle: string;
@@ -287,14 +267,12 @@ export interface TranslationContent {
   pricePerHour: string;
   loadingStadiums: string;
   noStadiumsFound: string;
-  // Stadiums section UI
   allStadiumsFilter: string;
   capacityLabel2: string;
   ratePerPlayerLabel: string;
   showAllStadiums2: string;
   noStadiumsForFilter: (sport: string) => string;
 
-  // ── Booking Modal ──
   chooseSport: string;
   chooseVenue: string;
   dateTimeSlots: string;
@@ -340,7 +318,6 @@ export interface TranslationContent {
   submittingBooking: string;
   continueNext: string;
 
-  // ── Payment Card Modal ──
   paymentTitle: string;
   paymentSecure: string;
   cardNumber: string;
@@ -362,7 +339,6 @@ export interface TranslationContent {
   paymentErrorTitle: string;
   tryAgain: string;
 
-  // ── Find Players ──
   findPlayersEyebrow: string;
   findPlayersTitle: string;
   findPlayersSubtitle: string;
@@ -388,7 +364,6 @@ export interface TranslationContent {
   viewComments: string;
   hideComments: string;
 
-  // ── General ──
   loading: string;
   error: string;
   cancel: string;

@@ -5,7 +5,6 @@ import { api } from '../services/api';
 import { StadiumBookingModal } from './StadiumBookingModal';
 import { getSportRequirements } from '../constants/sports';
 
-// Local stadium images
 import imgLisiAbano from '../assets/stadiums/lisiabano.jpg';
 import imgInterAcademy3 from '../assets/stadiums/interacademy3.webp';
 import imgInterAcademy4 from '../assets/stadiums/interacademy4.webp';
@@ -361,7 +360,6 @@ export const FALLBACK_STADIUMS: BilingualStadium[] = [
   },
 ];
 
-// Helper to pick the right language field from a bilingual stadium
 function getField(stadium: BilingualStadium, field: 'name' | 'description' | 'location' | 'address', lang: Language): string {
   const key = `${field}_${lang}` as keyof BilingualStadium;
   return (stadium[key] as string) || (stadium[`${field}_en` as keyof BilingualStadium] as string);
@@ -381,7 +379,6 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c, lang }) => 
         setError(null);
         const res = await api.getStadiums();
         if (res.stadiums && res.stadiums.length > 0) {
-          // API stadiums don't have bilingual fields — wrap them
           const wrapped = res.stadiums.map((s: Stadium) => ({
             ...s,
             name_en: s.name,
@@ -449,7 +446,6 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c, lang }) => 
         </div>
       </div>
 
-      {/* Sport Category Filter Tabs */}
       <div
         style={{
           display: 'flex',
@@ -562,7 +558,6 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c, lang }) => 
                 }}
                 onClick={() => setSelectedStadium({ ...stadium, name: displayName, location: displayLocation, address: displayAddress })}
               >
-                {/* Stadium Image Banner */}
                 <div style={{ position: 'relative', height: '200px', width: '100%', overflow: 'hidden' }}>
                   <img
                     src={stadium.selectedPhotoUrl || stadium.imageUrl}
@@ -609,7 +604,6 @@ export const StadiumsSection: React.FC<StadiumsSectionProps> = ({ c, lang }) => 
                   </div>
                 </div>
 
-                {/* Card Content */}
                 <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 6px', color: '#fff' }}>
                     {displayName}

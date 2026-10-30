@@ -1,4 +1,3 @@
-// TypeScript types for the PlayPass subscription system
 
 export type SubscriptionTier = 'SILVER' | 'GOLD' | 'UNLIMITED';
 export type SubscriptionStatus = 'ACTIVE' | 'CANCELLED' | 'EXPIRED';
@@ -8,16 +7,16 @@ export interface UserSubscription {
   tier: SubscriptionTier;
   status: SubscriptionStatus;
   durationMonths: number;
-  startDate: string; // ISO string
-  endDate: string;   // ISO string
+  startDate: string;
+  endDate: string;
   pricePaid: number;
 }
 
 export interface WeeklyUsage {
   weekKey: string;
   creditsUsed: number;
-  creditsRemaining: number | null; // null for UNLIMITED
-  weeklyLimit: number | null;      // null for UNLIMITED
+  creditsRemaining: number | null;
+  weeklyLimit: number | null;
 }
 
 export interface SubscriptionState {
